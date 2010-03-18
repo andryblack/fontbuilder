@@ -11,13 +11,13 @@ BoxLayouter::BoxLayouter(QObject *parent) :
 {
 }
 
-
-void BoxLayouter::PlaceImages() {
+void BoxLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
     int h = 0;
     int w = 0;
-    if (!chars().isEmpty()) {
-        w = chars().front().w;
-        h = chars().front().h;
+    if (!chars.isEmpty()) {
+        resize(chars.front().w,chars.front().h);
+        w = width();
+        h = height();
     }
     bool iteration = true;
     while (iteration) {
@@ -25,19 +25,25 @@ void BoxLayouter::PlaceImages() {
         int y = 0;
         int line_h = 0;
         iteration = false;
-        foreach (const LayoutChar& c, chars()) {
+        foreach (const LayoutChar& c, chars) {
             if (c.h>line_h)
                 line_h = c.h;
-            if ((y+line_h)>=h)
-                h = y+line_h;
+            if ((y+line_h)>=h) {
+                resize(width(),y+line_h);
+                h = height();
+            }
 
             if ((x+c.w)>=w) {
                 x = 0;
                 if ((y+line_h)>=h) {
-                    if (w>h)
-                        h+=line_h;
-                    else
-                        w+=c.w*2;
+                    if (w>h) {
+                        resize(width(),height()+line_h);
+                        h=height();
+                    }
+                    else {
+                        resize(width()+c.w*2,height());
+                        w=width();
+                    }
                     iteration = true;
                     break;
                 }
@@ -46,11 +52,12 @@ void BoxLayouter::PlaceImages() {
             x+=c.w;
         }
     }
-    resize(w,h);
+    w = width();
+    h = height();
     int x = 0;
     int y = 0;
     int line_h = 0;
-    foreach (const LayoutChar& c, chars()) {
+    foreach (const LayoutChar& c, chars) {
         if (c.h>line_h)
             line_h = c.h;
         if ((x+c.w)>=w){

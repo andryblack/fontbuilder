@@ -8,10 +8,10 @@ LineLayouter::LineLayouter(QObject *parent) :
 }
 
 
-void LineLayouter::PlaceImages() {
+void LineLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
     int h = 0;
     int w = 0;
-    foreach (const LayoutChar& c, chars()) {
+    foreach (const LayoutChar& c, chars) {
         w+=c.w;
         if (c.h>h)
             h = c.h;
@@ -19,11 +19,11 @@ void LineLayouter::PlaceImages() {
     resize(w,h);
     int x = 0;
     int y = 0;
-    foreach (const LayoutChar& c, chars()) {
+    foreach (const LayoutChar& c, chars) {
         LayoutChar l = c;
         l.x = x;
         l.y = y;
-        place(c);
+        place(l);
         x+=c.w;
     }
 }

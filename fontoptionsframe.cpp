@@ -37,8 +37,10 @@ void FontOptionsFrame::setConfig(FontConfig *config) {
     ui->checkBoxAutohinting->setChecked(m_config->autohinting());
     ui->checkBoxMissingGlypths->setChecked(m_config->renderMissing());
     ui->checkBoxSmoothing->setChecked(m_config->antialiased());
-    ui->checkBoxBold->setChecked(m_config->bold());
-    ui->checkBoxItalic->setChecked(m_config->italic());
+    ui->horizontalSliderBold->setValue(m_config->bold());
+    ui->horizontalSliderItalic->setValue(m_config->italic());
+    ui->doubleSpinBoxWidth->setValue(m_config->width());
+    ui->doubleSpinBoxHeight->setValue(m_config->height());
 }
 
 void FontOptionsFrame::on_checkBoxAutohinting_clicked()
@@ -61,12 +63,26 @@ void FontOptionsFrame::on_checkBoxSmoothing_toggled(bool checked)
     if (m_config) m_config->setAntialiased(checked);
 }
 
-void FontOptionsFrame::on_checkBoxBold_toggled(bool checked)
+
+
+void FontOptionsFrame::on_horizontalSliderBold_valueChanged(int value)
 {
-    if (m_config) m_config->setBold(checked);
+     if (m_config) m_config->setBold(value);
+     ui->labelBold->setText(QString().number(value));
 }
 
-void FontOptionsFrame::on_checkBoxItalic_toggled(bool checked)
+void FontOptionsFrame::on_horizontalSliderItalic_valueChanged(int value)
 {
-    if (m_config) m_config->setItalic(checked);
+    if (m_config) m_config->setItalic(value);
+    ui->labelItalic->setText(QString().number(value));
+}
+
+void FontOptionsFrame::on_doubleSpinBoxWidth_valueChanged(double value)
+{
+    if (m_config) m_config->setWidth(value);
+}
+
+void FontOptionsFrame::on_doubleSpinBoxHeight_valueChanged(double value)
+{
+    if (m_config) m_config->setHeight(value);
 }

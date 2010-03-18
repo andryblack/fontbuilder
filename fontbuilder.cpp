@@ -43,6 +43,7 @@ FontBuilder::FontBuilder(QWidget *parent) :
     ui->frameFontSelect->setConfig(m_font_config);
     ui->frameCharacters->setConfig(m_font_config);
     ui->frameFontOptions->setConfig(m_font_config);
+    ui->frameLayoutConfig->setConfig(m_layout_config);
 
 }
 
@@ -92,6 +93,9 @@ void FontBuilder::on_layoutChanged() {
     pixmap.fill(QColor(0,0,0,255));
     QPainter painter(&pixmap);
     foreach (const LayoutChar& c,m_layout_data->placed())
-        m_font_renderer->placeImage(painter,c.symbol,c.x,c.y);
+        m_font_renderer->placeImage(painter,c.symbol,
+                                    c.x + m_layout_config->offsetLeft(),
+                                    c.y + m_layout_config->offsetTop()
+                                    );
     ui->label_Image->setPixmap(pixmap);
 }

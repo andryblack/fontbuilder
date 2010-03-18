@@ -10,8 +10,10 @@ FontConfig::FontConfig(QObject *parent) :
     m_autohinting = false;
     m_render_missing = false;
     m_antialiased = true;
-    m_bold = false;
+    m_bold = 0;
     m_italic = false;
+    m_width = 100.0f;
+    m_height = 100.0f;
 }
 
 void FontConfig::setPath(const QString& path) {
@@ -75,16 +77,30 @@ void FontConfig::setRenderMissing(bool b) {
     }
 }
 
-void FontConfig::setItalic(bool b) {
+void FontConfig::setItalic(int b) {
     if (m_italic!=b) {
         m_italic = b;
         renderingOptionsChanged();
     }
 }
 
-void FontConfig::setBold(bool b) {
+void FontConfig::setBold(int b) {
     if (m_bold!=b) {
         m_bold = b;
         renderingOptionsChanged();
+    }
+}
+
+void FontConfig::setWidth(float b) {
+    if (m_width!=b) {
+        m_width = b;
+        sizeChanged();
+    }
+}
+
+void FontConfig::setHeight(float b) {
+    if (m_height!=b) {
+        m_height = b;
+        sizeChanged();
     }
 }

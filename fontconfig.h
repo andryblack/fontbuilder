@@ -42,13 +42,22 @@ public:
     void setAntialiased(bool b);
     Q_PROPERTY( bool antialiased READ antialiased WRITE setAntialiased );
 
-    bool bold() const { return m_bold;}
-    void setBold(bool b);
-    Q_PROPERTY( bool bold READ bold WRITE setBold );
+    int bold() const { return m_bold;}
+    void setBold(int b);
+    Q_PROPERTY( int bold READ bold WRITE setBold );
 
-    bool italic() const { return m_italic;}
-    void setItalic(bool b);
-    Q_PROPERTY( bool italic READ italic WRITE setBold );
+    int italic() const { return m_italic;}
+    void setItalic(int b);
+    Q_PROPERTY( int italic READ italic WRITE setBold );
+
+    float width() const { return m_width;}
+    void setWidth(float b);
+    Q_PROPERTY( float width READ width WRITE setWidth );
+
+    float height() const { return m_height;}
+    void setHeight(float b);
+    Q_PROPERTY( float height READ height WRITE setHeight );
+
 private:
     QString m_path;
     QString m_filename;
@@ -58,8 +67,10 @@ private:
     bool    m_autohinting;
     bool    m_render_missing;
     bool    m_antialiased;
-    bool    m_bold;
-    bool    m_italic;
+    int    m_bold;
+    int    m_italic;
+    float   m_width;
+    float   m_height;
 signals:
     void fileChanged();
     void faceIndexChanged();

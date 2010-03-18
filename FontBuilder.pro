@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     layoutdata.cpp \
     layouters/linelayouter.cpp \
     layouterfactory.cpp \
-    layouters/boxlayouter.cpp
+    layouters/boxlayouter.cpp \
+    layoutconfigframe.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -31,11 +32,13 @@ HEADERS += fontbuilder.h \
     layouters/linelayouter.h \
     layouterfactory.h \
     layoutchar.h \
-    layouters/boxlayouter.h
+    layouters/boxlayouter.h \
+    layoutconfigframe.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \
-    charactersframe.ui
+    charactersframe.ui \
+    layoutconfigframe.ui
 mac { 
     INCLUDEPATH += /Users/andry/src/include
     INCLUDEPATH += /Users/andry/src/include/freetype2

@@ -10,7 +10,7 @@ public:
     explicit LineLayouter(QObject *parent = 0);
 
 protected:
-    virtual void PlaceImages();
+    virtual void PlaceImages(const QVector<LayoutChar>& chars) ;
 signals:
 
 public slots:

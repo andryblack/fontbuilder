@@ -23,26 +23,41 @@ void AbstractLayouter::on_ReplaceImages(const QVector<LayoutChar>& chars) {
     m_chars = chars;
 
     if (m_data!=0 && m_config!=0 ) {
-        if (m_config->onePixelOffset()) {
-            for( int i=0;i<m_chars.size();i++) {
-                m_chars[i].w++;
-                m_chars[i].h++;
-            }
-        }
         m_data->beginPlacing();
-        PlaceImages();
+        on_LayoutDataChanged();
         m_data->endPlacing();
     }
 }
 
 void AbstractLayouter::on_LayoutDataChanged() {
     if (m_data!=0 && m_config!=0 ) {
+        QVector<LayoutChar> chars = m_chars;
+        {
+            for( int i=0;i<m_chars.size();i++) {
+                if (m_config->onePixelOffset()) {
+                    chars[i].w++;
+                    chars[i].h++;
+                }
+                chars[i].w+=m_config->offsetLeft()+m_config->offsetRight();
+                chars[i].h+=m_config->offsetTop()+m_config->offsetBottom();
+            }
+        }
         m_data->beginPlacing();
-        PlaceImages();
+        PlaceImages(chars);
         m_data->endPlacing();
     }
 }
 
+static const int nextpot(unsigned int val) {
+    val--;
+    val = (val >> 1) | val;
+    val = (val >> 2) | val;
+    val = (val >> 4) | val;
+    val = (val >> 8) | val;
+    val = (val >> 16) | val;
+    val++;
+    return val;
+}
 
 void AbstractLayouter::resize(int w,int h) {
     if (m_config) {
@@ -50,6 +65,10 @@ void AbstractLayouter::resize(int w,int h) {
         {
             w+=2;
             h+=2;
+        }
+        if (m_config->potImage()) {
+            w = nextpot(w);
+            h = nextpot(h);
         }
     }
     if (m_data) {

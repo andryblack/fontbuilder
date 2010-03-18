@@ -125,6 +125,16 @@
            <widget class="QComboBox" name="comboBoxLayouter"/>
           </item>
           <item>
+           <widget class="LayoutConfigFrame" name="frameLayoutConfig">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer_2">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -169,8 +179,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>313</width>
-            <height>440</height>
+            <width>356</width>
+            <height>423</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout">
@@ -257,7 +267,7 @@
      <x>0</x>
      <y>0</y>
      <width>612</width>
-     <height>22</height>
+     <height>31</height>
     </rect>
    </property>
   </widget>
@@ -289,6 +299,12 @@
    <class>CharactersFrame</class>
    <extends>QFrame</extends>
    <header>charactersframe.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayoutConfigFrame</class>
+   <extends>QFrame</extends>
+   <header>layoutconfigframe.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -26,8 +26,7 @@ protected:
     int width() const;
     int height() const;
     void place(const LayoutChar&);
-    const QVector<LayoutChar>& chars() const { return m_chars;}
-    virtual void PlaceImages() = 0;
+    virtual void PlaceImages(const QVector<LayoutChar>& chars) = 0;
 protected slots:
     void on_LayoutDataChanged();
 signals:

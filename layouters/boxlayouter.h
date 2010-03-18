@@ -14,7 +14,7 @@ Q_OBJECT
 public:
     explicit BoxLayouter(QObject *parent = 0);
 
-    virtual void PlaceImages();
+    virtual void PlaceImages(const QVector<LayoutChar>& chars) ;
 signals:
 
 public slots:

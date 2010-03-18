@@ -54,7 +54,7 @@ void FontRenderer::rasterize() {
 
     if (m_config->italic()) {
         FT_Matrix matrix;
-        const float angle = -10 * M_PI / 180.0f;
+        const float angle = (-M_PI*m_config->italic()) / 180.0f;
         matrix.xx = (FT_Fixed)( cos( angle ) * 0x10000L );
         matrix.xy = (FT_Fixed)(-sin( angle ) * 0x10000L );
         matrix.yx = (FT_Fixed)( sin( angle ) * 0x10000L );
@@ -74,13 +74,13 @@ void FontRenderer::rasterize() {
             continue;
         error = FT_Load_Glyph( m_ft_face, glyph_index,
                       FT_LOAD_DEFAULT |
-                      FT_LOAD_NO_BITMAP |
+                      /*FT_LOAD_NO_BITMAP |*/
                       (m_config->antialiased() ? FT_LOAD_TARGET_MONO : FT_LOAD_TARGET_NORMAL) |
                       (m_config->autohinting() ? FT_LOAD_FORCE_AUTOHINT : 0) );
         if ( error )
            continue;
-        if (m_config->bold()) {
-            FT_Pos strength = m_config->size()*4;
+        if (m_config->bold()>0) {
+            FT_Pos strength = m_config->size()*m_config->bold();
             if ( m_ft_face->glyph->format == FT_GLYPH_FORMAT_OUTLINE )
                 FT_Outline_Embolden( &m_ft_face->glyph->outline, strength );
         }
@@ -197,9 +197,11 @@ void FontRenderer::on_fontSizeChanged() {
     if (fixedsize) {
         qDebug() << "fixed size not impemented";
     } else {
+        int size_x = static_cast<int>(m_config->width()*size*64.0f/100.0f);
+        int size_y = static_cast<int>(m_config->height()*size*64.0f/100.0f);
         int error = FT_Set_Char_Size(m_ft_face,
-                                     0,
-                                     size*64,0,0);
+                                     size_x,
+                                     size_y,0,0);
         if (error) {
             qDebug() << "FT_Set_Char_Size error " << error;
         }
