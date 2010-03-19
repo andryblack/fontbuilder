@@ -53,28 +53,25 @@ void BoxLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
         foreach (const LayoutChar& c, chars) {
             if (c.h>line_h)
                 line_h = c.h;
-            if ((y+line_h)>=h) {
-                resize(width(),y+line_h);
-                h = height();
+            if ((y+line_h)>=h || (y+line_h)>=h ) {
+                if (w>h) {
+                    resize(width(),height()+line_h);
+                    h=height();
+                }
+                else {
+                    resize(width()+c.w*2,height());
+                    w=width();
+                }
+                iteration = true;
+                break;
             }
 
             if ((x+c.w)>=w) {
                 x = 0;
-                if ((y+line_h)>=h) {
-                    if (w>h) {
-                        resize(width(),height()+line_h);
-                        h=height();
-                    }
-                    else {
-                        resize(width()+c.w*2,height());
-                        w=width();
-                    }
-                    iteration = true;
-                    break;
-                }
                 y+=line_h;
-            }
-            x+=c.w;
+                line_h = 0;
+            } else
+                x+=c.w;
         }
     }
     w = width();
@@ -85,16 +82,16 @@ void BoxLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
     foreach (const LayoutChar& c, chars) {
         if (c.h>line_h)
             line_h = c.h;
-        if ((x+c.w)>=w){
-            y+=line_h;
-            x = 0;
-        } else {
-        }
         LayoutChar l = c;
         l.x = x;
         l.y = y;
         place(l);
-        x+=c.w;
+        if ((x+c.w)>=w) {
+            x = 0;
+            y+=line_h;
+            line_h = 0;
+        } else
+            x+=c.w;
     }
 }
 

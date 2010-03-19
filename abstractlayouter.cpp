@@ -120,7 +120,7 @@ int AbstractLayouter::width() const {
 int AbstractLayouter::height() const {
     int h= 0;
     if (m_data) {
-        h = m_data->width();
+        h = m_data->height();
     }
     if (m_config) {
         if (m_config->onePixelOffset())
