@@ -49,3 +49,4 @@ unix {
     CONFIG += link_pkgconfig
     PKGCONFIG += freetype2
 }
+/**test**/
