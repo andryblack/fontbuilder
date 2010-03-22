@@ -29,11 +29,15 @@
  */
 
 #include <QtGui/QApplication>
+#include <QCoreApplication>
 #include "fontbuilder.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QCoreApplication::setOrganizationName("AndryBlack");
+    QCoreApplication::setOrganizationDomain("andryblack.com");
+    QCoreApplication::setApplicationName("FontBuilder");
     FontBuilder w;
     w.show();
     return a.exec();

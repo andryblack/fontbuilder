@@ -78,7 +78,7 @@ public:
 
     int italic() const { return m_italic;}
     void setItalic(int b);
-    Q_PROPERTY( int italic READ italic WRITE setBold );
+    Q_PROPERTY( int italic READ italic WRITE setItalic );
 
     float width() const { return m_width;}
     void setWidth(float b);
@@ -110,5 +110,6 @@ signals:
 public slots:
 
 };
+
 
 #endif // FONTCONFIG_H

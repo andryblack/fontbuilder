@@ -70,6 +70,8 @@ protected:
     void changeEvent(QEvent *e);
 
     void readFontSizes(const FontDef& def);
+    void selectFile(const QString& file,int face);
+    void selectSize(int size);
 private:
     Ui::FontSelectFrame *ui;
     FontFamilys m_database;

@@ -59,13 +59,17 @@ void FontOptionsFrame::changeEvent(QEvent *e)
 
 void FontOptionsFrame::setConfig(FontConfig *config) {
     m_config = config;
-    ui->checkBoxAutohinting->setChecked(m_config->autohinting());
-    ui->checkBoxMissingGlypths->setChecked(m_config->renderMissing());
-    ui->checkBoxSmoothing->setChecked(m_config->antialiased());
-    ui->horizontalSliderBold->setValue(m_config->bold());
-    ui->horizontalSliderItalic->setValue(m_config->italic());
-    ui->doubleSpinBoxWidth->setValue(m_config->width());
-    ui->doubleSpinBoxHeight->setValue(m_config->height());
+    if (config) {
+        ui->checkBoxAutohinting->setChecked(m_config->autohinting());
+        ui->checkBoxMissingGlypths->setChecked(m_config->renderMissing());
+        ui->checkBoxSmoothing->setChecked(m_config->antialiased());
+        ui->horizontalSliderBold->setValue(m_config->bold());
+        ui->horizontalSliderItalic->setValue(m_config->italic());
+        ui->doubleSpinBoxWidth->setValue(m_config->width());
+        ui->doubleSpinBoxHeight->setValue(m_config->height());
+
+
+    }
 }
 
 void FontOptionsFrame::on_checkBoxAutohinting_clicked()

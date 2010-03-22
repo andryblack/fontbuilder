@@ -32,6 +32,7 @@
 #define FONTBUILDER_H
 
 #include <QMainWindow>
+#include <QSettings>
 
 namespace Ui {
     class FontBuilder;
@@ -52,8 +53,12 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
+    void closeEvent(QCloseEvent *event);
+    void saveConfig(QSettings& config,const QString& name,const QObject* obj);
+    void readConfig(QSettings& config,const QString& name,QObject* obj);
 
 private:
+
     Ui::FontBuilder *ui;
     FontRenderer*   m_font_renderer;
     FontConfig*     m_font_config;

@@ -77,8 +77,18 @@ void FontSelectFrame::changeEvent(QEvent *e)
 }
 
 void FontSelectFrame::setConfig(FontConfig* config) {
-    m_config = config;
-    setFontsDirectory(config->path());
+    m_config = 0;
+    if (config) {
+        bool b = config->blockSignals(true);
+        setFontsDirectory(config->path());
+        if (!config->filename().isEmpty())
+            selectFile(config->filename(),config->faceIndex());
+        if (config->size())
+            selectSize(config->size());
+        config->blockSignals(b);
+         m_config = config;
+    }
+
 }
 
 void FontSelectFrame::setFontsDirectory(QString dir_name) {
@@ -183,6 +193,41 @@ void FontSelectFrame::on_pushButtonChangeDir_clicked()
         if (m_config) m_config->setPath(dir);
         setFontsDirectory(dir);
     }
+}
+
+void FontSelectFrame::selectFile(const QString& file,int face) {
+    foreach (const QString& name, m_database.keys()) {
+        int id = 0;
+        const FontStyles &fs(m_database[name]);
+        foreach (const FontDef &fd, fs) {
+            if (fd.file == file &&
+                fd.face == face) {
+                bool b = ui->comboBoxStyle->blockSignals(true);
+                bool block = ui->comboBoxSize->blockSignals(true);
+
+                for (int i=0;i<ui->comboBoxFamily->count();i++)
+                    if (ui->comboBoxFamily->itemText(i)==name)
+                        ui->comboBoxFamily->setCurrentIndex(i);
+
+
+                for (int i=0;i<ui->comboBoxStyle->count();i++)
+                    if (ui->comboBoxStyle->itemData(i).toInt()==id) {
+                        ui->comboBoxStyle->setCurrentIndex(i);
+                        on_comboBoxStyle_currentIndexChanged(i);
+                    }
+                ui->comboBoxSize->blockSignals(block);
+                ui->comboBoxStyle->blockSignals(b);
+            }
+            id++;
+        }
+    }
+}
+
+void FontSelectFrame::selectSize(int size) {
+    QString ss = QString().number(size);
+    for (int i=0;i<ui->comboBoxSize->count();i++)
+        if (ss==ui->comboBoxSize->itemText(i))
+            ui->comboBoxSize->setCurrentIndex(i);
 }
 
 void FontSelectFrame::on_comboBoxFamily_currentIndexChanged(QString family)

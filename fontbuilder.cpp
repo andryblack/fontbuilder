@@ -33,6 +33,9 @@
 #include <QDebug>
 #include <QPainter>
 #include <QPixmap>
+#include <QSettings>
+#include <QMetaProperty>
+
 #include "fontconfig.h"
 #include "fontrenderer.h"
 #include "layoutconfig.h"
@@ -41,11 +44,15 @@
 
 
 
+
 FontBuilder::FontBuilder(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::FontBuilder)
 {
     ui->setupUi(this);
+
+
+
     m_font_config = new FontConfig(this);
     m_font_renderer = new FontRenderer(this,m_font_config);
 
@@ -64,6 +71,10 @@ FontBuilder::FontBuilder(QWidget *parent) :
 
 
 
+    QSettings settings;
+    restoreGeometry(settings.value("geometry").toByteArray());
+    readConfig(settings,"fontconfig",m_font_config);
+    readConfig(settings,"layoutconfig",m_layout_config);
 
     ui->frameFontSelect->setConfig(m_font_config);
     ui->frameCharacters->setConfig(m_font_config);
@@ -75,6 +86,46 @@ FontBuilder::FontBuilder(QWidget *parent) :
 FontBuilder::~FontBuilder()
 {
     delete ui;
+}
+
+
+void FontBuilder::closeEvent(QCloseEvent *event)
+ {
+     QSettings settings;
+     settings.setValue("geometry", saveGeometry());
+     saveConfig(settings,"fontconfig",m_font_config);
+     saveConfig(settings,"layoutconfig",m_layout_config);
+     QMainWindow::closeEvent(event);
+ }
+
+void FontBuilder::saveConfig(QSettings& settings,
+                             const QString& name,
+                             const QObject* object) {
+    settings.beginGroup(name);
+    const QMetaObject *metaobject = object->metaObject();
+     int count = metaobject->propertyCount();
+     for (int i=0; i<count; ++i) {
+         QMetaProperty metaproperty = metaobject->property(i);
+         const char *name = metaproperty.name();
+         QVariant value = object->property(name);
+         settings.setValue(name,value);
+     }
+    settings.endGroup();
+}
+
+void FontBuilder::readConfig(QSettings& settings,
+                             const QString& name,
+                             QObject* object) {
+    settings.beginGroup(name);
+    const QMetaObject *metaobject = object->metaObject();
+     int count = metaobject->propertyCount();
+     for (int i=0; i<count; ++i) {
+         QMetaProperty metaproperty = metaobject->property(i);
+         const char *name = metaproperty.name();
+         if (settings.contains(name))
+             object->setProperty(name,settings.value(name));
+      }
+    settings.endGroup();
 }
 
 void FontBuilder::changeEvent(QEvent *e)
