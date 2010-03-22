@@ -49,15 +49,25 @@ void AbstractLayouter::setData(LayoutData* data) {
     m_data = data;
 }
 
+void AbstractLayouter::DoPlace(const QVector<LayoutChar>& chars) {
+    m_data->beginPlacing();
+    m_compact_w = 0;
+    m_compact_h = 0;
+    PlaceImages(chars);
+    if (!m_config->potImage()) {
+        m_data->resize(m_compact_w,m_compact_h);
+    }
+    m_data->endPlacing();
+}
+
 void AbstractLayouter::on_ReplaceImages(const QVector<LayoutChar>& chars) {
     m_chars = chars;
 
     if (m_data!=0 && m_config!=0 ) {
-        m_data->beginPlacing();
         on_LayoutDataChanged();
-        m_data->endPlacing();
     }
 }
+
 
 void AbstractLayouter::on_LayoutDataChanged() {
     if (m_data!=0 && m_config!=0 ) {
@@ -72,9 +82,7 @@ void AbstractLayouter::on_LayoutDataChanged() {
                 chars[i].h+=m_config->offsetTop()+m_config->offsetBottom();
             }
         }
-        m_data->beginPlacing();
-        PlaceImages(chars);
-        m_data->endPlacing();
+        DoPlace(chars);
     }
 }
 
@@ -138,4 +146,8 @@ void AbstractLayouter::place(const LayoutChar& c) {
     }
     if (m_data)
         m_data->placeChar(out);
+    if ((out.x + out.w)>m_compact_w)
+        m_compact_w = out.x + out.w;
+    if ((out.y + out.h)>m_compact_h)
+        m_compact_h = out.y + out.h;
 }

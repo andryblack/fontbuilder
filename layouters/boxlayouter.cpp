@@ -43,55 +43,67 @@ void BoxLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
         resize(chars.front().w,chars.front().h);
         w = width();
         h = height();
-    }
-    bool iteration = true;
-    while (iteration) {
-        int x = 0;
-        int y = 0;
-        int line_h = 0;
-        iteration = false;
-        foreach (const LayoutChar& c, chars) {
-            if (c.h>line_h)
-                line_h = c.h;
-            if ((y+line_h)>=h || (y+line_h)>=h ) {
-                if (w>h) {
-                    resize(width(),height()+line_h);
-                    h=height();
-                }
-                else {
-                    resize(width()+c.w*2,height());
-                    w=width();
-                }
-                iteration = true;
-                break;
-            }
 
-            if ((x+c.w)>=w) {
-                x = 0;
-                y+=line_h;
-                line_h = 0;
-            } else
+        bool iteration = true;
+        while (iteration) {
+            int x = 0;
+            int y = 0;
+            int line_h = chars.front().h;
+            iteration = false;
+            foreach (const LayoutChar& c, chars) {
+
+                if ((x+c.w)>w) {
+                    x = 0;
+                    y+=line_h;
+                    line_h = c.h;
+                }
+
+               if ( (y+c.h)>h ) {
+                    if (w>h) {
+                        resize(width(),y+c.h);
+                        h=height();
+                    }
+                    else {
+                        resize(width()+c.w,height());
+                        w=width();
+                    }
+                    iteration = true;
+                    break;
+                }
+
+                if (c.h>line_h)
+                    line_h = c.h;
+
+                /// place
                 x+=c.w;
+
+            }
         }
     }
+
     w = width();
     h = height();
     int x = 0;
     int y = 0;
     int line_h = 0;
     foreach (const LayoutChar& c, chars) {
+
+        if ((x+c.w)>w) {
+            x = 0;
+            y+=line_h;
+            line_h = c.h;
+        }
+
         if (c.h>line_h)
             line_h = c.h;
+
         LayoutChar l = c;
         l.x = x;
         l.y = y;
         place(l);
-        if ((x+c.w)>=w) {
-            x = 0;
-            y+=line_h;
-            line_h = 0;
-        } else
-            x+=c.w;
+
+        x+=c.w;
+
     }
 }
 

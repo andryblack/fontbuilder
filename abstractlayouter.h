@@ -51,6 +51,9 @@ private:
     const LayoutConfig*   m_config;
     LayoutData* m_data;
     QVector<LayoutChar>    m_chars;
+    int m_compact_w;
+    int m_compact_h;
+    void DoPlace(const QVector<LayoutChar>& chars);
 protected:
     void resize(int w,int h);
     int width() const;

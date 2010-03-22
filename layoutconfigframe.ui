@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>213</width>
+    <width>218</width>
     <height>170</height>
    </rect>
   </property>
@@ -31,6 +31,13 @@
     <widget class="QCheckBox" name="checkBoxPOT">
      <property name="text">
       <string>Power ot two image</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBoxDrawGrid">
+     <property name="text">
+      <string>Draw grid</string>
      </property>
     </widget>
    </item>

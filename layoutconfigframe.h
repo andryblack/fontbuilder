@@ -24,6 +24,7 @@ private:
     LayoutConfig*   m_config;
 
 private slots:
+    void on_checkBoxDrawGrid_toggled(bool checked);
     void on_spinBoxRightOffset_valueChanged(int );
     void on_spinBoxBottomOffset_valueChanged(int );
     void on_spinBoxLeftOffset_valueChanged(int );

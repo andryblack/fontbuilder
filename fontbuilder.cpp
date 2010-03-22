@@ -122,15 +122,20 @@ void FontBuilder::on_layoutChanged() {
                                     c.x + m_layout_config->offsetLeft(),
                                     c.y + m_layout_config->offsetTop()
                                     );
-    painter.setPen(QColor(255,0,255,255));
-    if (m_layout_config->onePixelOffset())
-        foreach (const LayoutChar& c,m_layout_data->placed()) {
-            painter.drawRect(c.x-1,c.y-1,c.w,c.h);
-        }
-    else
-        foreach (const LayoutChar& c,m_layout_data->placed()) {
-            painter.drawRect(c.x,c.y,c.w-1,c.h-1);
-        }
-
+    if (m_layout_config->drawGrid()) {
+        painter.setPen(QColor(255,0,255,255));
+        if (m_layout_config->onePixelOffset())
+            foreach (const LayoutChar& c,m_layout_data->placed()) {
+                painter.drawRect(c.x-1,c.y-1,c.w,c.h);
+            }
+        else
+            foreach (const LayoutChar& c,m_layout_data->placed()) {
+                painter.drawRect(c.x,c.y,c.w-1,c.h-1);
+            }
+    }
     ui->label_Image->setPixmap(pixmap);
+    ui->groupBoxPreview->setTitle(
+            QString().number(m_layout_data->width()) + "x" +
+            QString().number(m_layout_data->height())
+            );
 }
