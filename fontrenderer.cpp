@@ -77,7 +77,7 @@ void FontRenderer::rasterize() {
     qDebug() << " begin rasterize_font ";
 
 
-    if (m_config->italic()) {
+    if (m_config->italic()!=0) {
         FT_Matrix matrix;
         const float angle = (-M_PI*m_config->italic()) / 180.0f;
         matrix.xx = (FT_Fixed)( cos( angle ) * 0x10000L );
@@ -100,17 +100,21 @@ void FontRenderer::rasterize() {
         error = FT_Load_Glyph( m_ft_face, glyph_index,
                       FT_LOAD_DEFAULT |
                       /*FT_LOAD_NO_BITMAP |*/
-                      (m_config->antialiased() ? FT_LOAD_TARGET_MONO : FT_LOAD_TARGET_NORMAL) |
-                      (m_config->autohinting() ? FT_LOAD_FORCE_AUTOHINT : 0) );
+                      (!m_config->antialiased() ?
+                         ( FT_LOAD_MONOCHROME | FT_LOAD_TARGET_MONO) :
+                         FT_LOAD_TARGET_NORMAL) |
+                      (m_config->autohinting() ? FT_LOAD_FORCE_AUTOHINT : FT_LOAD_NO_AUTOHINT) );
         if ( error )
            continue;
-        if (m_config->bold()>0) {
+        if (m_config->bold()!=0) {
             FT_Pos strength = m_config->size()*m_config->bold();
             if ( m_ft_face->glyph->format == FT_GLYPH_FORMAT_OUTLINE )
                 FT_Outline_Embolden( &m_ft_face->glyph->outline, strength );
         }
-        error = FT_Render_Glyph( m_ft_face->glyph,
+        if (m_ft_face->glyph->format!=FT_GLYPH_FORMAT_BITMAP) {
+            error = FT_Render_Glyph( m_ft_face->glyph,
                m_config->antialiased() ? FT_RENDER_MODE_NORMAL:FT_RENDER_MODE_MONO );
+        }
         if ( error )
            continue;
         append_bitmap(chars[i]);
@@ -162,9 +166,9 @@ void FontRenderer::append_bitmap(ushort symbol) {
                 *dst++ = qRgba(255,255,255,(s&(1<<1))?255:0);
                 *dst++ = qRgba(255,255,255,(s&(1<<0))?255:0);
             }
-            if (int d=w%8) {
+            {
                 uchar s = src[w/8];
-                switch (d) {
+                switch (w%8) {
                 case 7:  *dst++ = qRgba(255,255,255,(s&(1<<7))?255:0);
                 case 6:  *dst++ = qRgba(255,255,255,(s&(1<<6))?255:0);
                 case 5:  *dst++ = qRgba(255,255,255,(s&(1<<5))?255:0);
@@ -172,6 +176,8 @@ void FontRenderer::append_bitmap(ushort symbol) {
                 case 3:  *dst++ = qRgba(255,255,255,(s&(1<<3))?255:0);
                 case 2:  *dst++ = qRgba(255,255,255,(s&(1<<2))?255:0);
                 case 1:  *dst++ = qRgba(255,255,255,(s&(1<<1))?255:0);
+                case 0:
+                    break;
                 }
             }
 
@@ -180,7 +186,7 @@ void FontRenderer::append_bitmap(ushort symbol) {
     }
 
     m_images[symbol]=RenderedChar(symbol,slot->bitmap_left,slot->bitmap_top,slot->advance.x/64,img);
-    m_chars.push_back(LayoutChar(symbol,w,h));
+    m_chars.push_back(LayoutChar(symbol,slot->bitmap_left,slot->bitmap_top,w,h));
 
 }
 
@@ -227,6 +233,7 @@ void FontRenderer::on_fontSizeChanged() {
         int error = FT_Set_Char_Size(m_ft_face,
                                      size_x,
                                      size_y,0,0);
+        //error = FT_Set_Pixel_Sizes(m_ft_face,size_x,size_y);
         if (error) {
             qDebug() << "FT_Set_Char_Size error " << error;
         }
