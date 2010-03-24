@@ -31,78 +31,104 @@
 #include "boxlayouter.h"
 #include "../layoutdata.h"
 
+#include <cmath>
+
 BoxLayouter::BoxLayouter(QObject *parent) :
     AbstractLayouter(parent)
 {
 }
 
+struct Line {
+    int min_y;
+    int max_y;
+    int y;
+    Line() : min_y(0),max_y(0),y(0) {}
+    explicit Line(const LayoutChar& c) : y(0) {
+        min_y = c.y;
+        max_y = c.y + c.h;
+        //chars.push_back(&c);
+    }
+    int h() const { return max_y - min_y;}
+    void append(const LayoutChar& c) {
+        if (c.y < min_y)
+            min_y = c.y;
+        if ((c.y+c.h)>max_y)
+            max_y = c.y + c.h;
+        chars.push_back(&c);
+    }
+
+    QVector<const LayoutChar*> chars;
+};
+
 void BoxLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
     int h = 0;
     int w = 0;
-    if (!chars.isEmpty()) {
-        resize(chars.front().w,chars.front().h);
-        w = width();
-        h = height();
+    if (chars.isEmpty()) return;
 
-        bool iteration = true;
-        while (iteration) {
-            int x = 0;
-            int y = 0;
-            int line_h = chars.front().h;
-            iteration = false;
-            foreach (const LayoutChar& c, chars) {
+    /// speed up
+    int area = 0;
+    foreach (const LayoutChar& c, chars)
+        area+=c.w*c.h;
+    int dim = ::sqrt(area);
 
-                if ((x+c.w)>w) {
-                    x = 0;
-                    y+=line_h;
-                    line_h = c.h;
-                }
+    resize(dim,dim);
+    w = width();
+    h = height();
 
-               if ( (y+c.h)>h ) {
-                    if (w>h) {
-                        resize(width(),y+c.h);
-                        h=height();
-                    }
-                    else {
-                        resize(width()+c.w,height());
-                        w=width();
-                    }
-                    iteration = true;
-                    break;
-                }
 
-                if (c.h>line_h)
-                    line_h = c.h;
+    QVector<Line> lines;
 
-                /// place
-                x+=c.w;
+    bool iteration = true;
+    while (iteration) {
+        int x = 0;
+        lines.clear();
+        lines.push_back(Line(chars.front()));
+        iteration = false;
+        foreach (const LayoutChar& c, chars) {
 
+            if ((x+c.w)>w) {
+                x = 0;
+                int y = lines.back().y;
+                int h = lines.back().h();
+                lines.push_back(Line(c));
+                lines.back().y = y + h;
             }
+
+           if ( (lines.back().y+c.h)>h ) {
+                if (w>h) {
+                    resize(width(),lines.back().y+c.h);
+                    h=height();
+                }
+                else {
+                    resize(width()+c.w,height());
+                    w=width();
+                }
+                iteration = true;
+                break;
+            }
+
+
+
+            /// place
+           lines.back().append(c);
+           x+=c.w;
+
         }
     }
+
 
     w = width();
     h = height();
     int x = 0;
-    int y = 0;
-    int line_h = 0;
-    foreach (const LayoutChar& c, chars) {
-
-        if ((x+c.w)>w) {
-            x = 0;
-            y+=line_h;
-            line_h = c.h;
+    foreach (const Line& line, lines) {
+        x = 0;
+        foreach (const LayoutChar* c , line.chars ) {
+            LayoutChar l = *c;
+            l.x = x;
+            l.y = line.y + (c->y-line.min_y);
+            place(l);
+            x+=c->w;
         }
-
-        if (c.h>line_h)
-            line_h = c.h;
-
-        LayoutChar l = c;
-        l.x = x;
-        l.y = y;
-        place(l);
-
-        x+=c.w;
 
     }
 }

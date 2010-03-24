@@ -47,4 +47,5 @@ public slots:
 
 };
 
+
 #endif // LINELAYOUTER_H

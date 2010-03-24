@@ -45,6 +45,7 @@ void ColorButton::paintEvent(QPaintEvent *) {
 
 
 void ColorButton::mouseReleaseEvent(QMouseEvent *ev) {
+    Q_UNUSED(ev);
     QColorDialog cd(color(),parentWidget());
     if (cd.exec()==QDialog::Accepted) {
         setColor(cd.selectedColor());

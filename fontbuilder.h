@@ -66,15 +66,15 @@ private:
     LayoutData*     m_layout_data;
     AbstractLayouter* m_layouter;
     LayouterFactory*    m_layouter_factory;
+
 public slots:
 
     void fontParametersChanged();
-private slots:
 
 private slots:
     void on_comboBoxLayouter_currentIndexChanged(QString );
-    void on_layoutChanged();
-    void on_renderedChanged();
+    void onLayoutChanged();
+    void onRenderedChanged();
 };
 
 #endif // FONTBUILDER_H

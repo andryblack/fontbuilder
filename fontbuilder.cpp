@@ -56,16 +56,17 @@ FontBuilder::FontBuilder(QWidget *parent) :
     m_font_config = new FontConfig(this);
     m_font_renderer = new FontRenderer(this,m_font_config);
 
-    connect(m_font_renderer,SIGNAL(imagesChanged()),this,SLOT(on_renderedChanged()));
+    connect(m_font_renderer,SIGNAL(imagesChanged()),this,SLOT(onRenderedChanged()));
 
     m_layout_config = new LayoutConfig(this);
     m_layout_data = new LayoutData(this);
 
-    connect(m_layout_data,SIGNAL(layoutChanged()),this,SLOT(on_layoutChanged()));
+    connect(m_layout_data,SIGNAL(layoutChanged()),this,SLOT(onLayoutChanged()));
 
     m_layouter = 0;
     m_layouter_factory = new LayouterFactory(this);
 
+    bool b = ui->comboBoxLayouter->blockSignals(true);
     ui->comboBoxLayouter->clear();
     ui->comboBoxLayouter->addItems(m_layouter_factory->names());
 
@@ -79,8 +80,16 @@ FontBuilder::FontBuilder(QWidget *parent) :
     ui->frameFontSelect->setConfig(m_font_config);
     ui->frameCharacters->setConfig(m_font_config);
     ui->frameFontOptions->setConfig(m_font_config);
+    if (!m_layout_config->layouter().isEmpty()) {
+        for (int i=0;i<ui->comboBoxLayouter->count();i++)
+            if (ui->comboBoxLayouter->itemText(i)==m_layout_config->layouter())
+                ui->comboBoxLayouter->setCurrentIndex(i);
+    }
     ui->frameLayoutConfig->setConfig(m_layout_config);
 
+    ui->comboBoxLayouter->blockSignals(b);
+    this->on_comboBoxLayouter_currentIndexChanged(
+            ui->comboBoxLayouter->currentText());
 }
 
 FontBuilder::~FontBuilder()
@@ -146,6 +155,7 @@ void FontBuilder::fontParametersChanged() {
 
 void FontBuilder::on_comboBoxLayouter_currentIndexChanged(QString name)
 {
+    if (name.isEmpty()) return;
     if (m_layouter) {
         delete m_layouter;
         m_layouter = 0;
@@ -157,14 +167,15 @@ void FontBuilder::on_comboBoxLayouter_currentIndexChanged(QString name)
         connect(m_font_renderer,SIGNAL(imagesChanged(QVector<LayoutChar>)),
                 m_layouter,SLOT(on_ReplaceImages(QVector<LayoutChar>)));
         m_layouter->on_ReplaceImages(m_font_renderer->rendered());
+        m_layout_config->setLayouter(name);
     }
 }
 
-void FontBuilder::on_renderedChanged() {
+void FontBuilder::onRenderedChanged() {
 
 }
 
-void FontBuilder::on_layoutChanged() {
+void FontBuilder::onLayoutChanged() {
     QPixmap pixmap(m_layout_data->width(),m_layout_data->height());
     pixmap.fill(QColor(0,0,0,255));
     QPainter painter(&pixmap);

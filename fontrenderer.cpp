@@ -186,7 +186,7 @@ void FontRenderer::append_bitmap(ushort symbol) {
     }
 
     m_images[symbol]=RenderedChar(symbol,slot->bitmap_left,slot->bitmap_top,slot->advance.x/64,img);
-    m_chars.push_back(LayoutChar(symbol,slot->bitmap_left,slot->bitmap_top,w,h));
+    m_chars.push_back(LayoutChar(symbol,slot->bitmap_left,-slot->bitmap_top,w,h));
 
 }
 

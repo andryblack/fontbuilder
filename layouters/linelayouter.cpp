@@ -39,20 +39,24 @@ LineLayouter::LineLayouter(QObject *parent) :
 
 
 void LineLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
-    int h = 0;
     int w = 0;
+    if (chars.isEmpty()) return;
+    int min_y = chars.front().y;
+    int max_y = chars.front().y + chars.front().h;
     foreach (const LayoutChar& c, chars) {
         w+=c.w;
-        if (c.h>h)
-            h = c.h;
+        if (c.y<min_y)
+            min_y = c.y;
+        if ((c.y+c.h)>max_y)
+            max_y = c.y+c.h;
     }
-    resize(w,h);
+    resize(w,max_y-min_y);
     int x = 0;
-    int y = 0;
+    //int y = 0;
     foreach (const LayoutChar& c, chars) {
         LayoutChar l = c;
         l.x = x;
-        l.y = y;
+        l.y = (c.y-min_y);
         place(l);
         x+=c.w;
     }

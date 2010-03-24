@@ -105,78 +105,82 @@ void FontSelectFrame::setFontsDirectory(QString dir_name) {
     int error = FT_Init_FreeType(&library);
     if (error) {
         qDebug() << "FT_Open_Library error " << error;
-    } else {
+        return;
+    }
 
 
-        QDir dir(dir_name);
-        QStringList files = dir.entryList(
-                QStringList()
-                    << "*.ttf"
-                    << "*.pcf"
-                    << "*.pcf.gz"
-                    << "*.otf",
-                    QDir::Files | QDir::Readable
-                    );
-        QProgressDialog* progress = 0;
-        if (!files.isEmpty()) {
-            progress = new QProgressDialog(
-                    tr("Scanning directory.."),
-                    tr("Cancel"),
-                    0,files.size(),this);
-            progress->setCancelButton(0);
-            progress->setWindowModality(Qt::WindowModal);
-            //progress->show();
-        }
-        int progress_val = 0;
-        foreach (QString file_name, files) {
-            qDebug() << "found font file : " << file_name;
-            QFile file(dir.filePath(file_name));
-            if (file.open(QFile::ReadOnly)) {
-                QByteArray bytes = file.readAll();
-                const FT_Byte* data = reinterpret_cast<const FT_Byte* >(bytes.data());
-                FT_Face face;
-                int error =  FT_New_Memory_Face(library,
-                                                data,bytes.size(),-1,&face);
-                if (error==0) {
-                    int faces_num = face->num_faces;
-                    FT_Done_Face(face);
-                    for (int face_n = 0;face_n<faces_num;face_n++) {
-                        error =  FT_New_Memory_Face(library,
+    QDir dir(dir_name);
+    QStringList files = dir.entryList(
+            QStringList()
+            << "*.ttf"
+            << "*.pcf"
+            << "*.pcf.gz"
+            << "*.otf",
+            QDir::Files | QDir::Readable
+            );
+    QProgressDialog* progress = 0;
+    if (!files.isEmpty()) {
+        progress = new QProgressDialog(
+                tr("Scanning directory.."),
+                tr("Cancel"),
+                0,files.size(),this);
+        progress->setCancelButton(0);
+        progress->setWindowModality(Qt::WindowModal);
+        //progress->show();
+    }
+    int progress_val = 0;
+    foreach (QString file_name, files) {
+        //qDebug() << "found font file : " << file_name;
+        QFile file(dir.filePath(file_name));
+        if (file.open(QFile::ReadOnly)) {
+            QByteArray bytes = file.readAll();
+            const FT_Byte* data = reinterpret_cast<const FT_Byte* >(bytes.data());
+            FT_Face face;
+            int error =  FT_New_Memory_Face(library,
+                                            data,bytes.size(),-1,&face);
+            if (error==0) {
+                int faces_num = face->num_faces;
+                FT_Done_Face(face);
+                for (int face_n = 0;face_n<faces_num;face_n++) {
+                    error =  FT_New_Memory_Face(library,
                                                 data,bytes.size(),face_n,&face);
-                        if (error==0) {
-                            QString family = face->family_name;
-                            qDebug() << "face " << family << " "
-                                    << face->style_name;
-                            if (!family.isEmpty()) {
-                                bool fixedsizes = (FT_FACE_FLAG_SCALABLE & face->face_flags ) == 0;
-                                m_database[face->family_name].push_back(
-                                        FontDef(face->style_name,
-                                                file_name,
-                                                face_n,
-                                                fixedsizes));
-                                if (fixedsizes) {
-                                    for (int i=0;i<face->num_fixed_sizes;i++) {
-                                        m_database[family].back().fixedsizes.push_back(
-                                                QPair<int,int>(
-                                                        face->available_sizes[i].width,
-                                                        face->available_sizes[i].height));
-                                    }
-                                    qDebug() << " fixed sizes " << m_database[family].back().fixedsizes;
+                    /// skip font if load error
+                    if (error!=0)  continue;
 
-                                }
-                            }
-                            FT_Done_Face(face);
+                    QString family = face->family_name;
+                    //qDebug() << "face " << family << " "
+                    //        << face->style_name;
+                    /// skip font if not have family
+                    if (family.isEmpty()) continue;
+
+                    bool fixedsizes = (FT_FACE_FLAG_SCALABLE & face->face_flags ) == 0;
+                    m_database[face->family_name].push_back(
+                            FontDef(face->style_name,
+                                    file_name,
+                                    face_n,
+                                    fixedsizes));
+                    if (fixedsizes) {
+                        for (int i=0;i<face->num_fixed_sizes;i++) {
+                            m_database[family].back().fixedsizes.push_back(
+                                    QPair<int,int>(
+                                            face->available_sizes[i].width,
+                                            face->available_sizes[i].height));
                         }
-                    }
-                }
+                        qDebug() << " fixed sizes " << m_database[family].back().fixedsizes;
 
+                    }
+
+                    FT_Done_Face(face);
+
+                }
             }
 
-            progress_val++;
-            progress->setValue(progress_val);
         }
-        FT_Done_FreeType(library);
+
+        progress_val++;
+        progress->setValue(progress_val);
     }
+    FT_Done_FreeType(library);
 
     /// fill combo
     ui->comboBoxFamily->clear();
@@ -188,7 +192,9 @@ void FontSelectFrame::setFontsDirectory(QString dir_name) {
 
 void FontSelectFrame::on_pushButtonChangeDir_clicked()
 {
-    QString dir = QFileDialog::getExistingDirectory(this,tr("Select fonts directory"),ui->lineEditFontsDir->text());
+    QString dir = QFileDialog::getExistingDirectory(
+            this,tr("Select fonts directory"),
+            ui->lineEditFontsDir->text());
     if (!dir.isEmpty()) {
         if (m_config) m_config->setPath(dir);
         setFontsDirectory(dir);
@@ -294,6 +300,7 @@ void FontSelectFrame::readFontSizes(const FontDef& def) {
 
 void FontSelectFrame::on_comboBoxSize_editTextChanged(QString size_str)
 {
+    Q_UNUSED(size_str);
     /*
     bool ok = false;
     int size = size_str.toInt(&ok);
