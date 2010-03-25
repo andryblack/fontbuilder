@@ -48,6 +48,14 @@ public:
     void setFilename(const QString& filename);
     Q_PROPERTY( QString filename READ filename WRITE setFilename );
 
+    const QString& family() const { return m_family; }
+    void setFamily(const QString& family);
+    Q_PROPERTY( QString family READ family WRITE setFamily );
+
+    const QString& style() const { return m_style; }
+    void setStyle(const QString& style);
+    Q_PROPERTY( QString style READ style WRITE setStyle );
+
     int faceIndex() const { return m_face_index;}
     void setFaceIndex(int indx);
     Q_PROPERTY( int faceIndex READ faceIndex WRITE setFaceIndex );
@@ -91,6 +99,8 @@ public:
 private:
     QString m_path;
     QString m_filename;
+    QString m_family;
+    QString m_style;
     int m_face_index;
     int m_size;
     QString m_characters;
@@ -102,6 +112,7 @@ private:
     float   m_width;
     float   m_height;
 signals:
+    void nameChanged();
     void fileChanged();
     void faceIndexChanged();
     void sizeChanged();

@@ -41,7 +41,7 @@
 #include "layoutconfig.h"
 #include "layoutdata.h"
 #include "layouterfactory.h"
-
+#include "outputconfig.h"
 
 
 
@@ -54,6 +54,9 @@ FontBuilder::FontBuilder(QWidget *parent) :
 
 
     m_font_config = new FontConfig(this);
+    connect(m_font_config,SIGNAL(nameChanged()),this,SLOT(onFontNameChanged()));
+    connect(m_font_config,SIGNAL(sizeChanged()),this,SLOT(onFontNameChanged()));
+
     m_font_renderer = new FontRenderer(this,m_font_config);
 
     connect(m_font_renderer,SIGNAL(imagesChanged()),this,SLOT(onRenderedChanged()));
@@ -70,12 +73,13 @@ FontBuilder::FontBuilder(QWidget *parent) :
     ui->comboBoxLayouter->clear();
     ui->comboBoxLayouter->addItems(m_layouter_factory->names());
 
-
+    m_output_config = new OutputConfig(this);
 
     QSettings settings;
     restoreGeometry(settings.value("geometry").toByteArray());
     readConfig(settings,"fontconfig",m_font_config);
     readConfig(settings,"layoutconfig",m_layout_config);
+    readConfig(settings,"outputconfig",m_output_config);
 
     ui->frameFontSelect->setConfig(m_font_config);
     ui->frameCharacters->setConfig(m_font_config);
@@ -90,6 +94,8 @@ FontBuilder::FontBuilder(QWidget *parent) :
     ui->comboBoxLayouter->blockSignals(b);
     this->on_comboBoxLayouter_currentIndexChanged(
             ui->comboBoxLayouter->currentText());
+
+    ui->frameOutput->setConfig(m_output_config);
 }
 
 FontBuilder::~FontBuilder()
@@ -104,6 +110,7 @@ void FontBuilder::closeEvent(QCloseEvent *event)
      settings.setValue("geometry", saveGeometry());
      saveConfig(settings,"fontconfig",m_font_config);
      saveConfig(settings,"layoutconfig",m_layout_config);
+     saveConfig(settings,"outputconfig",m_output_config);
      QMainWindow::closeEvent(event);
  }
 
@@ -196,8 +203,18 @@ void FontBuilder::onLayoutChanged() {
             }
     }
     ui->label_Image->setPixmap(pixmap);
-    ui->groupBoxPreview->setTitle(
+    ui->groupBoxPreview->setTitle(tr("Preview(")+
             QString().number(m_layout_data->width()) + "x" +
-            QString().number(m_layout_data->height())
+            QString().number(m_layout_data->height()) +")"
             );
+}
+
+void FontBuilder::onFontNameChanged() {
+    QString name = m_font_config->family()+ "_" +
+                   m_font_config->style()+ "_" +
+                   QString().number(m_font_config->size());
+
+    name = name.toLower().replace(" ","_");
+    m_output_config->setImageName(name);
+    m_output_config->setDescriptionName(name);
 }

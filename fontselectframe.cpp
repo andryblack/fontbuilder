@@ -239,6 +239,8 @@ void FontSelectFrame::selectSize(int size) {
 void FontSelectFrame::on_comboBoxFamily_currentIndexChanged(QString family)
 {
     if (family.isEmpty()) return;
+    if (m_config)
+        m_config->setFamily(family);
     ui->comboBoxStyle->clear();
     int item_no = 0;
     foreach (const FontDef& def ,m_database[family]) {
@@ -252,6 +254,7 @@ void FontSelectFrame::on_comboBoxStyle_currentIndexChanged(int index )
 {
     if (index<0)
         return;
+
     int item_no = ui->comboBoxStyle->itemData(index).toInt();
     QString family = ui->comboBoxFamily->currentText();
 
@@ -262,6 +265,7 @@ void FontSelectFrame::on_comboBoxStyle_currentIndexChanged(int index )
         if (m_config) {
             m_config->setFilename(m_database[family][item_no].file);
             m_config->setFaceIndex(m_database[family][item_no].face);
+            m_config->setStyle(m_database[family][item_no].style);
         }
         readFontSizes(m_database[family][item_no]);
     }

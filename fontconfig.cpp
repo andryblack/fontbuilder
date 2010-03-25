@@ -60,6 +60,19 @@ void FontConfig::setFilename(const QString& filename) {
     }
 }
 
+void FontConfig::setFamily(const QString& family) {
+    if (m_family!=family) {
+        m_family = family;
+        nameChanged();
+    }
+}
+
+void FontConfig::setStyle(const QString& style) {
+    if (m_style!=style) {
+        m_style = style;
+        nameChanged();
+    }
+}
 
 void FontConfig::setFaceIndex(int indx) {
     if (m_face_index!=indx) {

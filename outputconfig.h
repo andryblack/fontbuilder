@@ -28,56 +28,37 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef FONTBUILDER_H
-#define FONTBUILDER_H
+#ifndef OUTPUTCONFIG_H
+#define OUTPUTCONFIG_H
 
-#include <QMainWindow>
-#include <QSettings>
+#include <QObject>
 
-namespace Ui {
-    class FontBuilder;
-}
-
-struct FontRenderer;
-class FontConfig;
-class LayoutConfig;
-class LayoutData;
-class AbstractLayouter;
-class LayouterFactory;
-class OutputConfig;
-
-class FontBuilder : public QMainWindow {
-    Q_OBJECT
+class OutputConfig : public QObject
+{
+Q_OBJECT
 public:
-    FontBuilder(QWidget *parent = 0);
-    ~FontBuilder();
+    explicit OutputConfig(QObject *parent = 0);
 
-protected:
-    void changeEvent(QEvent *e);
-    void closeEvent(QCloseEvent *event);
-    void saveConfig(QSettings& config,const QString& name,const QObject* obj);
-    void readConfig(QSettings& config,const QString& name,QObject* obj);
+    const QString& path() const { return m_path;}
+    void setPath(const QString& path) { m_path=path;}
+    Q_PROPERTY(QString path READ path WRITE setPath);
 
+    const QString& imageName() const { return m_image_name;}
+    void setImageName(const QString& name);
+    Q_PROPERTY(QString imageName READ imageName WRITE setImageName);
+
+    const QString& descriptionName() const { return m_description_name;}
+    void setDescriptionName(const QString& name);
+    Q_PROPERTY(QString descriptionName READ descriptionName WRITE setDescriptionName);
 private:
-
-    Ui::FontBuilder *ui;
-    FontRenderer*   m_font_renderer;
-    FontConfig*     m_font_config;
-    LayoutConfig*   m_layout_config;
-    LayoutData*     m_layout_data;
-    AbstractLayouter* m_layouter;
-    LayouterFactory*    m_layouter_factory;
-    OutputConfig*   m_output_config;
-
+    QString m_path;
+    QString m_image_name;
+    QString m_description_name;
+signals:
+    void imageNameChanged(const QString&);
+    void descriptionNameChanged(const QString&);
 public slots:
 
-    void fontParametersChanged();
-
-private slots:
-    void on_comboBoxLayouter_currentIndexChanged(QString );
-    void onLayoutChanged();
-    void onRenderedChanged();
-    void onFontNameChanged();
 };
 
-#endif // FONTBUILDER_H
+#endif // OUTPUTCONFIG_H

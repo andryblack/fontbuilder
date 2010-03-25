@@ -7,11 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>218</width>
-    <height>170</height>
+    <height>190</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Frame</string>
+  </property>
+  <property name="locale">
+   <locale language="English" country="UnitedStates"/>
   </property>
   <property name="frameShape">
    <enum>QFrame::StyledPanel</enum>
@@ -23,7 +26,7 @@
    <item>
     <widget class="QCheckBox" name="checkBoxOnePixelOffset">
      <property name="text">
-      <string>One pixel offset</string>
+      <string>One pixel separator</string>
      </property>
     </widget>
    </item>
@@ -60,7 +63,7 @@
      <item row="1" column="1">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Offsets</string>
+        <string>Padding</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

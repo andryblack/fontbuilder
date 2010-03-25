@@ -28,56 +28,23 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef FONTBUILDER_H
-#define FONTBUILDER_H
+#include "outputconfig.h"
 
-#include <QMainWindow>
-#include <QSettings>
-
-namespace Ui {
-    class FontBuilder;
+OutputConfig::OutputConfig(QObject *parent) :
+    QObject(parent)
+{
 }
 
-struct FontRenderer;
-class FontConfig;
-class LayoutConfig;
-class LayoutData;
-class AbstractLayouter;
-class LayouterFactory;
-class OutputConfig;
+void OutputConfig::setImageName(const QString& name) {
+    if (m_image_name!=name) {
+        m_image_name = name;
+        imageNameChanged(name);
+    }
+}
 
-class FontBuilder : public QMainWindow {
-    Q_OBJECT
-public:
-    FontBuilder(QWidget *parent = 0);
-    ~FontBuilder();
-
-protected:
-    void changeEvent(QEvent *e);
-    void closeEvent(QCloseEvent *event);
-    void saveConfig(QSettings& config,const QString& name,const QObject* obj);
-    void readConfig(QSettings& config,const QString& name,QObject* obj);
-
-private:
-
-    Ui::FontBuilder *ui;
-    FontRenderer*   m_font_renderer;
-    FontConfig*     m_font_config;
-    LayoutConfig*   m_layout_config;
-    LayoutData*     m_layout_data;
-    AbstractLayouter* m_layouter;
-    LayouterFactory*    m_layouter_factory;
-    OutputConfig*   m_output_config;
-
-public slots:
-
-    void fontParametersChanged();
-
-private slots:
-    void on_comboBoxLayouter_currentIndexChanged(QString );
-    void onLayoutChanged();
-    void onRenderedChanged();
-    void onFontNameChanged();
-};
-
-#endif // FONTBUILDER_H
+void OutputConfig::setDescriptionName(const QString& name) {
+    if (m_description_name!=name) {
+        m_description_name = name;
+        descriptionNameChanged(name);
+    }
+}
