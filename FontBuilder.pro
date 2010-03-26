@@ -81,6 +81,12 @@ mac {
     LIBS += -L../../src/lib \
         -lfreetype
 }
+win32 {
+    INCLUDEPATH += ../include
+    INCLUDEPATH += ../include/freetype2
+    LIBS += -L../lib \
+        -lfreetype
+}
 linux { 
     CONFIG += link_pkgconfig
     PKGCONFIG += freetype2
