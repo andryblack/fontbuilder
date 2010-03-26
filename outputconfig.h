@@ -32,6 +32,7 @@
 #define OUTPUTCONFIG_H
 
 #include <QObject>
+#include <QImage>
 
 class OutputConfig : public QObject
 {
@@ -47,12 +48,27 @@ public:
     void setImageName(const QString& name);
     Q_PROPERTY(QString imageName READ imageName WRITE setImageName);
 
+    const QString& imageFormat() const { return m_image_format;}
+    void setImageFormat(const QString& format) { m_image_format=format;}
+    Q_PROPERTY(QString imageFormat READ imageFormat WRITE setImageFormat);
+
     const QString& descriptionName() const { return m_description_name;}
     void setDescriptionName(const QString& name);
     Q_PROPERTY(QString descriptionName READ descriptionName WRITE setDescriptionName);
+
+    bool writeImage() const { return m_write_image;}
+    void setWriteImage(bool write) { m_write_image = write;}
+    Q_PROPERTY(bool writeImage READ writeImage WRITE setWriteImage );
+
+    bool writeDescription() const { return m_write_description;}
+    void setWriteDescription(bool write) { m_write_description = write;}
+    Q_PROPERTY(bool writeDescription READ writeDescription WRITE setWriteDescription );
 private:
     QString m_path;
+    bool    m_write_image;
     QString m_image_name;
+    QString m_image_format;
+    bool    m_write_description;
     QString m_description_name;
 signals:
     void imageNameChanged(const QString&);

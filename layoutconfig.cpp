@@ -39,7 +39,6 @@ LayoutConfig::LayoutConfig(QObject *parent) :
     m_offset_top = 0;
     m_offset_right = 0;
     m_offset_bottom = 0;
-    m_draw_grid = true;
 }
 
 
@@ -57,12 +56,7 @@ void LayoutConfig::setPotImage(bool b) {
     }
 }
 
-void LayoutConfig::setDrawGrid(bool b) {
-    if (m_draw_grid!=b) {
-        m_draw_grid = b;
-        layoutConfigChanged();
-    }
-}
+
 void LayoutConfig::setOffsetLeft(int v) {
     if (m_offset_left!=v) {
         m_offset_left = v;

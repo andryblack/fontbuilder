@@ -33,6 +33,9 @@
 OutputConfig::OutputConfig(QObject *parent) :
     QObject(parent)
 {
+    m_write_image = true;
+    m_write_description = true;
+    m_image_format = "PNG";
 }
 
 void OutputConfig::setImageName(const QString& name) {

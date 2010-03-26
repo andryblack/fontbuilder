@@ -35,6 +35,7 @@
 #include <QPixmap>
 #include <QSettings>
 #include <QMetaProperty>
+#include <QDir>
 
 #include "fontconfig.h"
 #include "fontrenderer.h"
@@ -80,6 +81,8 @@ FontBuilder::FontBuilder(QWidget *parent) :
     readConfig(settings,"fontconfig",m_font_config);
     readConfig(settings,"layoutconfig",m_layout_config);
     readConfig(settings,"outputconfig",m_output_config);
+    ui->checkBoxDrawGrid->setChecked(settings.value("draw_grid").toBool());
+    connect(ui->checkBoxDrawGrid,SIGNAL(toggled(bool)),this,SLOT(onLayoutChanged()));
 
     ui->frameFontSelect->setConfig(m_font_config);
     ui->frameCharacters->setConfig(m_font_config);
@@ -111,6 +114,7 @@ void FontBuilder::closeEvent(QCloseEvent *event)
      saveConfig(settings,"fontconfig",m_font_config);
      saveConfig(settings,"layoutconfig",m_layout_config);
      saveConfig(settings,"outputconfig",m_output_config);
+     settings.setValue("draw_grid",ui->checkBoxDrawGrid->isChecked());
      QMainWindow::closeEvent(event);
  }
 
@@ -191,7 +195,7 @@ void FontBuilder::onLayoutChanged() {
                                     c.x + m_layout_config->offsetLeft(),
                                     c.y + m_layout_config->offsetTop()
                                     );
-    if (m_layout_config->drawGrid()) {
+    if (ui->checkBoxDrawGrid->isChecked()) {
         painter.setPen(QColor(255,0,255,255));
         if (m_layout_config->onePixelOffset())
             foreach (const LayoutChar& c,m_layout_data->placed()) {
@@ -203,9 +207,10 @@ void FontBuilder::onLayoutChanged() {
             }
     }
     ui->label_Image->setPixmap(pixmap);
-    ui->groupBoxPreview->setTitle(tr("Preview(")+
+    ui->label_Image->repaint();
+    ui->label_ImageSize->setText(tr("Image size: ")+
             QString().number(m_layout_data->width()) + "x" +
-            QString().number(m_layout_data->height()) +")"
+            QString().number(m_layout_data->height())
             );
 }
 
@@ -218,3 +223,23 @@ void FontBuilder::onFontNameChanged() {
     m_output_config->setImageName(name);
     m_output_config->setDescriptionName(name);
 }
+
+void FontBuilder::on_pushButtonWriteFont_clicked()
+{
+    QDir dir(m_output_config->path());
+    if (m_output_config->writeImage()) {
+        QPixmap pixmap(m_layout_data->width(),m_layout_data->height());
+        pixmap.fill(QColor(0,0,0,0));
+        QPainter painter(&pixmap);
+        foreach (const LayoutChar& c,m_layout_data->placed())
+            m_font_renderer->placeImage(painter,c.symbol,
+                                        c.x + m_layout_config->offsetLeft(),
+                                        c.y + m_layout_config->offsetTop()
+                                        );
+        QString filename = dir.filePath(m_output_config->imageName());
+        filename+="."+m_output_config->imageFormat();
+        pixmap.save(filename,m_output_config->imageFormat().toUtf8());
+    }
+}
+
+

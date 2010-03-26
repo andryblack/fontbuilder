@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>300</height>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,14 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="comboBoxImageFormat"/>
+       <widget class="QComboBox" name="comboBoxImageFormat">
+        <property name="sizeAdjustPolicy">
+         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
@@ -86,18 +93,42 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QComboBox" name="comboBoxImageChannels"/>
+       <widget class="QComboBox" name="comboBoxImageChannels">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="checkBoxDrawGrid">
+        <property name="text">
+         <string>Write grid</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="ColorButton" name="widgetGridColor" native="true">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
    <item row="3" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBoxDescription">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Description</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="1">
@@ -138,6 +169,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ColorButton</class>
+   <extends>QWidget</extends>
+   <header>colorbutton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

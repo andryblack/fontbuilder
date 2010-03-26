@@ -55,6 +55,10 @@ private:
     OutputConfig*   m_config;
 
 private slots:
+    void on_checkBoxDrawGrid_toggled(bool checked);
+    void on_groupBoxDescription_toggled(bool );
+    void on_groupBoxImage_toggled(bool );
+    void on_comboBoxImageFormat_currentIndexChanged(QString );
     void onImageNameChanged(const QString& s);
     void onDescriptionNameChanged(const QString& s);
     void on_lineEditImageFilename_editingFinished( );

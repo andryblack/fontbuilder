@@ -74,6 +74,7 @@ public slots:
     void fontParametersChanged();
 
 private slots:
+    void on_pushButtonWriteFont_clicked();
     void on_comboBoxLayouter_currentIndexChanged(QString );
     void onLayoutChanged();
     void onRenderedChanged();

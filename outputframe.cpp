@@ -34,12 +34,19 @@
 #include "outputconfig.h"
 
 #include <QFileDialog>
+#include <QImage>
+#include <QImageWriter>
 
 OutputFrame::OutputFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::OutputFrame)
 {
     ui->setupUi(this);
+    foreach( QByteArray format , QImageWriter::supportedImageFormats()) {
+        QString name = format;
+        ui->comboBoxImageFormat->addItem(name,format);
+    }
+    ui->widgetGridColor->setColor(QColor(255,0,255,255));
 }
 
 OutputFrame::~OutputFrame()
@@ -67,6 +74,14 @@ void OutputFrame::setConfig(OutputConfig* config) {
         onImageNameChanged(config->imageName());
         connect(config,SIGNAL(descriptionNameChanged(QString)),this,SLOT(onDescriptionNameChanged(QString)));
         onDescriptionNameChanged(config->descriptionName());
+        for (int i=0;i<ui->comboBoxImageFormat->count();i++)
+            if (ui->comboBoxImageFormat->itemText(i)==config->imageFormat())
+                ui->comboBoxImageFormat->setCurrentIndex(i);
+        ui->groupBoxImage->setChecked(config->writeImage());
+        if (ui->groupBoxDescription->isEnabled())
+            ui->groupBoxDescription->setChecked(config->writeDescription());
+        else
+            config->setWriteDescription(false);
     }
 }
 
@@ -97,4 +112,24 @@ void OutputFrame::on_lineEditImageFilename_editingFinished()
 void OutputFrame::on_lineEditDescriptionFilename_editingFinished()
 {
     if (m_config) m_config->setDescriptionName(ui->lineEditDescriptionFilename->text());
+}
+
+void OutputFrame::on_comboBoxImageFormat_currentIndexChanged(QString name)
+{
+    if (m_config) m_config->setImageFormat(name);
+}
+
+void OutputFrame::on_groupBoxImage_toggled(bool checked)
+{
+    if (m_config) m_config->setWriteImage(checked);
+}
+
+void OutputFrame::on_groupBoxDescription_toggled(bool checked)
+{
+    if (m_config) m_config->setWriteDescription(checked);
+}
+
+void OutputFrame::on_checkBoxDrawGrid_toggled(bool checked)
+{
+    ui->widgetGridColor->setEnabled(checked);
 }

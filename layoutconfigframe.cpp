@@ -24,7 +24,6 @@ void LayoutConfigFrame::setConfig(LayoutConfig* config) {
         ui->spinBoxTopOffset->setValue(config->offsetTop());
         ui->spinBoxRightOffset->setValue(config->offsetRight());
         ui->spinBoxBottomOffset->setValue(config->offsetBottom());
-        ui->checkBoxDrawGrid->setChecked(config->drawGrid());
     }
 }
 
@@ -70,7 +69,4 @@ void LayoutConfigFrame::on_spinBoxRightOffset_valueChanged(int value)
     if (m_config) m_config->setOffsetRight(value);
 }
 
-void LayoutConfigFrame::on_checkBoxDrawGrid_toggled(bool checked)
-{
-    if (m_config) m_config->setDrawGrid(checked);
-}
+

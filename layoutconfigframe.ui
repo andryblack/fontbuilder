@@ -33,14 +33,7 @@
    <item>
     <widget class="QCheckBox" name="checkBoxPOT">
      <property name="text">
-      <string>Power ot two image</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="checkBoxDrawGrid">
-     <property name="text">
-      <string>Draw grid</string>
+      <string>Power of two image</string>
      </property>
     </widget>
    </item>

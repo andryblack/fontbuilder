@@ -54,9 +54,7 @@ void AbstractLayouter::DoPlace(const QVector<LayoutChar>& chars) {
     m_compact_w = 0;
     m_compact_h = 0;
     PlaceImages(chars);
-    if (!m_config->potImage()) {
-        m_data->resize(m_compact_w,m_compact_h);
-    }
+    resize(m_compact_w,m_compact_h);
     m_data->endPlacing();
 }
 
@@ -138,6 +136,10 @@ int AbstractLayouter::height() const {
 }
 void AbstractLayouter::place(const LayoutChar& c) {
     LayoutChar out = c;
+    if ((out.x + out.w)>m_compact_w)
+        m_compact_w = out.x + out.w;
+    if ((out.y + out.h)>m_compact_h)
+        m_compact_h = out.y + out.h;
     if (m_config) {
         if (m_config->onePixelOffset()) {
             out.x++;
@@ -146,8 +148,5 @@ void AbstractLayouter::place(const LayoutChar& c) {
     }
     if (m_data)
         m_data->placeChar(out);
-    if ((out.x + out.w)>m_compact_w)
-        m_compact_w = out.x + out.w;
-    if ((out.y + out.h)>m_compact_h)
-        m_compact_h = out.y + out.h;
+
 }

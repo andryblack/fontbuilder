@@ -62,9 +62,6 @@ public:
     Q_PROPERTY( int offsetRight READ offsetRight WRITE setOffsetRight );
     Q_PROPERTY( int offsetBottom READ offsetBottom WRITE setOffsetBottom );
 
-    bool drawGrid() const { return m_draw_grid;}
-    void setDrawGrid(bool b);
-    Q_PROPERTY( bool drawGrid READ drawGrid WRITE setDrawGrid );
 
     const QString& layouter() const { return m_layouter;}
     void setLayouter(const QString& layouter) { m_layouter=layouter;}
@@ -73,7 +70,6 @@ private:
     QString m_layouter;
     bool    m_one_pixel_offset;
     bool    m_pot_image;
-    bool    m_draw_grid;
     int     m_offset_left;
     int     m_offset_top;
     int     m_offset_right;
