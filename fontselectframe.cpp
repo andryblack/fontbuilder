@@ -80,13 +80,25 @@ void FontSelectFrame::setConfig(FontConfig* config) {
     m_config = 0;
     if (config) {
         bool b = config->blockSignals(true);
-        setFontsDirectory(config->path());
+        if (!config->path().isEmpty())
+            setFontsDirectory(config->path());
         if (!config->filename().isEmpty())
             selectFile(config->filename(),config->faceIndex());
+        else if (!m_database.isEmpty()) {
+            const FontDef& def = m_database.constBegin()->front();
+            selectFile(def.file,def.face);
+            config->setFilename(def.file);
+        }
+        if (config->size()==0)
+            config->setSize(ui->comboBoxSize->itemText(0).toInt());
         if (config->size())
             selectSize(config->size());
+
+        config->setFamily(ui->comboBoxFamily->itemText(ui->comboBoxFamily->currentIndex()));
+        config->setStyle(ui->comboBoxStyle->itemText(ui->comboBoxStyle->currentIndex()));
+
         config->blockSignals(b);
-         m_config = config;
+        m_config = config;
     }
 
 }
@@ -212,14 +224,17 @@ void FontSelectFrame::selectFile(const QString& file,int face) {
                 bool block = ui->comboBoxSize->blockSignals(true);
 
                 for (int i=0;i<ui->comboBoxFamily->count();i++)
-                    if (ui->comboBoxFamily->itemText(i)==name)
+                    if (ui->comboBoxFamily->itemText(i)==name) {
                         ui->comboBoxFamily->setCurrentIndex(i);
+                        break;
+                    }
 
 
                 for (int i=0;i<ui->comboBoxStyle->count();i++)
                     if (ui->comboBoxStyle->itemData(i).toInt()==id) {
                         ui->comboBoxStyle->setCurrentIndex(i);
                         on_comboBoxStyle_currentIndexChanged(i);
+                        break;
                     }
                 ui->comboBoxSize->blockSignals(block);
                 ui->comboBoxStyle->blockSignals(b);

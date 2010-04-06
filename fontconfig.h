@@ -96,6 +96,7 @@ public:
     void setHeight(float b);
     Q_PROPERTY( float height READ height WRITE setHeight );
 
+    void emmitChange();
 private:
     QString m_path;
     QString m_filename;

@@ -147,3 +147,9 @@ void FontConfig::setHeight(float b) {
         sizeChanged();
     }
 }
+
+void FontConfig::emmitChange() {
+    fileChanged();
+    nameChanged();
+    sizeChanged();
+}

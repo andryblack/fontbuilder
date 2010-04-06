@@ -55,6 +55,7 @@ FontBuilder::FontBuilder(QWidget *parent) :
 
 
     m_font_config = new FontConfig(this);
+    bool font_config_block = m_font_config->blockSignals(true);
     connect(m_font_config,SIGNAL(nameChanged()),this,SLOT(onFontNameChanged()));
     connect(m_font_config,SIGNAL(sizeChanged()),this,SLOT(onFontNameChanged()));
 
@@ -84,7 +85,6 @@ FontBuilder::FontBuilder(QWidget *parent) :
     ui->checkBoxDrawGrid->setChecked(settings.value("draw_grid").toBool());
     connect(ui->checkBoxDrawGrid,SIGNAL(toggled(bool)),this,SLOT(onLayoutChanged()));
 
-    ui->frameFontSelect->setConfig(m_font_config);
     ui->frameCharacters->setConfig(m_font_config);
     ui->frameFontOptions->setConfig(m_font_config);
     if (!m_layout_config->layouter().isEmpty()) {
@@ -94,11 +94,16 @@ FontBuilder::FontBuilder(QWidget *parent) :
     }
     ui->frameLayoutConfig->setConfig(m_layout_config);
 
+
+
     ui->comboBoxLayouter->blockSignals(b);
     this->on_comboBoxLayouter_currentIndexChanged(
             ui->comboBoxLayouter->currentText());
 
     ui->frameOutput->setConfig(m_output_config);
+    ui->frameFontSelect->setConfig(m_font_config);
+    m_font_config->blockSignals(font_config_block);
+    m_font_config->emmitChange();
 }
 
 FontBuilder::~FontBuilder()
