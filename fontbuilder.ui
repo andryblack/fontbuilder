@@ -28,7 +28,7 @@
        <locale language="English" country="UnitedStates"/>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_Font">
        <attribute name="title">
@@ -203,8 +203,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>223</width>
-             <height>395</height>
+             <width>264</width>
+             <height>393</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout">
@@ -311,17 +311,9 @@
      <x>0</x>
      <y>0</y>
      <width>612</width>
-     <height>22</height>
+     <height>31</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
