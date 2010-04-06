@@ -41,6 +41,7 @@ OutputFrame::OutputFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::OutputFrame)
 {
+    m_config = 0;
     ui->setupUi(this);
     foreach( QByteArray format , QImageWriter::supportedImageFormats()) {
         QString name = format;
