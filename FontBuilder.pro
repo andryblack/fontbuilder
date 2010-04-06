@@ -87,7 +87,7 @@ win32 {
     LIBS += -L../lib \
         -lfreetype
 }
-linux { 
+linux* {
     CONFIG += link_pkgconfig
     PKGCONFIG += freetype2
 }

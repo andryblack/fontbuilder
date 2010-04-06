@@ -84,7 +84,7 @@ void AbstractLayouter::on_LayoutDataChanged() {
     }
 }
 
-static const int nextpot(unsigned int val) {
+static unsigned int nextpot(unsigned int val) {
     val--;
     val = (val >> 1) | val;
     val = (val >> 2) | val;
