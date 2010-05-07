@@ -28,60 +28,38 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef FONTBUILDER_H
-#define FONTBUILDER_H
+#include "abstractexporter.h"
+#include "layoutdata.h"
+#include "rendererdata.h"
 
-#include <QMainWindow>
-#include <QSettings>
-
-namespace Ui {
-    class FontBuilder;
+AbstractExporter::AbstractExporter(QObject *parent) :
+    QObject(parent)
+{
+    m_extension = "font";
 }
 
-struct FontRenderer;
-class FontConfig;
-class LayoutConfig;
-class LayoutData;
-class AbstractLayouter;
-class LayouterFactory;
-class OutputConfig;
-class ExporterFactory;
-class AbstractExporter;
 
-class FontBuilder : public QMainWindow {
-    Q_OBJECT
-public:
-    FontBuilder(QWidget *parent = 0);
-    ~FontBuilder();
+void AbstractExporter::setData(const LayoutData* data,const RendererData& rendered) {
+    m_symbols.clear();
+    foreach ( const LayoutChar& lc, data->placed()) {
+        Symbol symb;
+        symb.id = lc.symbol;
+        symb.place_x = lc.x;
+        symb.place_y = lc.y;
+        symb.place_w = lc.w;
+        symb.place_h = lc.h;
+        const RenderedChar& rc = rendered[symb.id];
+        symb.offset_x = rc.offset_x;
+        symb.offset_y = rc.offset_y;
+        symb.advance = rc.advance;
+        m_symbols.push_back(symb);
+    }
+}
 
-protected:
-    void changeEvent(QEvent *e);
-    void closeEvent(QCloseEvent *event);
-    void saveConfig(QSettings& config,const QString& name,const QObject* obj);
-    void readConfig(QSettings& config,const QString& name,QObject* obj);
 
-private:
-
-    Ui::FontBuilder *ui;
-    FontRenderer*   m_font_renderer;
-    FontConfig*     m_font_config;
-    LayoutConfig*   m_layout_config;
-    LayoutData*     m_layout_data;
-    AbstractLayouter* m_layouter;
-    LayouterFactory*    m_layouter_factory;
-    OutputConfig*   m_output_config;
-    ExporterFactory* m_exporter_factory;
-
-public slots:
-
-    void fontParametersChanged();
-
-private slots:
-    void on_pushButtonWriteFont_clicked();
-    void on_comboBoxLayouter_currentIndexChanged(QString );
-    void onLayoutChanged();
-    void onRenderedChanged();
-    void onFontNameChanged();
-};
-
-#endif // FONTBUILDER_H
+bool AbstractExporter::Write(QByteArray& bytes) {
+    if (Export(bytes)) {
+       return true;
+    }
+    return false;
+}

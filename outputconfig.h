@@ -56,6 +56,10 @@ public:
     void setDescriptionName(const QString& name);
     Q_PROPERTY(QString descriptionName READ descriptionName WRITE setDescriptionName);
 
+    const QString& descriptionFormat() const { return m_description_format;}
+    void setDescriptionFormat(const QString& format) { m_description_format=format;}
+    Q_PROPERTY(QString descriptionFormat READ descriptionFormat WRITE setDescriptionFormat);
+
     bool writeImage() const { return m_write_image;}
     void setWriteImage(bool write) { m_write_image = write;}
     Q_PROPERTY(bool writeImage READ writeImage WRITE setWriteImage );
@@ -70,6 +74,7 @@ private:
     QString m_image_format;
     bool    m_write_description;
     QString m_description_name;
+    QString m_description_format;
 signals:
     void imageNameChanged(const QString&);
     void descriptionNameChanged(const QString&);

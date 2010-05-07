@@ -37,6 +37,7 @@
 #include <QImage>
 #include <QImageWriter>
 
+
 OutputFrame::OutputFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::OutputFrame)
@@ -83,13 +84,18 @@ void OutputFrame::setConfig(OutputConfig* config) {
             ui->groupBoxDescription->setChecked(config->writeDescription());
         else
             config->setWriteDescription(false);
+
+        for (int i=0;i<ui->comboBoxDescriptionType->count();i++)
+            if (ui->comboBoxDescriptionType->itemText(i)==config->descriptionFormat())
+                ui->comboBoxDescriptionType->setCurrentIndex(i);
+        config->setDescriptionFormat(ui->comboBoxDescriptionType->currentText());
     }
 }
 
 void OutputFrame::on_pushButtonSelectPath_clicked()
 {
     QString dir = QFileDialog::getExistingDirectory(
-            this,tr("Select fonts directory"),
+            this,tr("Select output directory"),
             ui->lineEditPath->text());
     if (!dir.isEmpty()) {
         if (m_config) m_config->setPath(dir);
@@ -133,4 +139,16 @@ void OutputFrame::on_groupBoxDescription_toggled(bool checked)
 void OutputFrame::on_checkBoxDrawGrid_toggled(bool checked)
 {
     ui->widgetGridColor->setEnabled(checked);
+}
+
+void OutputFrame::setExporters(const QStringList& exporters) {
+    bool bs = ui->comboBoxDescriptionType->blockSignals(true);
+    ui->comboBoxDescriptionType->clear();
+    ui->comboBoxDescriptionType->addItems(exporters);
+    ui->comboBoxDescriptionType->blockSignals(bs);
+}
+
+void OutputFrame::on_comboBoxImageChannels_currentIndexChanged(QString name)
+{
+    if (m_config) m_config->setDescriptionFormat(name);
 }

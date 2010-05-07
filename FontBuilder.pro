@@ -48,7 +48,10 @@ SOURCES += main.cpp \
     layouters/boxlayouter.cpp \
     layoutconfigframe.cpp \
     outputconfig.cpp \
-    outputframe.cpp
+    outputframe.cpp \
+    abstractexporter.cpp \
+    exporters/ghlexporter.cpp \
+    exporterfactory.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -66,28 +69,33 @@ HEADERS += fontbuilder.h \
     layouters/boxlayouter.h \
     layoutconfigframe.h \
     outputconfig.h \
-    outputframe.h
+    outputframe.h \
+    abstractexporter.h \
+    exporters/ghlexporter.h \
+    exporterfactory.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \
     charactersframe.ui \
     layoutconfigframe.ui \
-    outputframe.ui
+    outputframe.ui \
+    ../iPhoneDev/GHL/src/system/qt/ghl_opengl_widget.ui
 TRANSLATIONS = fontbuilder_en.ts \
     fontbuilder_ru.ts
+QT += xml
 mac { 
     INCLUDEPATH += ../../src/include
     INCLUDEPATH += ../../src/include/freetype2
     LIBS += -L../../src/lib \
         -lfreetype
 }
-win32 {
+win32 { 
     INCLUDEPATH += ../include
     INCLUDEPATH += ../include/freetype2
     LIBS += -L../lib \
         -lfreetype
 }
-linux* {
+linux* { 
     CONFIG += link_pkgconfig
     PKGCONFIG += freetype2
 }

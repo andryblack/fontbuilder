@@ -45,6 +45,7 @@ public:
     OutputFrame(QWidget *parent = 0);
     ~OutputFrame();
 
+    void setExporters(const QStringList& exporters);
     void setConfig(OutputConfig* config);
 
 protected:
@@ -55,6 +56,7 @@ private:
     OutputConfig*   m_config;
 
 private slots:
+    void on_comboBoxImageChannels_currentIndexChanged(QString );
     void on_checkBoxDrawGrid_toggled(bool checked);
     void on_groupBoxDescription_toggled(bool );
     void on_groupBoxImage_toggled(bool );

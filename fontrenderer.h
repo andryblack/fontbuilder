@@ -52,6 +52,7 @@ public:
 
     const QVector<LayoutChar>& rendered() const { return m_chars;}
     void placeImage(QPainter& p,ushort sybol,int x,int y);
+    const RendererData& data() const { return m_images;}
 private:
     const FontConfig* m_config;
     FT_Library m_ft_library;

@@ -36,6 +36,7 @@
 #include <QSettings>
 #include <QMetaProperty>
 #include <QDir>
+#include <QMessageBox>
 
 #include "fontconfig.h"
 #include "fontrenderer.h"
@@ -43,6 +44,7 @@
 #include "layoutdata.h"
 #include "layouterfactory.h"
 #include "outputconfig.h"
+#include "exporterfactory.h"
 
 
 
@@ -95,6 +97,8 @@ FontBuilder::FontBuilder(QWidget *parent) :
     ui->frameLayoutConfig->setConfig(m_layout_config);
 
 
+    m_exporter_factory = new ExporterFactory(this);
+    ui->frameOutput->setExporters(m_exporter_factory->names());
 
     ui->comboBoxLayouter->blockSignals(b);
     this->on_comboBoxLayouter_currentIndexChanged(
@@ -244,6 +248,33 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
         QString filename = dir.filePath(m_output_config->imageName());
         filename+="."+m_output_config->imageFormat();
         pixmap.save(filename,m_output_config->imageFormat().toUtf8());
+    }
+    if (m_output_config->writeDescription()) {
+        AbstractExporter* exporter = m_exporter_factory->build(m_output_config->descriptionFormat(),this);
+        if (!exporter) {
+            QMessageBox msgBox;
+            msgBox.setText(tr("Unknown exporter :")+m_output_config->descriptionFormat());
+            msgBox.exec();
+            return;
+        }
+        exporter->setFontConfig(m_font_config);
+        exporter->setData(m_layout_data,m_font_renderer->data());
+        QString filename = dir.filePath(m_output_config->descriptionName());
+        filename+="."+exporter->getExtension();
+        QByteArray data;
+        if (!exporter->Write(data)) {
+             QMessageBox msgBox;
+             msgBox.setText(tr("Error on save description :\n")+exporter->getErrorString()+"\nFile not writed.");
+             msgBox.exec();
+         } else {
+             QFile file(filename);
+             if (file.open(QIODevice::WriteOnly)) {
+                 file.write(data);
+             } else {
+
+             }
+         }
+        delete exporter;
     }
 }
 

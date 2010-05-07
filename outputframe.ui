@@ -119,7 +119,7 @@
    <item row="3" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBoxDescription">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="title">
       <string>Description</string>

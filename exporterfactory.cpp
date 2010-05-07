@@ -28,60 +28,25 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef FONTBUILDER_H
-#define FONTBUILDER_H
+#include "exporterfactory.h"
 
-#include <QMainWindow>
-#include <QSettings>
 
-namespace Ui {
-    class FontBuilder;
+extern AbstractExporter* GHLExporterFactoryFunc (QObject*);
+
+ExporterFactory::ExporterFactory(QObject *parent) :
+    QObject(parent)
+{
+    m_factorys["GHL"] = &GHLExporterFactoryFunc;
 }
 
-struct FontRenderer;
-class FontConfig;
-class LayoutConfig;
-class LayoutData;
-class AbstractLayouter;
-class LayouterFactory;
-class OutputConfig;
-class ExporterFactory;
-class AbstractExporter;
 
-class FontBuilder : public QMainWindow {
-    Q_OBJECT
-public:
-    FontBuilder(QWidget *parent = 0);
-    ~FontBuilder();
+QStringList ExporterFactory::names() const {
+    return m_factorys.keys();
+}
 
-protected:
-    void changeEvent(QEvent *e);
-    void closeEvent(QCloseEvent *event);
-    void saveConfig(QSettings& config,const QString& name,const QObject* obj);
-    void readConfig(QSettings& config,const QString& name,QObject* obj);
-
-private:
-
-    Ui::FontBuilder *ui;
-    FontRenderer*   m_font_renderer;
-    FontConfig*     m_font_config;
-    LayoutConfig*   m_layout_config;
-    LayoutData*     m_layout_data;
-    AbstractLayouter* m_layouter;
-    LayouterFactory*    m_layouter_factory;
-    OutputConfig*   m_output_config;
-    ExporterFactory* m_exporter_factory;
-
-public slots:
-
-    void fontParametersChanged();
-
-private slots:
-    void on_pushButtonWriteFont_clicked();
-    void on_comboBoxLayouter_currentIndexChanged(QString );
-    void onLayoutChanged();
-    void onRenderedChanged();
-    void onFontNameChanged();
-};
-
-#endif // FONTBUILDER_H
+AbstractExporter* ExporterFactory::build(const QString &name,QObject* parent) {
+    if (m_factorys.contains(name)) {
+        return m_factorys[name](parent);
+    }
+    return 0;
+}

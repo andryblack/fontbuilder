@@ -28,60 +28,58 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef FONTBUILDER_H
-#define FONTBUILDER_H
 
-#include <QMainWindow>
-#include <QSettings>
+#ifndef ABSTRACTEXPORTER_H
+#define ABSTRACTEXPORTER_H
 
-namespace Ui {
-    class FontBuilder;
-}
+#include <QObject>
+#include <QByteArray>
+#include <QDir>
+#include <QVector>
+#include "rendererdata.h"
 
-struct FontRenderer;
 class FontConfig;
-class LayoutConfig;
 class LayoutData;
-class AbstractLayouter;
-class LayouterFactory;
-class OutputConfig;
-class ExporterFactory;
-class AbstractExporter;
 
-class FontBuilder : public QMainWindow {
-    Q_OBJECT
+class AbstractExporter : public QObject
+{
+Q_OBJECT
 public:
-    FontBuilder(QWidget *parent = 0);
-    ~FontBuilder();
+    explicit AbstractExporter(QObject *parent );
 
-protected:
-    void changeEvent(QEvent *e);
-    void closeEvent(QCloseEvent *event);
-    void saveConfig(QSettings& config,const QString& name,const QObject* obj);
-    void readConfig(QSettings& config,const QString& name,QObject* obj);
+    const QString& getErrorString() const { return m_error_string;}
+    const QString& getExtension() const { return m_extension;}
 
+    bool Write(QByteArray& out);
+
+    void setFontConfig(const FontConfig* config) { m_font_config = config;}
+    void setData(const LayoutData* data,const RendererData& rendered);
 private:
+    QString m_error_string;
+    QString m_extension;
+    QString m_filename;
 
-    Ui::FontBuilder *ui;
-    FontRenderer*   m_font_renderer;
-    FontConfig*     m_font_config;
-    LayoutConfig*   m_layout_config;
-    LayoutData*     m_layout_data;
-    AbstractLayouter* m_layouter;
-    LayouterFactory*    m_layouter_factory;
-    OutputConfig*   m_output_config;
-    ExporterFactory* m_exporter_factory;
+    const FontConfig* m_font_config;
+protected:
+    struct Symbol {
+        unsigned short id;
+        int place_x;
+        int place_y;
+        int place_w;
+        int place_h;
+        int offset_x;
+        int offset_y;
+        int advance;
+    };
 
-public slots:
-
-    void fontParametersChanged();
-
-private slots:
-    void on_pushButtonWriteFont_clicked();
-    void on_comboBoxLayouter_currentIndexChanged(QString );
-    void onLayoutChanged();
-    void onRenderedChanged();
-    void onFontNameChanged();
+    const FontConfig* font_config() const { return m_font_config;}
+    const QVector<Symbol>& symbols() const { return m_symbols;}
+    void setExtension(const QString& extension) { m_extension = extension;}
+    void setErrorMessage(const QString& str) { m_error_string=str; }
+    virtual bool Export(QByteArray& out) = 0;
+private:
+     QVector<Symbol> m_symbols;
 };
 
-#endif // FONTBUILDER_H
+
+#endif // ABSTRACTEXPORTER_H

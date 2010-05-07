@@ -28,60 +28,29 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef FONTBUILDER_H
-#define FONTBUILDER_H
+#ifndef EXPORTERFACTORY_H
+#define EXPORTERFACTORY_H
 
-#include <QMainWindow>
-#include <QSettings>
+#include <QObject>
+#include <QMap>
+#include <QStringList>
+#include "abstractexporter.h"
 
-namespace Ui {
-    class FontBuilder;
-}
+typedef AbstractExporter* (*ExporterFactoryFunc) (QObject*);
 
-struct FontRenderer;
-class FontConfig;
-class LayoutConfig;
-class LayoutData;
-class AbstractLayouter;
-class LayouterFactory;
-class OutputConfig;
-class ExporterFactory;
-class AbstractExporter;
-
-class FontBuilder : public QMainWindow {
-    Q_OBJECT
+class ExporterFactory : public QObject
+{
+Q_OBJECT
 public:
-    FontBuilder(QWidget *parent = 0);
-    ~FontBuilder();
-
-protected:
-    void changeEvent(QEvent *e);
-    void closeEvent(QCloseEvent *event);
-    void saveConfig(QSettings& config,const QString& name,const QObject* obj);
-    void readConfig(QSettings& config,const QString& name,QObject* obj);
-
+    explicit ExporterFactory(QObject *parent = 0);
+    AbstractExporter* build(const QString& name,QObject *parent);
+    QStringList names() const;
 private:
-
-    Ui::FontBuilder *ui;
-    FontRenderer*   m_font_renderer;
-    FontConfig*     m_font_config;
-    LayoutConfig*   m_layout_config;
-    LayoutData*     m_layout_data;
-    AbstractLayouter* m_layouter;
-    LayouterFactory*    m_layouter_factory;
-    OutputConfig*   m_output_config;
-    ExporterFactory* m_exporter_factory;
+    QMap<QString,ExporterFactoryFunc> m_factorys;
+signals:
 
 public slots:
 
-    void fontParametersChanged();
-
-private slots:
-    void on_pushButtonWriteFont_clicked();
-    void on_comboBoxLayouter_currentIndexChanged(QString );
-    void onLayoutChanged();
-    void onRenderedChanged();
-    void onFontNameChanged();
 };
 
-#endif // FONTBUILDER_H
+#endif // EXPORTERFACTORY_H

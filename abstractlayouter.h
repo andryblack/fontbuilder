@@ -35,6 +35,7 @@
 #include <QVector>
 #include "layoutchar.h"
 
+
 class LayoutConfig;
 class LayoutData;
 
