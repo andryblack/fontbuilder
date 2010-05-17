@@ -94,7 +94,7 @@ win32 {
     LIBS += -L../lib \
         -lfreetype
 }
-linux* { 
+linux* | freebsd* {
     CONFIG += link_pkgconfig
     PKGCONFIG += freetype2
 }
