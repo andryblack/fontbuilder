@@ -58,7 +58,8 @@ private:
     QString m_error_string;
     QString m_extension;
     QString m_filename;
-
+    int m_tex_width;
+    int m_tex_height;
     const FontConfig* m_font_config;
 protected:
     struct Symbol {
@@ -76,6 +77,8 @@ protected:
     const QVector<Symbol>& symbols() const { return m_symbols;}
     void setExtension(const QString& extension) { m_extension = extension;}
     void setErrorMessage(const QString& str) { m_error_string=str; }
+    int texWidth() const { return m_tex_width;}
+    int texHeight() const { return m_tex_height;}
     virtual bool Export(QByteArray& out) = 0;
 private:
      QVector<Symbol> m_symbols;

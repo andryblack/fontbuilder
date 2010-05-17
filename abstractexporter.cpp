@@ -36,6 +36,8 @@ AbstractExporter::AbstractExporter(QObject *parent) :
     QObject(parent)
 {
     m_extension = "font";
+    m_tex_width = 0;
+    m_tex_height = 0;
 }
 
 
@@ -54,6 +56,8 @@ void AbstractExporter::setData(const LayoutData* data,const RendererData& render
         symb.advance = rc.advance;
         m_symbols.push_back(symb);
     }
+    m_tex_width = data->width();
+    m_tex_height = data->height();
 }
 
 

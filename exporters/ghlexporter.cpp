@@ -51,6 +51,11 @@ bool GHLExporter::Export(QByteArray& out) {
     descr.setAttribute("size",font_config()->size());
     root.appendChild(descr);
 
+    QDomElement tex = doc.createElement("texture");
+    tex.setAttribute("width",texWidth());
+    tex.setAttribute("height",texHeight());
+    root.appendChild(tex);
+
     QDomElement chars = doc.createElement("chars");
     foreach (const Symbol& c , symbols()) {
         QDomElement ce = doc.createElement("char");
