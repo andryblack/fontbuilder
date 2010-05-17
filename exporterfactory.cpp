@@ -32,11 +32,13 @@
 
 
 extern AbstractExporter* GHLExporterFactoryFunc (QObject*);
+extern AbstractExporter* ZFIExporterFactoryFunc (QObject* parent);
 
 ExporterFactory::ExporterFactory(QObject *parent) :
     QObject(parent)
 {
     m_factorys["GHL"] = &GHLExporterFactoryFunc;
+    m_factorys["ZenGL-zfi"] = &ZFIExporterFactoryFunc;
 }
 
 

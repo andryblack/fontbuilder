@@ -54,7 +54,8 @@ SOURCES += main.cpp \
     exporterfactory.cpp \
     abstractimagewriter.cpp \
     imagewriterfactory.cpp \
-    image/builtinimagewriter.cpp
+    image/builtinimagewriter.cpp \
+    exporters/zfiexporter.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -78,7 +79,8 @@ HEADERS += fontbuilder.h \
     exporterfactory.h \
     abstractimagewriter.h \
     imagewriterfactory.h \
-    image/builtinimagewriter.h
+    image/builtinimagewriter.h \
+    exporters/zfiexporter.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \
