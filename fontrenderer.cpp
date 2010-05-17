@@ -168,14 +168,15 @@ void FontRenderer::append_bitmap(ushort symbol) {
             }
             {
                 uchar s = src[w/8];
+                int num = 7;
                 switch (w%8) {
-                case 7:  *dst++ = qRgba(255,255,255,(s&(1<<7))?255:0);
-                case 6:  *dst++ = qRgba(255,255,255,(s&(1<<6))?255:0);
-                case 5:  *dst++ = qRgba(255,255,255,(s&(1<<5))?255:0);
-                case 4:  *dst++ = qRgba(255,255,255,(s&(1<<4))?255:0);
-                case 3:  *dst++ = qRgba(255,255,255,(s&(1<<3))?255:0);
-                case 2:  *dst++ = qRgba(255,255,255,(s&(1<<2))?255:0);
-                case 1:  *dst++ = qRgba(255,255,255,(s&(1<<1))?255:0);
+                case 7:  *dst++ = qRgba(255,255,255,(s&(1<<(num--)))?255:0);
+                case 6:  *dst++ = qRgba(255,255,255,(s&(1<<(num--)))?255:0);
+                case 5:  *dst++ = qRgba(255,255,255,(s&(1<<(num--)))?255:0);
+                case 4:  *dst++ = qRgba(255,255,255,(s&(1<<(num--)))?255:0);
+                case 3:  *dst++ = qRgba(255,255,255,(s&(1<<(num--)))?255:0);
+                case 2:  *dst++ = qRgba(255,255,255,(s&(1<<(num--)))?255:0);
+                case 1:  *dst++ = qRgba(255,255,255,(s&(1<<(num--)))?255:0);
                 case 0:
                     break;
                 }
