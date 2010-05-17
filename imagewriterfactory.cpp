@@ -37,6 +37,7 @@ static AbstractImageWriter* PNG_img_writer(QObject* parent) {
 static AbstractImageWriter* png_img_writer(QObject* parent) {
     return new BuiltinImageWriter("png","png",parent);
 }
+
 ImageWriterFactory::ImageWriterFactory(QObject *parent) :
     QObject(parent)
 {

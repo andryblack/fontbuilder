@@ -37,6 +37,7 @@
 #include <QObject>
 #include <QFile>
 #include <QVector>
+#include <QPixmap>
 #include "rendererdata.h"
 
 class LayoutData;
@@ -71,6 +72,7 @@ protected:
     const LayoutData* layout() const { return m_layout;}
     const LayoutConfig* layoutConfig() const { return m_layout_config;}
     virtual bool Export(QFile& file) = 0;
+    QPixmap buildPixmap();
 private:
 };
 

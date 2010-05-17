@@ -44,15 +44,7 @@ BuiltinImageWriter::BuiltinImageWriter(QString format,QString ext,QObject *paren
 
 
 bool BuiltinImageWriter::Export(QFile& file) {
-    QPixmap pixmap(layout()->width(),layout()->height());
-    pixmap.fill(QColor(0,0,0,0));
-    QPainter painter(&pixmap);
-    foreach (const LayoutChar& c,layout()->placed())
-        if (rendered()->contains(c.symbol)) {
-            const RenderedChar& rend = rendered()->operator [](c.symbol);
-            painter.drawImage(c.x + layoutConfig()->offsetLeft(),
-                              c.y + layoutConfig()->offsetTop(),rend.img);
-        }
+    QPixmap pixmap = buildPixmap();
     pixmap.save(&file,m_format.toUtf8().data());
     return true;
 }

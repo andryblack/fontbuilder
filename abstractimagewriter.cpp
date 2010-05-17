@@ -30,6 +30,8 @@
 
 #include "abstractimagewriter.h"
 #include "layoutdata.h"
+#include <QPainter>
+#include "layoutconfig.h"
 
 
 AbstractImageWriter::AbstractImageWriter(QObject *parent ) : QObject(parent) {
@@ -45,6 +47,18 @@ void AbstractImageWriter::setData(const LayoutData* data,const LayoutConfig* con
     m_tex_height = data->height();
 }
 
+QPixmap AbstractImageWriter::buildPixmap() {
+    QPixmap pixmap(layout()->width(),layout()->height());
+    pixmap.fill(QColor(0,0,0,0));
+    QPainter painter(&pixmap);
+    foreach (const LayoutChar& c,layout()->placed())
+        if (rendered()->contains(c.symbol)) {
+            const RenderedChar& rend = rendered()->operator [](c.symbol);
+            painter.drawImage(c.x + layoutConfig()->offsetLeft(),
+                              c.y + layoutConfig()->offsetTop(),rend.img);
+        }
+    return pixmap;
+}
 
 bool AbstractImageWriter::Write(QFile& file) {
     if (Export(file)) {
