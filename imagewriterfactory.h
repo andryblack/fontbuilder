@@ -28,46 +28,30 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef OUTPUTFRAME_H
-#define OUTPUTFRAME_H
+#ifndef IMAGEWRITERFACTORY_H
+#define IMAGEWRITERFACTORY_H
 
-#include <QFrame>
+#include <QObject>
+#include <QMap>
+#include <QStringList>
+#include "abstractimagewriter.h"
 
-namespace Ui {
-    class OutputFrame;
-}
+typedef AbstractImageWriter* (*ImageWriterFactoryFunc) (QObject*);
 
-class OutputConfig;
 
-class OutputFrame : public QFrame {
-    Q_OBJECT
+class ImageWriterFactory : public QObject
+{
+Q_OBJECT
 public:
-    OutputFrame(QWidget *parent = 0);
-    ~OutputFrame();
-
-    void setExporters(const QStringList& exporters);
-    void setImageWriters(const QStringList& writers);
-    void setConfig(OutputConfig* config);
-
-protected:
-    void changeEvent(QEvent *e);
-
+    explicit ImageWriterFactory(QObject *parent = 0);
+    AbstractImageWriter* build(const QString& name,QObject *parent);
+    QStringList names() const;
 private:
-    Ui::OutputFrame *ui;
-    OutputConfig*   m_config;
+    QMap<QString,ImageWriterFactoryFunc> m_factorys;
+signals:
 
-private slots:
-    void on_comboBoxDescriptionType_currentIndexChanged(QString );
-    void on_checkBoxDrawGrid_toggled(bool checked);
-    void on_groupBoxDescription_toggled(bool );
-    void on_groupBoxImage_toggled(bool );
-    void on_comboBoxImageFormat_currentIndexChanged(QString );
-    void onImageNameChanged(const QString& s);
-    void onDescriptionNameChanged(const QString& s);
-    void on_lineEditImageFilename_editingFinished( );
-    void on_lineEditDescriptionFilename_editingFinished( );
-    void on_pushButtonSelectPath_clicked();
+public slots:
 
 };
 
-#endif // OUTPUTFRAME_H
+#endif // IMAGEWRITERFACTORY_H

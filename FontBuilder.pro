@@ -51,7 +51,10 @@ SOURCES += main.cpp \
     outputframe.cpp \
     abstractexporter.cpp \
     exporters/ghlexporter.cpp \
-    exporterfactory.cpp
+    exporterfactory.cpp \
+    abstractimagewriter.cpp \
+    imagewriterfactory.cpp \
+    image/builtinimagewriter.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -72,7 +75,10 @@ HEADERS += fontbuilder.h \
     outputframe.h \
     abstractexporter.h \
     exporters/ghlexporter.h \
-    exporterfactory.h
+    exporterfactory.h \
+    abstractimagewriter.h \
+    imagewriterfactory.h \
+    image/builtinimagewriter.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \
@@ -94,7 +100,7 @@ win32 {
     LIBS += -L../lib \
         -lfreetype
 }
-linux* | freebsd* {
+linux*|freebsd* { 
     CONFIG += link_pkgconfig
     PKGCONFIG += freetype2
 }

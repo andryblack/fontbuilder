@@ -28,46 +28,31 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef OUTPUTFRAME_H
-#define OUTPUTFRAME_H
 
-#include <QFrame>
+#include "builtinimagewriter.h"
+#include "layoutdata.h"
+#include <QPixmap>
+#include <QPainter>
+#include "../layoutconfig.h"
 
-namespace Ui {
-    class OutputFrame;
+BuiltinImageWriter::BuiltinImageWriter(QString format,QString ext,QObject *parent) :
+    AbstractImageWriter(parent)
+{
+    setExtension(ext);
+    m_format = format;
 }
 
-class OutputConfig;
 
-class OutputFrame : public QFrame {
-    Q_OBJECT
-public:
-    OutputFrame(QWidget *parent = 0);
-    ~OutputFrame();
-
-    void setExporters(const QStringList& exporters);
-    void setImageWriters(const QStringList& writers);
-    void setConfig(OutputConfig* config);
-
-protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::OutputFrame *ui;
-    OutputConfig*   m_config;
-
-private slots:
-    void on_comboBoxDescriptionType_currentIndexChanged(QString );
-    void on_checkBoxDrawGrid_toggled(bool checked);
-    void on_groupBoxDescription_toggled(bool );
-    void on_groupBoxImage_toggled(bool );
-    void on_comboBoxImageFormat_currentIndexChanged(QString );
-    void onImageNameChanged(const QString& s);
-    void onDescriptionNameChanged(const QString& s);
-    void on_lineEditImageFilename_editingFinished( );
-    void on_lineEditDescriptionFilename_editingFinished( );
-    void on_pushButtonSelectPath_clicked();
-
-};
-
-#endif // OUTPUTFRAME_H
+bool BuiltinImageWriter::Export(QFile& file) {
+    QPixmap pixmap(layout()->width(),layout()->height());
+    pixmap.fill(QColor(0,0,0,0));
+    QPainter painter(&pixmap);
+    foreach (const LayoutChar& c,layout()->placed())
+        if (rendered()->contains(c.symbol)) {
+            const RenderedChar& rend = rendered()->operator [](c.symbol);
+            painter.drawImage(c.x + layoutConfig()->offsetLeft(),
+                              c.y + layoutConfig()->offsetTop(),rend.img);
+        }
+    pixmap.save(&file,m_format.toUtf8().data());
+    return true;
+}

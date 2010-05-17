@@ -44,10 +44,10 @@ OutputFrame::OutputFrame(QWidget *parent) :
 {
     m_config = 0;
     ui->setupUi(this);
-    foreach( QByteArray format , QImageWriter::supportedImageFormats()) {
+    /*foreach( QByteArray format , QImageWriter::supportedImageFormats()) {
         QString name = format;
         ui->comboBoxImageFormat->addItem(name,format);
-    }
+    }*/
     ui->widgetGridColor->setColor(QColor(255,0,255,255));
 }
 
@@ -148,7 +148,15 @@ void OutputFrame::setExporters(const QStringList& exporters) {
     ui->comboBoxDescriptionType->blockSignals(bs);
 }
 
-void OutputFrame::on_comboBoxImageChannels_currentIndexChanged(QString name)
+void OutputFrame::setImageWriters(const QStringList& writers) {
+    bool bs = ui->comboBoxImageFormat->blockSignals(true);
+    ui->comboBoxImageFormat->clear();
+    ui->comboBoxImageFormat->addItems(writers);
+    ui->comboBoxImageFormat->blockSignals(bs);
+}
+
+
+void OutputFrame::on_comboBoxDescriptionType_currentIndexChanged(QString name)
 {
     if (m_config) m_config->setDescriptionFormat(name);
 }

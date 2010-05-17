@@ -28,46 +28,27 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef OUTPUTFRAME_H
-#define OUTPUTFRAME_H
+#include "abstractimagewriter.h"
+#include "layoutdata.h"
 
-#include <QFrame>
 
-namespace Ui {
-    class OutputFrame;
+AbstractImageWriter::AbstractImageWriter(QObject *parent ) : QObject(parent) {
+    setExtension("img");
 }
 
-class OutputConfig;
 
-class OutputFrame : public QFrame {
-    Q_OBJECT
-public:
-    OutputFrame(QWidget *parent = 0);
-    ~OutputFrame();
+void AbstractImageWriter::setData(const LayoutData* data,const LayoutConfig* config,const RendererData& rendered) {
+    m_layout = data;
+    m_layout_config = config;
+    m_rendered = &rendered;
+    m_tex_width = data->width();
+    m_tex_height = data->height();
+}
 
-    void setExporters(const QStringList& exporters);
-    void setImageWriters(const QStringList& writers);
-    void setConfig(OutputConfig* config);
 
-protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::OutputFrame *ui;
-    OutputConfig*   m_config;
-
-private slots:
-    void on_comboBoxDescriptionType_currentIndexChanged(QString );
-    void on_checkBoxDrawGrid_toggled(bool checked);
-    void on_groupBoxDescription_toggled(bool );
-    void on_groupBoxImage_toggled(bool );
-    void on_comboBoxImageFormat_currentIndexChanged(QString );
-    void onImageNameChanged(const QString& s);
-    void onDescriptionNameChanged(const QString& s);
-    void on_lineEditImageFilename_editingFinished( );
-    void on_lineEditDescriptionFilename_editingFinished( );
-    void on_pushButtonSelectPath_clicked();
-
-};
-
-#endif // OUTPUTFRAME_H
+bool AbstractImageWriter::Write(QFile& file) {
+    if (Export(file)) {
+       return true;
+    }
+    return false;
+}

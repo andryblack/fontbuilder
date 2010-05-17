@@ -28,46 +28,29 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef OUTPUTFRAME_H
-#define OUTPUTFRAME_H
+#include "imagewriterfactory.h"
+#include "image/builtinimagewriter.h"
 
-#include <QFrame>
-
-namespace Ui {
-    class OutputFrame;
+static AbstractImageWriter* PNG_img_writer(QObject* parent) {
+    return new BuiltinImageWriter("png","PNG",parent);
+}
+static AbstractImageWriter* png_img_writer(QObject* parent) {
+    return new BuiltinImageWriter("png","png",parent);
+}
+ImageWriterFactory::ImageWriterFactory(QObject *parent) :
+    QObject(parent)
+{
+    m_factorys["png"] = &png_img_writer;
+    m_factorys["PNG"] = &PNG_img_writer;
 }
 
-class OutputConfig;
+QStringList ImageWriterFactory::names() const {
+    return m_factorys.keys();
+}
 
-class OutputFrame : public QFrame {
-    Q_OBJECT
-public:
-    OutputFrame(QWidget *parent = 0);
-    ~OutputFrame();
-
-    void setExporters(const QStringList& exporters);
-    void setImageWriters(const QStringList& writers);
-    void setConfig(OutputConfig* config);
-
-protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::OutputFrame *ui;
-    OutputConfig*   m_config;
-
-private slots:
-    void on_comboBoxDescriptionType_currentIndexChanged(QString );
-    void on_checkBoxDrawGrid_toggled(bool checked);
-    void on_groupBoxDescription_toggled(bool );
-    void on_groupBoxImage_toggled(bool );
-    void on_comboBoxImageFormat_currentIndexChanged(QString );
-    void onImageNameChanged(const QString& s);
-    void onDescriptionNameChanged(const QString& s);
-    void on_lineEditImageFilename_editingFinished( );
-    void on_lineEditDescriptionFilename_editingFinished( );
-    void on_pushButtonSelectPath_clicked();
-
-};
-
-#endif // OUTPUTFRAME_H
+AbstractImageWriter* ImageWriterFactory::build(const QString &name,QObject* parent) {
+    if (m_factorys.contains(name)) {
+        return m_factorys[name](parent);
+    }
+    return 0;
+}

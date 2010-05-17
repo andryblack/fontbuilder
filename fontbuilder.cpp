@@ -45,7 +45,7 @@
 #include "layouterfactory.h"
 #include "outputconfig.h"
 #include "exporterfactory.h"
-
+#include "imagewriterfactory.h"
 
 
 FontBuilder::FontBuilder(QWidget *parent) :
@@ -99,6 +99,9 @@ FontBuilder::FontBuilder(QWidget *parent) :
 
     m_exporter_factory = new ExporterFactory(this);
     ui->frameOutput->setExporters(m_exporter_factory->names());
+
+    m_image_writer_factory = new ImageWriterFactory(this);
+    ui->frameOutput->setImageWriters(m_image_writer_factory->names());
 
     ui->comboBoxLayouter->blockSignals(b);
     this->on_comboBoxLayouter_currentIndexChanged(
@@ -237,17 +240,35 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
 {
     QDir dir(m_output_config->path());
     if (m_output_config->writeImage()) {
-        QPixmap pixmap(m_layout_data->width(),m_layout_data->height());
-        pixmap.fill(QColor(0,0,0,0));
-        QPainter painter(&pixmap);
-        foreach (const LayoutChar& c,m_layout_data->placed())
-            m_font_renderer->placeImage(painter,c.symbol,
-                                        c.x + m_layout_config->offsetLeft(),
-                                        c.y + m_layout_config->offsetTop()
-                                        );
+
+        AbstractImageWriter* exporter = m_image_writer_factory->build(m_output_config->imageFormat(),this);
+        if (!exporter) {
+            QMessageBox msgBox;
+            msgBox.setText(tr("Unknown exporter :")+m_output_config->descriptionFormat());
+            msgBox.exec();
+            return;
+        }
+
+        exporter->setData(m_layout_data,m_layout_config,m_font_renderer->data());
+
         QString filename = dir.filePath(m_output_config->imageName());
-        filename+="."+m_output_config->imageFormat();
-        pixmap.save(filename,m_output_config->imageFormat().toUtf8());
+        filename+="."+exporter->extension();
+        QFile file(this);
+        file.setFileName(filename);
+        if (!file.open(QIODevice::WriteOnly)) {
+            delete exporter;
+            QMessageBox msgBox;
+            msgBox.setText(tr("Error opening file :")+filename);
+            msgBox.exec();
+            return;
+        }
+        if (!exporter->Write(file)) {
+            QMessageBox msgBox;
+            msgBox.setText(tr("Error on save image :\n")+exporter->errorString()+"\nFile not writed.");
+            msgBox.exec();
+        }
+
+        delete exporter;
     }
     if (m_output_config->writeDescription()) {
         AbstractExporter* exporter = m_exporter_factory->build(m_output_config->descriptionFormat(),this);

@@ -28,46 +28,51 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef OUTPUTFRAME_H
-#define OUTPUTFRAME_H
+#ifndef ABSTRACTIMAGEWRITER_H
+#define ABSTRACTIMAGEWRITER_H
 
-#include <QFrame>
 
-namespace Ui {
-    class OutputFrame;
-}
 
-class OutputConfig;
 
-class OutputFrame : public QFrame {
-    Q_OBJECT
+#include <QObject>
+#include <QFile>
+#include <QVector>
+#include "rendererdata.h"
+
+class LayoutData;
+class LayoutConfig;
+
+class AbstractImageWriter : public QObject
+{
+Q_OBJECT
 public:
-    OutputFrame(QWidget *parent = 0);
-    ~OutputFrame();
+    explicit AbstractImageWriter(QObject *parent );
 
-    void setExporters(const QStringList& exporters);
-    void setImageWriters(const QStringList& writers);
-    void setConfig(OutputConfig* config);
+    const QString& errorString() const { return m_error_string;}
+    const QString& extension() const { return m_extension;}
 
-protected:
-    void changeEvent(QEvent *e);
+    bool Write(QFile& file);
 
+    void setData(const LayoutData* data,const LayoutConfig* config,const RendererData& rendered);
 private:
-    Ui::OutputFrame *ui;
-    OutputConfig*   m_config;
-
-private slots:
-    void on_comboBoxDescriptionType_currentIndexChanged(QString );
-    void on_checkBoxDrawGrid_toggled(bool checked);
-    void on_groupBoxDescription_toggled(bool );
-    void on_groupBoxImage_toggled(bool );
-    void on_comboBoxImageFormat_currentIndexChanged(QString );
-    void onImageNameChanged(const QString& s);
-    void onDescriptionNameChanged(const QString& s);
-    void on_lineEditImageFilename_editingFinished( );
-    void on_lineEditDescriptionFilename_editingFinished( );
-    void on_pushButtonSelectPath_clicked();
-
+    QString m_error_string;
+    QString m_extension;
+    int m_tex_width;
+    int m_tex_height;
+    const RendererData* m_rendered;
+    const LayoutData* m_layout;
+    const LayoutConfig* m_layout_config;
+protected:
+    void setExtension(const QString& extension) { m_extension = extension;}
+    void setErrorMessage(const QString& str) { m_error_string=str; }
+    int texWidth() const { return m_tex_width;}
+    int texHeight() const { return m_tex_height;}
+    const RendererData* rendered() const { return m_rendered;}
+    const LayoutData* layout() const { return m_layout;}
+    const LayoutConfig* layoutConfig() const { return m_layout_config;}
+    virtual bool Export(QFile& file) = 0;
+private:
 };
 
-#endif // OUTPUTFRAME_H
+
+#endif // ABSTRACTIMAGEWRITER_H

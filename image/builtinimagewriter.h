@@ -28,46 +28,25 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef OUTPUTFRAME_H
-#define OUTPUTFRAME_H
 
-#include <QFrame>
+#ifndef BUILTINIMAGEWRITER_H
+#define BUILTINIMAGEWRITER_H
 
-namespace Ui {
-    class OutputFrame;
-}
+#include "../abstractimagewriter.h"
 
-class OutputConfig;
-
-class OutputFrame : public QFrame {
-    Q_OBJECT
+class BuiltinImageWriter : public AbstractImageWriter
+{
+Q_OBJECT
 public:
-    OutputFrame(QWidget *parent = 0);
-    ~OutputFrame();
+    BuiltinImageWriter(QString format,QString ext,QObject *parent = 0);
 
-    void setExporters(const QStringList& exporters);
-    void setImageWriters(const QStringList& writers);
-    void setConfig(OutputConfig* config);
-
-protected:
-    void changeEvent(QEvent *e);
-
+    virtual bool Export(QFile& file);
 private:
-    Ui::OutputFrame *ui;
-    OutputConfig*   m_config;
+    QString m_format;
+signals:
 
-private slots:
-    void on_comboBoxDescriptionType_currentIndexChanged(QString );
-    void on_checkBoxDrawGrid_toggled(bool checked);
-    void on_groupBoxDescription_toggled(bool );
-    void on_groupBoxImage_toggled(bool );
-    void on_comboBoxImageFormat_currentIndexChanged(QString );
-    void onImageNameChanged(const QString& s);
-    void onDescriptionNameChanged(const QString& s);
-    void on_lineEditImageFilename_editingFinished( );
-    void on_lineEditDescriptionFilename_editingFinished( );
-    void on_pushButtonSelectPath_clicked();
+public slots:
 
 };
 
-#endif // OUTPUTFRAME_H
+#endif // BUILTINIMAGEWRITER_H

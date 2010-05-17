@@ -47,6 +47,7 @@ class LayouterFactory;
 class OutputConfig;
 class ExporterFactory;
 class AbstractExporter;
+class ImageWriterFactory;
 
 class FontBuilder : public QMainWindow {
     Q_OBJECT
@@ -71,6 +72,7 @@ private:
     LayouterFactory*    m_layouter_factory;
     OutputConfig*   m_output_config;
     ExporterFactory* m_exporter_factory;
+    ImageWriterFactory* m_image_writer_factory;
 
 public slots:
 
