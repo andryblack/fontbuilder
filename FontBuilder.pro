@@ -78,8 +78,7 @@ FORMS += fontbuilder.ui \
     fontoptionsframe.ui \
     charactersframe.ui \
     layoutconfigframe.ui \
-    outputframe.ui \
-    ../iPhoneDev/GHL/src/system/qt/ghl_opengl_widget.ui
+    outputframe.ui
 TRANSLATIONS = fontbuilder_en.ts \
     fontbuilder_ru.ts
 QT += xml
