@@ -49,12 +49,26 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="pushButtonDefault">
+       <property name="text">
+        <string>Default</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
     <widget class="QPlainTextEdit" name="plainTextEdit">
      <property name="plainText">
       <string/>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButtonRefresh">
+     <property name="text">
+      <string>Refresh</string>
      </property>
     </widget>
    </item>

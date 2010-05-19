@@ -52,9 +52,12 @@ protected:
 private:
     Ui::CharactersFrame *ui;
     FontConfig* m_config;
+    QString remove_duplicates(const QString& text) const;
 signals:
 
 private slots:
+    void on_pushButtonDefault_clicked();
+    void on_pushButton_clicked();
     void on_plainTextEdit_textChanged();
     void on_pushButtonExport_clicked();
     void on_pushButtonImport_clicked();

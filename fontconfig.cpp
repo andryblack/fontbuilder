@@ -36,7 +36,7 @@ FontConfig::FontConfig(QObject *parent) :
 {
     m_path = QDesktopServices::storageLocation(QDesktopServices::FontsLocation);
     m_size = 0;
-    m_characters = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    m_characters = defaultCharacters();
     m_autohinting = false;
     m_render_missing = false;
     m_antialiased = true;
@@ -45,6 +45,15 @@ FontConfig::FontConfig(QObject *parent) :
     m_width = 100.0f;
     m_height = 100.0f;
 }
+
+
+const QString& FontConfig::defaultCharacters() const {
+    static const QString def = " !\"#$%&'()*+,-./0123456789:;<=>?@"
+                               "ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+                               "abcdefghijklmnopqrstuvwxyz{|}~";
+    return def;
+}
+
 
 void FontConfig::setPath(const QString& path) {
     m_filename = QString();

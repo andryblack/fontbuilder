@@ -68,6 +68,8 @@ public:
     void setCharacters(const QString& characters);
     Q_PROPERTY( QString characters READ characters WRITE setCharacters );
 
+    const QString& defaultCharacters() const;
+
     bool autohinting() const { return m_autohinting;}
     void setAutohinting(bool b);
     Q_PROPERTY( bool autohinting READ autohinting WRITE setAutohinting );
