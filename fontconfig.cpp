@@ -36,7 +36,7 @@ FontConfig::FontConfig(QObject *parent) :
 {
     m_path = QDesktopServices::storageLocation(QDesktopServices::FontsLocation);
     m_size = 0;
-    m_characters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    m_characters = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     m_autohinting = false;
     m_render_missing = false;
     m_antialiased = true;
