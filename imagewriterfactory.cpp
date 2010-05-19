@@ -30,6 +30,7 @@
 
 #include "imagewriterfactory.h"
 #include "image/builtinimagewriter.h"
+#include "image/targawriter.h"
 
 static AbstractImageWriter* PNG_img_writer(QObject* parent) {
     return new BuiltinImageWriter("png","PNG",parent);
@@ -38,11 +39,20 @@ static AbstractImageWriter* png_img_writer(QObject* parent) {
     return new BuiltinImageWriter("png","png",parent);
 }
 
+static AbstractImageWriter* TGA_img_writer(QObject* parent) {
+    return new TargaImageWriter("TGA",parent);
+}
+static AbstractImageWriter* tga_img_writer(QObject* parent) {
+    return new TargaImageWriter("tga",parent);
+}
+
 ImageWriterFactory::ImageWriterFactory(QObject *parent) :
     QObject(parent)
 {
     m_factorys["png"] = &png_img_writer;
     m_factorys["PNG"] = &PNG_img_writer;
+    m_factorys["tga"] = &tga_img_writer;
+    m_factorys["TGA"] = &TGA_img_writer;
 }
 
 QStringList ImageWriterFactory::names() const {

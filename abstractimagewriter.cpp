@@ -47,9 +47,11 @@ void AbstractImageWriter::setData(const LayoutData* data,const LayoutConfig* con
     m_tex_height = data->height();
 }
 
-QPixmap AbstractImageWriter::buildPixmap() {
-    QPixmap pixmap(layout()->width(),layout()->height());
-    pixmap.fill(QColor(0,0,0,0));
+QImage AbstractImageWriter::buildImage() {
+    QImage pixmap(layout()->width(),layout()->height(),QImage::Format_ARGB32);
+
+    pixmap.fill(0);
+
     QPainter painter(&pixmap);
     foreach (const LayoutChar& c,layout()->placed())
         if (rendered()->contains(c.symbol)) {

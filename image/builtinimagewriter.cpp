@@ -31,7 +31,6 @@
 
 #include "builtinimagewriter.h"
 #include "layoutdata.h"
-#include <QPixmap>
 #include <QPainter>
 #include "../layoutconfig.h"
 
@@ -44,7 +43,7 @@ BuiltinImageWriter::BuiltinImageWriter(QString format,QString ext,QObject *paren
 
 
 bool BuiltinImageWriter::Export(QFile& file) {
-    QPixmap pixmap = buildPixmap();
+    QImage pixmap = buildImage();
     pixmap.save(&file,m_format.toUtf8().data());
     return true;
 }

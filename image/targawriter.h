@@ -28,53 +28,22 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef ABSTRACTIMAGEWRITER_H
-#define ABSTRACTIMAGEWRITER_H
+#ifndef TARGAWRITER_H
+#define TARGAWRITER_H
 
+#include "../abstractimagewriter.h"
 
-
-
-#include <QObject>
-#include <QFile>
-#include <QVector>
-#include <QImage>
-#include "rendererdata.h"
-
-class LayoutData;
-class LayoutConfig;
-
-class AbstractImageWriter : public QObject
+class TargaImageWriter : public AbstractImageWriter
 {
 Q_OBJECT
 public:
-    explicit AbstractImageWriter(QObject *parent );
+    TargaImageWriter(QString ext,QObject *parent = 0);
 
-    const QString& errorString() const { return m_error_string;}
-    const QString& extension() const { return m_extension;}
-
-    bool Write(QFile& file);
-
-    void setData(const LayoutData* data,const LayoutConfig* config,const RendererData& rendered);
+    virtual bool Export(QFile& file);
 private:
-    QString m_error_string;
-    QString m_extension;
-    int m_tex_width;
-    int m_tex_height;
-    const RendererData* m_rendered;
-    const LayoutData* m_layout;
-    const LayoutConfig* m_layout_config;
-protected:
-    void setExtension(const QString& extension) { m_extension = extension;}
-    void setErrorMessage(const QString& str) { m_error_string=str; }
-    int texWidth() const { return m_tex_width;}
-    int texHeight() const { return m_tex_height;}
-    const RendererData* rendered() const { return m_rendered;}
-    const LayoutData* layout() const { return m_layout;}
-    const LayoutConfig* layoutConfig() const { return m_layout_config;}
-    virtual bool Export(QFile& file) = 0;
-    QImage buildImage();
-private:
+signals:
+
+public slots:
+
 };
-
-
-#endif // ABSTRACTIMAGEWRITER_H
+#endif // TARGAWRITER_H
