@@ -73,7 +73,6 @@ void FontRenderer::rasterize() {
     }
 
 
-
     qDebug() << " begin rasterize_font ";
 
 
@@ -88,6 +87,20 @@ void FontRenderer::rasterize() {
     } else {
         FT_Set_Transform(m_ft_face,0,0);
     }
+
+
+    /// fill metrics
+    if (FT_IS_SCALABLE(m_ft_face)) {
+        m_rendered.metrics.ascender = m_ft_face->size->metrics.ascender / 64;
+        m_rendered.metrics.descender = m_ft_face->size->metrics.descender/ 64;
+        m_rendered.metrics.height = m_ft_face->size->metrics.height/ 64;
+    } else {
+        m_rendered.metrics.ascender = m_ft_face->ascender;
+        m_rendered.metrics.descender = m_ft_face->descender;
+        m_rendered.metrics.height = m_ft_face->height;
+    }
+
+
 
     const ushort* chars = m_config->characters().utf16();
     size_t amount = 0;
@@ -125,7 +138,7 @@ void FontRenderer::rasterize() {
 
 
 void FontRenderer::clear_bitmaps() {
-       m_images.clear();
+       m_rendered.chars.clear();
        m_chars.clear();
 }
 
@@ -186,7 +199,7 @@ void FontRenderer::append_bitmap(ushort symbol) {
         }
     }
 
-    m_images[symbol]=RenderedChar(symbol,slot->bitmap_left,slot->bitmap_top,slot->advance.x/64,img);
+    m_rendered.chars[symbol]=RenderedChar(symbol,slot->bitmap_left,slot->bitmap_top,slot->advance.x/64,img);
     m_chars.push_back(LayoutChar(symbol,slot->bitmap_left,-slot->bitmap_top,w,h));
 
 }
@@ -254,5 +267,5 @@ void FontRenderer::on_fontOptionsChanged() {
 
 
 void FontRenderer::placeImage(QPainter& p,ushort symbol,int x,int y) {
-    p.drawImage(x,y,m_images[symbol].img);
+    p.drawImage(x,y,m_rendered.chars[symbol].img);
 }

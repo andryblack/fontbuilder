@@ -52,14 +52,14 @@ public:
 
     const QVector<LayoutChar>& rendered() const { return m_chars;}
     void placeImage(QPainter& p,ushort sybol,int x,int y);
-    const RendererData& data() const { return m_images;}
+    const RendererData& data() const { return m_rendered;}
 private:
     const FontConfig* m_config;
     FT_Library m_ft_library;
     FT_Face m_ft_face;
     QByteArray  m_data;
     void rasterize();
-    RendererData m_images;
+    RendererData m_rendered;
     QVector<LayoutChar> m_chars;
     void clear_bitmaps();
     void append_bitmap(ushort symbol);

@@ -54,8 +54,8 @@ QImage AbstractImageWriter::buildImage() {
 
     QPainter painter(&pixmap);
     foreach (const LayoutChar& c,layout()->placed())
-        if (rendered()->contains(c.symbol)) {
-            const RenderedChar& rend = rendered()->operator [](c.symbol);
+        if (rendered()->chars.contains(c.symbol)) {
+            const RenderedChar& rend = rendered()->chars[c.symbol];
             painter.drawImage(c.x + layoutConfig()->offsetLeft(),
                               c.y + layoutConfig()->offsetTop(),rend.img);
         }

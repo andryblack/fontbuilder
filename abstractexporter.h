@@ -61,6 +61,7 @@ private:
     int m_tex_width;
     int m_tex_height;
     const FontConfig* m_font_config;
+    RenderedMetrics m_metrics;
 protected:
     struct Symbol {
         unsigned short id;
@@ -79,6 +80,7 @@ protected:
     void setErrorMessage(const QString& str) { m_error_string=str; }
     int texWidth() const { return m_tex_width;}
     int texHeight() const { return m_tex_height;}
+    const RenderedMetrics& metrics() const { return m_metrics;}
     virtual bool Export(QByteArray& out) = 0;
 private:
      QVector<Symbol> m_symbols;

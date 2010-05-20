@@ -51,6 +51,12 @@ bool GHLExporter::Export(QByteArray& out) {
     descr.setAttribute("size",font_config()->size());
     root.appendChild(descr);
 
+    QDomElement fmetrics = doc.createElement("metrics");
+    fmetrics.setAttribute("ascender",metrics().ascender);
+    fmetrics.setAttribute("descender",metrics().descender);
+    fmetrics.setAttribute("height",metrics().height);
+    root.appendChild(fmetrics);
+
     QDomElement tex = doc.createElement("texture");
     tex.setAttribute("width",texWidth());
     tex.setAttribute("height",texHeight());

@@ -42,6 +42,7 @@ AbstractExporter::AbstractExporter(QObject *parent) :
 
 
 void AbstractExporter::setData(const LayoutData* data,const RendererData& rendered) {
+    m_metrics = rendered.metrics;
     m_symbols.clear();
     foreach ( const LayoutChar& lc, data->placed()) {
         Symbol symb;
@@ -50,7 +51,7 @@ void AbstractExporter::setData(const LayoutData* data,const RendererData& render
         symb.place_y = lc.y;
         symb.place_w = lc.w;
         symb.place_h = lc.h;
-        const RenderedChar& rc = rendered[symb.id];
+        const RenderedChar& rc = rendered.chars[symb.id];
         symb.offset_x = rc.offset_x;
         symb.offset_y = rc.offset_y;
         symb.advance = rc.advance;

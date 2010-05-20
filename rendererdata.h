@@ -45,7 +45,17 @@ struct RenderedChar {
             symbol(symbol),offset_x(x),offset_y(y),advance(a),img(img) {}
 };
 
-typedef QMap<ushort,RenderedChar> RendererData;
+struct RenderedMetrics {
+    int ascender;
+    int descender;
+    int height;
+};
+
+struct RendererData {
+    QMap<ushort,RenderedChar> chars;
+    RenderedMetrics metrics;
+};
+
 
 
 #endif // RENDERERDATA_H
