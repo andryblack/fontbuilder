@@ -40,6 +40,7 @@ public:
     TargaImageWriter(QString ext,QObject *parent = 0);
 
     virtual bool Export(QFile& file);
+    virtual QImage* reload(QFile& file);
 private:
 signals:
 

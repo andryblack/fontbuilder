@@ -32,14 +32,17 @@
 
 #include "builtinimagewriter.h"
 #include "layoutdata.h"
-#include <QPixmap>
+#include <QImage>
 #include <QPainter>
 #include "../layoutconfig.h"
+
+#include <QDebug>
 
 TargaImageWriter::TargaImageWriter(QString ext,QObject *parent) :
     AbstractImageWriter(parent)
 {
     setExtension(ext);
+    setReloadSupport(true);
 }
 
 
@@ -105,7 +108,7 @@ bool TargaImageWriter::Export(QFile& file) {
     header.width = pixmap.width();
     header.height = pixmap.height();
     header.bitsperpixel = 32;
-    header.imagedescriptor = 1 << 5;
+    header.imagedescriptor = (1 << 5) | (8);
 
     file.write((const char*)&header,18);
     for (int y=0;y<pixmap.height();y++) {
@@ -116,4 +119,111 @@ bool TargaImageWriter::Export(QFile& file) {
 
 
     return true;
+}
+
+template <int bpp>
+        inline uchar* copy_element(const uchar* src,uchar* dst);
+
+template <>
+        inline uchar* copy_element<3>(const uchar* src,uchar* dst) {
+    *dst++=*src++;
+    *dst++=*src++;
+    *dst++=*src++;
+    return dst;
+}
+
+template <>
+        inline uchar* copy_element<4>(const uchar* src,uchar* dst) {
+    *dst++=*src++;
+    *dst++=*src++;
+    *dst++=*src++;
+    *dst++=*src++;
+    return dst;
+}
+
+template <int bpp>
+        void encode_rle(uchar* data,QFile& file,int size) {
+    uchar c;
+    while (size>0) {
+        if (file.read(reinterpret_cast<char*>(&c),1)!=1) return;
+        if (c < 128) {
+            c++;
+            file.read(reinterpret_cast<char*>(data), bpp * c);
+            data+=bpp * c;
+            size-= c;
+        } else {
+            c-=127;
+            file.read(reinterpret_cast<char*>(data), bpp);
+            uchar* out = data + bpp;
+            for(uint counter = 1; counter < c; counter++)
+            {
+                out = copy_element<bpp>(data,out);
+            }
+            data = out;
+            size-= c;
+        }
+    }
+}
+
+QImage* TargaImageWriter::reload(QFile& file) {
+    TGA_HEADER header;
+    if (file.read(reinterpret_cast<char*>(&header),18)!=18)
+        return 0;
+    /// don`t support palette
+    if (header.colourmaptype)
+        return 0;
+    bool rle = header.datatypecode & 8;
+    /// support only True Color data
+    if ( (header.datatypecode&7) != 2)
+        return 0;
+    int bpp = header.bitsperpixel;
+    /// support only 24 and 32 bpp
+    if (bpp!=24 && bpp!=32)
+        return 0;
+    int width = header.width;
+    int height = header.height;
+    /// @todo endian !
+    QImage* img = 0;
+    img = new QImage(width,height,QImage::Format_ARGB32);
+    img->fill(0);
+    uchar* data = reinterpret_cast<uchar*>(img->bits());
+    if (bpp==32) {
+        if (!rle) {
+            qDebug() << "Load TGA 32bpp";
+            file.read(reinterpret_cast<char*>(data),width*height*4);
+        } else {
+            qDebug() << "Load TGA 32bpp, rle";
+            encode_rle<4>(data,file,width*height);
+        }
+    } else if (bpp==24) {
+        uchar* src = new uchar [ width * height * 3];
+        if (!rle) {
+            qDebug() << "Load TGA 24bpp";
+            file.read(reinterpret_cast<char*>(src),width*height*3);
+        } else {
+            qDebug() << "Load TGA 24bpp, rle";
+            encode_rle<3>(src,file,width*height);
+        }
+        const uchar* s = src;
+        uchar* d = data;
+        for (int i=0;i<width*height;i++) {
+            *d++ = *s++;
+            *d++ = *s++;
+            *d++ = *s++;
+            *d++ = 255;
+        }
+        delete [] src;
+    }
+    /// swap top-bottom
+    qDebug() << "header.imagedescriptor : " << int(header.imagedescriptor);
+    const int line_len = width*4;
+    if ((header.imagedescriptor & (1<<5))==0) {
+        uchar line[width * 4];
+        for (int i=0;i<height/2;i++) {
+            ::memcpy(line,data+line_len*i,line_len);
+            ::memcpy(data+line_len*i,data+line_len*(height-1-i),line_len);
+            ::memcpy(data+line_len*(height-1-i),line,line_len);
+        }
+    }
+    return img;
 }
