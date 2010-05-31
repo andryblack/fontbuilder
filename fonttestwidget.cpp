@@ -53,7 +53,7 @@ const LayoutChar*   FontTestWidget::layoutChar(ushort c) const {
 void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
     calcBBox();
     QPainter painter(this);
-    painter.fillRect(event->rect(),QBrush(QColor(0,0,0)));
+    painter.fillRect(rect(),QBrush(QColor(0,0,0)));
     if (!m_renderer_data || !m_layout_data) return;
     int left = 0;
     int x = m_left;
