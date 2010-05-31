@@ -28,32 +28,37 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "layoutdata.h"
+#ifndef FONTTESTFRAME_H
+#define FONTTESTFRAME_H
 
-LayoutData::LayoutData(QObject *parent) :
-    QObject(parent)
-{
+#include <QFrame>
+
+namespace Ui {
+    class FontTestFrame;
 }
 
-LayoutData::~LayoutData() {
-}
+class LayoutData;
+struct RendererData;
 
+class FontTestFrame : public QFrame {
+    Q_OBJECT
+public:
+    FontTestFrame(QWidget *parent = 0);
+    ~FontTestFrame();
 
+    void setLayoutData(const LayoutData* data);
+    void setRendererData(const RendererData* data);
 
-void LayoutData::resize(int w,int h) {
-    m_width = w;
-    m_height = h;
-}
+public slots:
+    void refresh();
+protected:
+    void changeEvent(QEvent *e);
 
-void LayoutData::beginPlacing() {
-    m_placed.clear();
-}
+private:
+    Ui::FontTestFrame *ui;
 
-void LayoutData::placeChar(const LayoutChar& c) {
-  m_placed.push_back(c);
-}
+private slots:
+    void on_plainTextEdit_textChanged();
+};
 
-
-void LayoutData::endPlacing() {
-    layoutChanged();
-}
+#endif // FONTTESTFRAME_H

@@ -56,7 +56,9 @@ SOURCES += main.cpp \
     imagewriterfactory.cpp \
     image/builtinimagewriter.cpp \
     exporters/zfiexporter.cpp \
-    image/targawriter.cpp
+    image/targawriter.cpp \
+    fonttestframe.cpp \
+    fonttestwidget.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -82,13 +84,16 @@ HEADERS += fontbuilder.h \
     imagewriterfactory.h \
     image/builtinimagewriter.h \
     exporters/zfiexporter.h \
-    image/targawriter.h
+    image/targawriter.h \
+    fonttestframe.h \
+    fonttestwidget.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \
     charactersframe.ui \
     layoutconfigframe.ui \
-    outputframe.ui
+    outputframe.ui \
+    fonttestframe.ui
 TRANSLATIONS = fontbuilder_en.ts \
     fontbuilder_ru.ts
 QT += xml

@@ -186,7 +186,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_Preview">
        <attribute name="title">
@@ -203,8 +203,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>223</width>
-             <height>408</height>
+             <width>264</width>
+             <height>393</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout">
@@ -300,6 +300,18 @@
        <attribute name="title">
         <string>Test font</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="FontTestFrame" name="fontTestFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -311,7 +323,7 @@
      <x>0</x>
      <y>0</y>
      <width>612</width>
-     <height>22</height>
+     <height>31</height>
     </rect>
    </property>
   </widget>
@@ -347,6 +359,12 @@
    <class>OutputFrame</class>
    <extends>QFrame</extends>
    <header>outputframe.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FontTestFrame</class>
+   <extends>QFrame</extends>
+   <header>fonttestframe.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

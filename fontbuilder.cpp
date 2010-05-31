@@ -109,8 +109,14 @@ FontBuilder::FontBuilder(QWidget *parent) :
 
     ui->frameOutput->setConfig(m_output_config);
     ui->frameFontSelect->setConfig(m_font_config);
+
+    ui->fontTestFrame->setLayoutData(m_layout_data);
+    ui->fontTestFrame->setRendererData(&m_font_renderer->data());
+
     m_font_config->blockSignals(font_config_block);
     m_font_config->emmitChange();
+
+    ui->fontTestFrame->refresh();
 }
 
 FontBuilder::~FontBuilder()
@@ -195,35 +201,50 @@ void FontBuilder::on_comboBoxLayouter_currentIndexChanged(QString name)
 }
 
 void FontBuilder::onRenderedChanged() {
-
+    ui->fontTestFrame->refresh();
 }
 
 void FontBuilder::onLayoutChanged() {
+    QImage image (m_layout_data->width(),m_layout_data->height(),QImage::Format_ARGB32);
+    image.fill(0);
+    {
+        QPainter painter(&image);
+        foreach (const LayoutChar& c,m_layout_data->placed()) {
+            m_font_renderer->placeImage(painter,c.symbol,
+                                        c.x + m_layout_config->offsetLeft(),
+                                        c.y + m_layout_config->offsetTop()
+                                        );
+        }
+    }
+    m_layout_data->setImage(image);
     QPixmap pixmap(m_layout_data->width(),m_layout_data->height());
     pixmap.fill(QColor(0,0,0,255));
-    QPainter painter(&pixmap);
-    foreach (const LayoutChar& c,m_layout_data->placed())
-        m_font_renderer->placeImage(painter,c.symbol,
-                                    c.x + m_layout_config->offsetLeft(),
-                                    c.y + m_layout_config->offsetTop()
-                                    );
-    if (ui->checkBoxDrawGrid->isChecked()) {
-        painter.setPen(QColor(255,0,255,255));
-        if (m_layout_config->onePixelOffset())
-            foreach (const LayoutChar& c,m_layout_data->placed()) {
-                painter.drawRect(c.x-1,c.y-1,c.w,c.h);
-            }
-        else
-            foreach (const LayoutChar& c,m_layout_data->placed()) {
-                painter.drawRect(c.x,c.y,c.w-1,c.h-1);
-            }
+
+    {
+        QPainter painter(&pixmap);
+        painter.drawImage(0,0,image);
+
+        if (ui->checkBoxDrawGrid->isChecked()) {
+            painter.setPen(QColor(255,0,255,255));
+            if (m_layout_config->onePixelOffset())
+               foreach (const LayoutChar& c,m_layout_data->placed()) {
+                  painter.drawRect(c.x-1,c.y-1,c.w,c.h);
+               }
+            else
+               foreach (const LayoutChar& c,m_layout_data->placed()) {
+                  painter.drawRect(c.x,c.y,c.w-1,c.h-1);
+               }
+        }
     }
+
+
     ui->label_Image->setPixmap(pixmap);
     ui->label_Image->repaint();
     ui->label_ImageSize->setText(tr("Image size: ")+
             QString().number(m_layout_data->width()) + "x" +
             QString().number(m_layout_data->height())
             );
+    ui->fontTestFrame->refresh();
 }
 
 void FontBuilder::onFontNameChanged() {

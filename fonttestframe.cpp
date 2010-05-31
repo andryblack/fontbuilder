@@ -28,32 +28,48 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "layoutdata.h"
+#include "fonttestframe.h"
+#include "ui_fonttestframe.h"
 
-LayoutData::LayoutData(QObject *parent) :
-    QObject(parent)
+FontTestFrame::FontTestFrame(QWidget *parent) :
+    QFrame(parent),
+    ui(new Ui::FontTestFrame)
 {
+    ui->setupUi(this);
+    ui->drawWidget->setText(ui->plainTextEdit->document()->toPlainText());
 }
 
-LayoutData::~LayoutData() {
+FontTestFrame::~FontTestFrame()
+{
+    delete ui;
+}
+
+void FontTestFrame::changeEvent(QEvent *e)
+{
+    QFrame::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
 }
 
 
-
-void LayoutData::resize(int w,int h) {
-    m_width = w;
-    m_height = h;
+void FontTestFrame::setLayoutData(const LayoutData* data) {
+    ui->drawWidget->setLayoutData(data);
 }
 
-void LayoutData::beginPlacing() {
-    m_placed.clear();
+void FontTestFrame::setRendererData(const RendererData* data) {
+    ui->drawWidget->setRendererData(data);
 }
 
-void LayoutData::placeChar(const LayoutChar& c) {
-  m_placed.push_back(c);
+void FontTestFrame::on_plainTextEdit_textChanged()
+{
+    ui->drawWidget->setText(ui->plainTextEdit->document()->toPlainText());
 }
 
-
-void LayoutData::endPlacing() {
-    layoutChanged();
+void FontTestFrame::refresh() {
+    ui->drawWidget->refresh();
 }

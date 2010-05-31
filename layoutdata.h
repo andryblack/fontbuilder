@@ -31,16 +31,20 @@
 #ifndef LAYOUTDATA_H
 #define LAYOUTDATA_H
 
-#include <QObject>
-#include <QVector>
 
 #include "layoutchar.h"
+
+#include <QObject>
+#include <QVector>
+#include <QImage>
 
 class LayoutData : public QObject
 {
 Q_OBJECT
 public:
     explicit LayoutData(QObject *parent = 0);
+    ~LayoutData();
+
     int width() const { return m_width;}
     int height() const { return m_height;}
     Q_PROPERTY( int width READ width );
@@ -51,10 +55,13 @@ public:
     void endPlacing();
 
     const QVector<LayoutChar>& placed() const { return m_placed;}
+    void setImage(const QImage& image) { m_image = image;}
+    const QImage& image() const { return m_image;}
 private:
     int m_width;
     int m_height;
     QVector<LayoutChar> m_placed;
+    QImage    m_image;
 signals:
     void layoutChanged();
 public slots:

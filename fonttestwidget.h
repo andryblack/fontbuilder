@@ -28,32 +28,39 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "layoutdata.h"
+#ifndef FONTTESTWIDGET_H
+#define FONTTESTWIDGET_H
 
-LayoutData::LayoutData(QObject *parent) :
-    QObject(parent)
+#include <QWidget>
+
+class LayoutData;
+struct RendererData;
+struct LayoutChar;
+
+class FontTestWidget : public QWidget
 {
-}
+Q_OBJECT
+public:
+    explicit FontTestWidget(QWidget *parent = 0);
 
-LayoutData::~LayoutData() {
-}
+    void setLayoutData(const LayoutData* data) { m_layout_data = data;}
+    void setRendererData(const RendererData* data) { m_renderer_data = data;}
 
+    void setText(const QString& text);
+protected:
+    virtual void	paintEvent ( QPaintEvent * event );
+    void calcBBox();
+signals:
 
+public slots:
+    void refresh();
+private:
+    QString m_text;
+    const LayoutData*   m_layout_data;
+    const LayoutChar*   layoutChar(ushort c) const;
+    const RendererData* m_renderer_data;
+    int m_left;
+    int m_top;
+};
 
-void LayoutData::resize(int w,int h) {
-    m_width = w;
-    m_height = h;
-}
-
-void LayoutData::beginPlacing() {
-    m_placed.clear();
-}
-
-void LayoutData::placeChar(const LayoutChar& c) {
-  m_placed.push_back(c);
-}
-
-
-void LayoutData::endPlacing() {
-    layoutChanged();
-}
+#endif // FONTTESTWIDGET_H
