@@ -41,6 +41,7 @@ public:
     BuiltinImageWriter(QString format,QString ext,QObject *parent = 0);
 
     virtual bool Export(QFile& file);
+    virtual QImage* reload(QFile& file);
 private:
     QString m_format;
 signals:

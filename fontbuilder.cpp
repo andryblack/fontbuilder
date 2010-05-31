@@ -50,7 +50,8 @@
 
 FontBuilder::FontBuilder(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::FontBuilder)
+    ui(new Ui::FontBuilder),
+    m_image_writer(0)
 {
     ui->setupUi(this);
 
@@ -85,7 +86,7 @@ FontBuilder::FontBuilder(QWidget *parent) :
     readConfig(settings,"layoutconfig",m_layout_config);
     readConfig(settings,"outputconfig",m_output_config);
     ui->checkBoxDrawGrid->setChecked(settings.value("draw_grid").toBool());
-    connect(ui->checkBoxDrawGrid,SIGNAL(toggled(bool)),this,SLOT(onLayoutChanged()));
+    connect(ui->checkBoxDrawGrid,SIGNAL(toggled(bool)),this,SLOT(on_checkBoxDrawGrid_toggled(bool)));
 
     ui->frameCharacters->setConfig(m_font_config);
     ui->frameFontOptions->setConfig(m_font_config);
@@ -202,21 +203,12 @@ void FontBuilder::on_comboBoxLayouter_currentIndexChanged(QString name)
 
 void FontBuilder::onRenderedChanged() {
     ui->fontTestFrame->refresh();
+    if (m_image_writer)
+        m_image_writer->forget();
 }
 
-void FontBuilder::onLayoutChanged() {
-    QImage image (m_layout_data->width(),m_layout_data->height(),QImage::Format_ARGB32);
-    image.fill(0);
-    {
-        QPainter painter(&image);
-        foreach (const LayoutChar& c,m_layout_data->placed()) {
-            m_font_renderer->placeImage(painter,c.symbol,
-                                        c.x + m_layout_config->offsetLeft(),
-                                        c.y + m_layout_config->offsetTop()
-                                        );
-        }
-    }
-    m_layout_data->setImage(image);
+
+void FontBuilder::setLayoutImage(const QImage& image) {
     QPixmap pixmap(m_layout_data->width(),m_layout_data->height());
     pixmap.fill(QColor(0,0,0,255));
 
@@ -244,7 +236,30 @@ void FontBuilder::onLayoutChanged() {
             QString().number(m_layout_data->width()) + "x" +
             QString().number(m_layout_data->height())
             );
+}
+
+void FontBuilder::onLayoutChanged() {
+    QImage image (m_layout_data->width(),m_layout_data->height(),QImage::Format_ARGB32);
+    image.fill(0);
+    {
+        QPainter painter(&image);
+        foreach (const LayoutChar& c,m_layout_data->placed()) {
+            m_font_renderer->placeImage(painter,c.symbol,
+                                        c.x + m_layout_config->offsetLeft(),
+                                        c.y + m_layout_config->offsetTop()
+                                        );
+        }
+    }
+    qDebug() << "set layout image from rendered";
+    m_layout_data->setImage(image);
+    setLayoutImage(image);
     ui->fontTestFrame->refresh();
+    if (m_image_writer)
+        m_image_writer->forget();
+}
+
+void FontBuilder::on_checkBoxDrawGrid_toggled(bool ) {
+    setLayoutImage(m_layout_data->image());
 }
 
 void FontBuilder::onFontNameChanged() {
@@ -255,13 +270,16 @@ void FontBuilder::onFontNameChanged() {
     name = name.toLower().replace(" ","_");
     m_output_config->setImageName(name);
     m_output_config->setDescriptionName(name);
+    if (m_image_writer)
+        m_image_writer->forget();
 }
 
 void FontBuilder::on_pushButtonWriteFont_clicked()
 {
     QDir dir(m_output_config->path());
     if (m_output_config->writeImage()) {
-
+        delete m_image_writer;
+        m_image_writer = 0;
         AbstractImageWriter* exporter = m_image_writer_factory->build(m_output_config->imageFormat(),this);
         if (!exporter) {
             QMessageBox msgBox;
@@ -288,8 +306,10 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
             msgBox.setText(tr("Error on save image :\n")+exporter->errorString()+"\nFile not writed.");
             msgBox.exec();
         }
-
-        delete exporter;
+        file.close();
+        m_image_writer = exporter;
+        m_image_writer->watch(filename);
+        connect(m_image_writer,SIGNAL(imageChanged(QString)),this,SLOT(onExternalImageChanged(QString)));
     }
     if (m_output_config->writeDescription()) {
         AbstractExporter* exporter = m_exporter_factory->build(m_output_config->descriptionFormat(),this);
@@ -320,4 +340,21 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
     }
 }
 
-
+void FontBuilder::onExternalImageChanged(const QString& fn) {
+    if (!m_image_writer) return;
+    qDebug() << "File changed : " << fn ;
+    QFile f(this);
+    f.setFileName(fn);
+    if (!f.open(QIODevice::ReadOnly)) {
+        qDebug() << "Failed open : " << fn ;
+        return;
+    }
+    QImage* image = m_image_writer->Read(f);
+    if (image) {
+        m_layout_data->setImage(*image);
+        setLayoutImage(*image);
+        qDebug() << "set layout image from exernal";
+        ui->fontTestFrame->refresh();
+        delete image;
+    }
+}

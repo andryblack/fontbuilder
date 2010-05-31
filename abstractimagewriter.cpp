@@ -30,12 +30,18 @@
 
 #include "abstractimagewriter.h"
 #include "layoutdata.h"
-#include <QPainter>
 #include "layoutconfig.h"
 
+#include <QPainter>
+#include <QFileSystemWatcher>
+#include <QTimer>
+#include <QDebug>
 
-AbstractImageWriter::AbstractImageWriter(QObject *parent ) : QObject(parent) {
+
+AbstractImageWriter::AbstractImageWriter(QObject *parent ) : QObject(parent),m_watcher(0) {
     setExtension("img");
+    setReloadSupport(false);
+    m_reload_timer = 0;
 }
 
 
@@ -67,4 +73,47 @@ bool AbstractImageWriter::Write(QFile& file) {
        return true;
     }
     return false;
+}
+
+QImage* AbstractImageWriter::Read(QFile& file) {
+    return reload(file);
+}
+
+void AbstractImageWriter::watch(const QString& file) {
+    delete m_watcher;
+    m_watcher = 0;
+    if (m_reload_support) {
+        m_watcher = new QFileSystemWatcher(this);
+        m_watcher->addPath(file);
+        connect(m_watcher,SIGNAL(fileChanged(QString)),this,SLOT(onFileChanged(QString)));
+    }
+}
+
+void AbstractImageWriter::onFileChanged(const QString& fn) {
+    m_reload_file = fn;
+    if (m_reload_timer) {
+        m_reload_timer->stop();
+    } else {
+        m_reload_timer = new QTimer(this);
+        connect(m_reload_timer,SIGNAL(timeout()),this,SLOT(onReload()));
+    }
+    m_reload_timer->setSingleShot(true);
+    m_reload_timer->setInterval(2000);
+    m_reload_timer->start();
+
+}
+
+void AbstractImageWriter::onReload() {
+    imageChanged(m_reload_file);
+}
+
+void AbstractImageWriter::forget() {
+    if (m_watcher) {
+        delete m_watcher;
+        m_watcher = 0;
+    }
+    if (m_reload_timer) {
+        delete m_reload_timer;
+        m_reload_timer = 0;
+    }
 }

@@ -38,6 +38,7 @@ BuiltinImageWriter::BuiltinImageWriter(QString format,QString ext,QObject *paren
     AbstractImageWriter(parent)
 {
     setExtension(ext);
+    setReloadSupport(true);
     m_format = format;
 }
 
@@ -46,4 +47,12 @@ bool BuiltinImageWriter::Export(QFile& file) {
     QImage pixmap = buildImage();
     pixmap.save(&file,m_format.toUtf8().data());
     return true;
+}
+
+QImage* BuiltinImageWriter::reload(QFile& file) {
+    QImage* img = new QImage();
+    if (img->load(&file,m_format.toUtf8().data()))
+        return img;
+    delete img;
+    return 0;
 }

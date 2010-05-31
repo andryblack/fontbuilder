@@ -43,6 +43,9 @@
 class LayoutData;
 class LayoutConfig;
 
+class QFileSystemWatcher;
+class QTimer;
+
 class AbstractImageWriter : public QObject
 {
 Q_OBJECT
@@ -53,8 +56,14 @@ public:
     const QString& extension() const { return m_extension;}
 
     bool Write(QFile& file);
+    QImage* Read(QFile& file);
 
     void setData(const LayoutData* data,const LayoutConfig* config,const RendererData& rendered);
+
+    void forget();
+    void watch(const QString& file);
+signals:
+    void imageChanged(const QString& file);
 private:
     QString m_error_string;
     QString m_extension;
@@ -63,8 +72,13 @@ private:
     const RendererData* m_rendered;
     const LayoutData* m_layout;
     const LayoutConfig* m_layout_config;
+    QFileSystemWatcher* m_watcher;
+    bool m_reload_support;
+    QTimer* m_reload_timer;
+    QString m_reload_file;
 protected:
     void setExtension(const QString& extension) { m_extension = extension;}
+    void setReloadSupport(bool support) { m_reload_support = support;}
     void setErrorMessage(const QString& str) { m_error_string=str; }
     int texWidth() const { return m_tex_width;}
     int texHeight() const { return m_tex_height;}
@@ -72,7 +86,11 @@ protected:
     const LayoutData* layout() const { return m_layout;}
     const LayoutConfig* layoutConfig() const { return m_layout_config;}
     virtual bool Export(QFile& file) = 0;
+    virtual QImage* reload( QFile& file) { Q_UNUSED(file);return 0;}
     QImage buildImage();
+protected slots:
+    void onFileChanged(const QString& fn);
+    void onReload();
 private:
 };
 

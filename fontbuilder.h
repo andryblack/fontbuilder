@@ -48,6 +48,8 @@ class OutputConfig;
 class ExporterFactory;
 class AbstractExporter;
 class ImageWriterFactory;
+class AbstractImageWriter;
+
 
 class FontBuilder : public QMainWindow {
     Q_OBJECT
@@ -73,7 +75,9 @@ private:
     OutputConfig*   m_output_config;
     ExporterFactory* m_exporter_factory;
     ImageWriterFactory* m_image_writer_factory;
+    AbstractImageWriter* m_image_writer;
 
+    void setLayoutImage(const QImage& img);
 public slots:
 
     void fontParametersChanged();
@@ -81,9 +85,11 @@ public slots:
 private slots:
     void on_pushButtonWriteFont_clicked();
     void on_comboBoxLayouter_currentIndexChanged(QString );
+    void on_checkBoxDrawGrid_toggled(bool);
     void onLayoutChanged();
     void onRenderedChanged();
     void onFontNameChanged();
+    void onExternalImageChanged(const QString& img);
 };
 
 #endif // FONTBUILDER_H
