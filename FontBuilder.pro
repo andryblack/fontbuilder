@@ -58,7 +58,8 @@ SOURCES += main.cpp \
     exporters/zfiexporter.cpp \
     image/targawriter.cpp \
     fonttestframe.cpp \
-    fonttestwidget.cpp
+    fonttestwidget.cpp \
+    exporters/divoexporter.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -86,7 +87,8 @@ HEADERS += fontbuilder.h \
     exporters/zfiexporter.h \
     image/targawriter.h \
     fonttestframe.h \
-    fonttestwidget.h
+    fonttestwidget.h \
+    exporters/divoexporter.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \

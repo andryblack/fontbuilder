@@ -39,6 +39,7 @@
 #include "rendererdata.h"
 
 class FontConfig;
+class LayoutConfig;
 class LayoutData;
 
 class AbstractExporter : public QObject
@@ -52,7 +53,7 @@ public:
 
     bool Write(QByteArray& out);
 
-    void setFontConfig(const FontConfig* config) { m_font_config = config;}
+    void setFontConfig(const FontConfig* config,const LayoutConfig* layout) { m_font_config = config;m_layout_config=layout;}
     void setData(const LayoutData* data,const RendererData& rendered);
 private:
     QString m_error_string;
@@ -61,6 +62,7 @@ private:
     int m_tex_width;
     int m_tex_height;
     const FontConfig* m_font_config;
+    const LayoutConfig* m_layout_config;
     RenderedMetrics m_metrics;
 protected:
     struct Symbol {
@@ -74,7 +76,8 @@ protected:
         int advance;
     };
 
-    const FontConfig* font_config() const { return m_font_config;}
+    const FontConfig* fontConfig() const { return m_font_config;}
+    const LayoutConfig* layoutConfig() const { return m_layout_config;}
     const QVector<Symbol>& symbols() const { return m_symbols;}
     void setExtension(const QString& extension) { m_extension = extension;}
     void setErrorMessage(const QString& str) { m_error_string=str; }

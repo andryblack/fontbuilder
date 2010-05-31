@@ -46,9 +46,9 @@ bool GHLExporter::Export(QByteArray& out) {
     root.setAttribute("type","GHL");
 
     QDomElement descr = doc.createElement("description");
-    descr.setAttribute("family",font_config()->family());
-    descr.setAttribute("style",font_config()->style());
-    descr.setAttribute("size",font_config()->size());
+    descr.setAttribute("family",fontConfig()->family());
+    descr.setAttribute("style",fontConfig()->style());
+    descr.setAttribute("size",fontConfig()->size());
     root.appendChild(descr);
 
     QDomElement fmetrics = doc.createElement("metrics");

@@ -319,7 +319,7 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
             msgBox.exec();
             return;
         }
-        exporter->setFontConfig(m_font_config);
+        exporter->setFontConfig(m_font_config,m_layout_config);
         exporter->setData(m_layout_data,m_font_renderer->data());
         QString filename = dir.filePath(m_output_config->descriptionName());
         filename+="."+exporter->getExtension();

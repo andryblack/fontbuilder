@@ -28,29 +28,45 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "exporterfactory.h"
+#include "divoexporter.h"
+#include "../fontconfig.h"
+#include <QtXml>
 
-
-extern AbstractExporter* GHLExporterFactoryFunc (QObject*);
-extern AbstractExporter* ZFIExporterFactoryFunc (QObject* parent);
-extern AbstractExporter* DivoExporterFactoryFunc (QObject*);
-
-ExporterFactory::ExporterFactory(QObject *parent) :
-    QObject(parent)
+DivoExporter::DivoExporter(QObject *parent) :
+    AbstractExporter(parent)
 {
-    m_factorys["GHL"] = &GHLExporterFactoryFunc;
-    m_factorys["ZenGL-zfi"] = &ZFIExporterFactoryFunc;
-    m_factorys["Divo compatible - xml"] = &DivoExporterFactoryFunc;
+    setExtension("xml");
 }
 
 
-QStringList ExporterFactory::names() const {
-    return m_factorys.keys();
-}
+bool DivoExporter::Export(QByteArray& out) {
+    QDomDocument doc("Font");
+    QDomElement root = doc.createElement("Font");
+    doc.appendChild(root);
 
-AbstractExporter* ExporterFactory::build(const QString &name,QObject* parent) {
-    if (m_factorys.contains(name)) {
-        return m_factorys[name](parent);
+    root.setAttribute("family",fontConfig()->family());
+    root.setAttribute("style",fontConfig()->style());
+    root.setAttribute("size",fontConfig()->size());
+    root.setAttribute("height",metrics().height);
+
+    int offset = metrics().ascender;
+
+    foreach (const Symbol& c , symbols()) {
+        QDomElement ce = doc.createElement("Char");
+        ce.setAttribute("code",QString().append(c.id));
+        char buf[64];
+        ::snprintf(buf,63,"%d %d %d %d",c.place_x,c.place_y,c.place_w,c.place_h);
+        ce.setAttribute("rect",buf);
+        ::snprintf(buf,63,"%d %d",c.offset_x,offset-c.offset_y);
+        ce.setAttribute("offset",buf);
+        ce.setAttribute("width",c.advance);
+        root.appendChild(ce);
     }
-    return 0;
+    out = doc.toByteArray(1);
+    return true;
+}
+
+
+AbstractExporter* DivoExporterFactoryFunc (QObject* parent) {
+    return new DivoExporter(parent);
 }

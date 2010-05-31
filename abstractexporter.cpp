@@ -30,6 +30,7 @@
 
 #include "abstractexporter.h"
 #include "layoutdata.h"
+#include "layoutconfig.h"
 #include "rendererdata.h"
 
 AbstractExporter::AbstractExporter(QObject *parent) :
@@ -52,8 +53,8 @@ void AbstractExporter::setData(const LayoutData* data,const RendererData& render
         symb.place_w = lc.w;
         symb.place_h = lc.h;
         const RenderedChar& rc = rendered.chars[symb.id];
-        symb.offset_x = rc.offset_x;
-        symb.offset_y = rc.offset_y;
+        symb.offset_x = rc.offset_x-layoutConfig()->offsetLeft();
+        symb.offset_y = rc.offset_y+layoutConfig()->offsetTop();
         symb.advance = rc.advance;
         m_symbols.push_back(symb);
     }
