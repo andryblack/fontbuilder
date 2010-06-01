@@ -246,9 +246,13 @@ void FontSelectFrame::selectFile(const QString& file,int face) {
 
 void FontSelectFrame::selectSize(int size) {
     QString ss = QString().number(size);
-    for (int i=0;i<ui->comboBoxSize->count();i++)
-        if (ss==ui->comboBoxSize->itemText(i))
+    for (int i=0;i<ui->comboBoxSize->count();i++) {
+        if (ss==ui->comboBoxSize->itemText(i)) {
             ui->comboBoxSize->setCurrentIndex(i);
+            return;
+        }
+    }
+    ui->comboBoxSize->setEditText(QString().number(size));
 }
 
 void FontSelectFrame::on_comboBoxFamily_currentIndexChanged(QString family)
