@@ -68,7 +68,7 @@ void CharactersFrame::on_pushButtonImport_clicked()
         if (f.open(QFile::ReadOnly | QFile::Text)) {
             QByteArray data = f.readAll();
             QString text = QString::fromUtf8(data.constData(),data.size());
-            text = remove_duplicates(text);
+            text = sortChars(removeDuplicates(text));
             ui->plainTextEdit->setPlainText(text);
         }
     }
@@ -97,7 +97,7 @@ QString CharactersFrame::getCharacters() const {
 void CharactersFrame::on_plainTextEdit_textChanged()
 {
     if (m_config) {
-        m_config->setCharacters(remove_duplicates(getCharacters()));
+        m_config->setCharacters(sortChars(removeDuplicates(getCharacters())));
     }
 }
 
@@ -106,12 +106,18 @@ void CharactersFrame::setConfig(FontConfig* config) {
     ui->plainTextEdit->setPlainText(config->characters());
 }
 
-QString CharactersFrame::remove_duplicates(const QString& text) const {
+QString CharactersFrame::removeDuplicates(const QString& text) const {
     QString res;
     foreach (QChar c, text) {
         if (!res.contains(c))
             res.append(c);
     }
+    return res;
+}
+
+QString CharactersFrame::sortChars(const QString& text) const {
+    QString res = text;
+    qSort(res.begin(),res.end());
     return res;
 }
 

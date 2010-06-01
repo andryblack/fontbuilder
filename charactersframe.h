@@ -52,7 +52,8 @@ protected:
 private:
     Ui::CharactersFrame *ui;
     FontConfig* m_config;
-    QString remove_duplicates(const QString& text) const;
+    QString removeDuplicates(const QString& text) const;
+    QString sortChars(const QString& text) const;
 signals:
 
 private slots:
