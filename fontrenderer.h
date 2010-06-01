@@ -63,6 +63,7 @@ private:
     QVector<LayoutChar> m_chars;
     void clear_bitmaps();
     void append_bitmap(ushort symbol);
+    void append_kerning(ushort symbol,const ushort* other,int amount);
 signals:
     void imagesChanged();
     void imagesChanged(const QVector<LayoutChar>&);

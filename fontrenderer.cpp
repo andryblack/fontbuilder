@@ -76,6 +76,7 @@ void FontRenderer::rasterize() {
     qDebug() << " begin rasterize_font ";
 
 
+
     if (m_config->italic()!=0) {
         FT_Matrix matrix;
         const float angle = (-M_PI*m_config->italic()) / 180.0f;
@@ -101,6 +102,7 @@ void FontRenderer::rasterize() {
     }
 
 
+    bool use_kerning = FT_HAS_KERNING( m_ft_face );
 
     const ushort* chars = m_config->characters().utf16();
     size_t amount = 0;
@@ -131,6 +133,8 @@ void FontRenderer::rasterize() {
         if ( error )
            continue;
         append_bitmap(chars[i]);
+        if (use_kerning)
+            append_kerning(chars[i],chars,amount);
     }
     imagesChanged(m_chars);
     imagesChanged();
@@ -202,6 +206,28 @@ void FontRenderer::append_bitmap(ushort symbol) {
     m_rendered.chars[symbol]=RenderedChar(symbol,slot->bitmap_left,slot->bitmap_top,slot->advance.x/64,img);
     m_chars.push_back(LayoutChar(symbol,slot->bitmap_left,-slot->bitmap_top,w,h));
 
+}
+
+void FontRenderer::append_kerning(ushort symbol,const ushort* other,int amount) {
+     FT_Vector  kerning;
+     FT_UInt left =  FT_Get_Char_Index( m_ft_face, symbol );
+    for (int i=0;i<amount;i++) {
+        if (other[i]!=symbol) {
+            FT_UInt right =  FT_Get_Char_Index( m_ft_face, other[i] );
+            int error = FT_Get_Kerning( m_ft_face,          /* handle to face object */
+                                      left,          /* left glyph index      */
+                                      right,         /* right glyph index     */
+                                      FT_KERNING_DEFAULT,  /* kerning mode          */
+                                      &kerning );    /* target vector         */
+            if (error) {
+
+            } else {
+                int advance = kerning.x / 64;
+                if (advance!=0)
+                    m_rendered.chars[symbol].kerning[other[i]]=advance;
+            }
+        }
+    }
 }
 
 void FontRenderer::on_fontFileChanged() {

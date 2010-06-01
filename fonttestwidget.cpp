@@ -39,6 +39,7 @@
 FontTestWidget::FontTestWidget(QWidget *parent) :
     QWidget(parent) , m_layout_data(0),m_renderer_data(0)
 {
+    setUseKerning(false);
 }
 
 
@@ -51,6 +52,7 @@ const LayoutChar*   FontTestWidget::layoutChar(ushort c) const {
 }
 
 void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
+    Q_UNUSED(event);
     calcBBox();
     QPainter painter(this);
     painter.fillRect(rect(),QBrush(QColor(0,0,0)));
@@ -71,6 +73,11 @@ void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
                                   layout->w,layout->h);
             }
             x+=rendered.advance;
+            if (useKerning() && (*chars!=0)) {
+                if (rendered.kerning.contains(*chars)) {
+                    x+=rendered.kerning[*chars];
+                }
+            }
         }
         if (c=='\n') {
             x = left;
@@ -105,6 +112,11 @@ void FontTestWidget::calcBBox() {
                     bottom = y-rendered.offset_y+layout->h;
             }
             x+=rendered.advance;
+            if (useKerning() && (*chars!=0)) {
+                if (rendered.kerning.contains(*chars)) {
+                    x+=rendered.kerning[*chars];
+                }
+            }
         }
         if (c=='\n') {
             x=left;

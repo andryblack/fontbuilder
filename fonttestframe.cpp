@@ -73,3 +73,9 @@ void FontTestFrame::on_plainTextEdit_textChanged()
 void FontTestFrame::refresh() {
     ui->drawWidget->refresh();
 }
+
+void FontTestFrame::on_useKerningCheckBox_toggled(bool checked)
+{
+    ui->drawWidget->setUseKerning(checked);
+    ui->drawWidget->refresh();
+}

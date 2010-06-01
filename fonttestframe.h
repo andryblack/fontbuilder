@@ -58,6 +58,7 @@ private:
     Ui::FontTestFrame *ui;
 
 private slots:
+    void on_useKerningCheckBox_toggled(bool checked);
     void on_plainTextEdit_textChanged();
 };
 

@@ -40,8 +40,11 @@ GHLExporter::GHLExporter(QObject *parent) :
 }
 
 bool GHLExporter::Export(QByteArray& out) {
-    QDomDocument doc("font");
+    QDomDocument doc;
     QDomElement root = doc.createElement("font");
+
+    doc.appendChild(doc.createProcessingInstruction("xml","version=\"1.0\" encoding=\"utf-8\"" ));
+
     doc.appendChild(root);
     root.setAttribute("type","GHL");
 
@@ -72,6 +75,14 @@ bool GHLExporter::Export(QByteArray& out) {
         ::snprintf(buf,63,"%d %d",c.offset_x,c.offset_y);
         ce.setAttribute("offset",buf);
         ce.setAttribute("advance",c.advance);
+        typedef QMap<ushort,int>::ConstIterator Kerning;
+        for ( Kerning k = c.kerning.begin();k!=c.kerning.end();k++) {
+            QDomElement ke = doc.createElement("kerning");
+            ke.setAttribute("id",QString().append(k.key()));
+            ke.setAttribute("advance",k.value());
+            ce.appendChild(ke);
+        }
+
         chars.appendChild(ce);
     }
     root.appendChild(chars);

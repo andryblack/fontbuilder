@@ -47,6 +47,9 @@ public:
     void setRendererData(const RendererData* data) { m_renderer_data = data;}
 
     void setText(const QString& text);
+
+    bool useKerning() const { return m_use_kerning;}
+    void setUseKerning(bool use) { m_use_kerning=use;}
 protected:
     virtual void	paintEvent ( QPaintEvent * event );
     void calcBBox();
@@ -61,6 +64,7 @@ private:
     const RendererData* m_renderer_data;
     int m_left;
     int m_top;
+    bool    m_use_kerning;
 };
 
 #endif // FONTTESTWIDGET_H

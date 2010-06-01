@@ -32,7 +32,10 @@
 #define RENDERERDATA_H
 
 #include <QMap>
+#include <QVector>
 #include <QImage>
+
+
 
 struct RenderedChar {
     ushort symbol;
@@ -40,6 +43,7 @@ struct RenderedChar {
     int offset_y;
     int advance;
     QImage img;
+    QMap<ushort,int> kerning;
     RenderedChar() : symbol(0) {}
     RenderedChar(ushort symbol,int x,int y,int a,const QImage& img) :
             symbol(symbol),offset_x(x),offset_y(y),advance(a),img(img) {}

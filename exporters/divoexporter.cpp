@@ -40,7 +40,8 @@ DivoExporter::DivoExporter(QObject *parent) :
 
 
 bool DivoExporter::Export(QByteArray& out) {
-    QDomDocument doc("Font");
+    QDomDocument doc;
+    doc.appendChild(doc.createProcessingInstruction("xml","version=\"1.0\" encoding=\"utf-8\"" ));
     QDomElement root = doc.createElement("Font");
     doc.appendChild(root);
 
@@ -60,6 +61,13 @@ bool DivoExporter::Export(QByteArray& out) {
         ::snprintf(buf,63,"%d %d",c.offset_x,offset-c.offset_y);
         ce.setAttribute("offset",buf);
         ce.setAttribute("width",c.advance);
+        typedef QMap<ushort,int>::ConstIterator Kerning;
+        for ( Kerning k = c.kerning.begin();k!=c.kerning.end();k++) {
+            QDomElement ke = doc.createElement("Kerning");
+            ke.setAttribute("id",QString().append(k.key()));
+            ke.setAttribute("advance",k.value());
+            ce.appendChild(ke);
+        }
         root.appendChild(ce);
     }
     out = doc.toByteArray(1);

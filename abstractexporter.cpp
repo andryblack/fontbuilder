@@ -56,6 +56,7 @@ void AbstractExporter::setData(const LayoutData* data,const RendererData& render
         symb.offset_x = rc.offset_x-layoutConfig()->offsetLeft();
         symb.offset_y = rc.offset_y+layoutConfig()->offsetTop();
         symb.advance = rc.advance;
+        symb.kerning = rc.kerning;
         m_symbols.push_back(symb);
     }
     m_tex_width = data->width();
