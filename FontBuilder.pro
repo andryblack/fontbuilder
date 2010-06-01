@@ -59,7 +59,9 @@ SOURCES += main.cpp \
     image/targawriter.cpp \
     fonttestframe.cpp \
     fonttestwidget.cpp \
-    exporters/divoexporter.cpp
+    exporters/divoexporter.cpp \
+    charmapdialog.cpp \
+    charsselectwidget.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -88,14 +90,17 @@ HEADERS += fontbuilder.h \
     image/targawriter.h \
     fonttestframe.h \
     fonttestwidget.h \
-    exporters/divoexporter.h
+    exporters/divoexporter.h \
+    charmapdialog.h \
+    charsselectwidget.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \
     charactersframe.ui \
     layoutconfigframe.ui \
     outputframe.ui \
-    fonttestframe.ui
+    fonttestframe.ui \
+    charmapdialog.ui
 TRANSLATIONS = fontbuilder_en.ts \
     fontbuilder_ru.ts
 QT += xml

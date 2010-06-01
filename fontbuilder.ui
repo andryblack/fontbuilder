@@ -18,10 +18,7 @@
    <locale language="English" country="UnitedStates"/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout"/>
-    </item>
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="locale">
@@ -186,7 +183,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_Preview">
        <attribute name="title">
@@ -203,7 +200,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>264</width>
+             <width>358</width>
              <height>393</height>
             </rect>
            </property>

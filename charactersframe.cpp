@@ -32,6 +32,7 @@
 #include "ui_charactersframe.h"
 #include <QFileDialog>
 #include "fontconfig.h"
+#include "charmapdialog.h"
 
 CharactersFrame::CharactersFrame(QWidget *parent) :
     QFrame(parent),
@@ -131,4 +132,19 @@ void CharactersFrame::on_pushButton_clicked()
 void CharactersFrame::on_pushButtonDefault_clicked()
 {
     ui->plainTextEdit->setPlainText(m_config->defaultCharacters());
+}
+
+void CharactersFrame::on_pushButton_SelectFromCharsMap_clicked()
+{
+    CharMapDialog dialog(this);
+    dialog.setModal(true);
+    dialog.setChars(m_config->characters());
+    int result = dialog.exec();
+    (void)result;
+    if (dialog.result()==QDialog::Accepted) {
+        m_config->setCharacters(sortChars(removeDuplicates(dialog.getCharacters())));
+        bool block = ui->plainTextEdit->blockSignals(true);
+        ui->plainTextEdit->setPlainText(m_config->characters());
+        ui->plainTextEdit->blockSignals(block);
+    }
 }
