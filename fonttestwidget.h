@@ -76,7 +76,7 @@ private:
     const RendererData* m_renderer_data;
     const FontConfig*   m_font_config;
     int m_left;
-    int m_right;
+    int m_width;
     int m_top;
     bool    m_use_kerning;
     Align   m_align;

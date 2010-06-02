@@ -54,21 +54,14 @@ const LayoutChar*   FontTestWidget::layoutChar(ushort c) const {
 }
 
 int FontTestWidget::lineWidth(const ushort* chars) const {
-    int left = 0;
-    int right = 1;
-    int x = left;
+    int x = 0;
     while (*chars) {
         ushort c = *chars++;
+        if (c=='\n') {
+            break;
+        } else
         if (m_renderer_data->chars.contains(c)) {
             const RenderedChar& rendered = m_renderer_data->chars[c];
-            const LayoutChar* layout = layoutChar(c);
-
-            if ( layout ) {
-                if ( (x+rendered.offsetX) < left)
-                    left = x+rendered.offsetX;
-                if ( (x+rendered.offsetX+layout->w) > right)
-                    right = x+rendered.offsetX+layout->w;
-            }
             x+=rendered.advance + m_font_config->charSpacing();
             if (useKerning() && (*chars!=0)) {
                 if (rendered.kerning.contains(*chars)) {
@@ -76,11 +69,9 @@ int FontTestWidget::lineWidth(const ushort* chars) const {
                 }
             }
         }
-        if (c=='\n') {
-            break;
-        }
+
     }
-    return right-left;
+    return x;
 }
 
 void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
@@ -90,8 +81,8 @@ void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
     QPainter painter(this);
     painter.fillRect(rect(),QBrush(QColor(0,0,0)));
     if (!m_renderer_data || !m_layout_data) return;
-    int left = m_left;
-    int x = left;
+
+    int x = m_left;
 
     int y = m_top;
     const ushort* chars = m_text.utf16();
@@ -99,13 +90,25 @@ void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
     if (m_align!=ALIGN_LEFT) {
         int width = lineWidth(chars);
         if (m_align==ALIGN_RIGHT) {
-            x = m_right-width;
+            x = m_left+m_width-width;
         } else {
-            x = m_left+(m_right-m_left-width)/2;
+            x = m_left+(m_width-width)/2;
         }
     }
     while (*chars) {
         ushort c = *chars++;
+        if (c=='\n') {
+            x = m_left;
+            if (m_align!=ALIGN_LEFT) {
+                int width = lineWidth(chars);
+                if (m_align==ALIGN_RIGHT) {
+                    x = m_left+m_width-width;
+                } else {
+                    x = m_left+(m_width-width)/2;
+                }
+            }
+            y += m_renderer_data->metrics.height+m_font_config->lineSpacing();
+        } else
         if (m_renderer_data->chars.contains(c)) {
             const RenderedChar& rendered = m_renderer_data->chars[c];
             const LayoutChar* layout = layoutChar(c);
@@ -122,18 +125,7 @@ void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
                 }
             }
         }
-        if (c=='\n') {
-            x = left;
-            if (m_align!=ALIGN_LEFT) {
-                int width = lineWidth(chars);
-                if (m_align==ALIGN_RIGHT) {
-                    x = m_right-width;
-                } else {
-                    x = m_left+(m_right-m_left-width)/2;
-                }
-            }
-            y += m_renderer_data->metrics.height+m_font_config->lineSpacing();
-        }
+
     }
 }
 
@@ -146,41 +138,54 @@ void FontTestWidget::calcBBox() {
     const ushort* chars = m_text.utf16();
     int x = left;
     int y = top;
+    int max_x = x;
+    bool first = true;
+    bool last = false;
     while (*chars) {
         ushort c = *chars++;
+        if (c=='\n') {
+            x=0;
+            y += m_renderer_data->metrics.height+m_font_config->lineSpacing();
+            first = true;
+        } else
         if (m_renderer_data->chars.contains(c)) {
             const RenderedChar& rendered = m_renderer_data->chars[c];
             const LayoutChar* layout = layoutChar(c);
-
-            if ( layout ) {
-                if ( (x+rendered.offsetX) < left)
-                    left = x+rendered.offsetX;
-                if ( (x+rendered.offsetX+layout->w) > right)
-                    right = x+rendered.offsetX+layout->w;
+            if (!layout) continue;
+            last = (*chars=='\n')||(*chars==0);
+            if ( first ) {
+                if ( (rendered.offsetX) < left)
+                    left = rendered.offsetX;
+            }
+            if (last) {
+                if ( (rendered.offsetX+layout->w-rendered.advance - m_font_config->charSpacing()) > right)
+                    right = rendered.offsetX+layout->w-rendered.advance - m_font_config->charSpacing();
+            }
+            {
                 if ( (y-rendered.offsetY) < top)
                     top = y-rendered.offsetY;
                 if ( (y-rendered.offsetY+layout->h) > bottom)
                     bottom = y-rendered.offsetY+layout->h;
             }
             x+=rendered.advance + m_font_config->charSpacing();
+            first = false;
             if (useKerning() && (*chars!=0)) {
                 if (rendered.kerning.contains(*chars)) {
                     x+=rendered.kerning[*chars];
                 }
             }
+            if (x>max_x)
+                max_x = x;
         }
-        if (c=='\n') {
-            x=left;
-            y += m_renderer_data->metrics.height+m_font_config->lineSpacing();
-        }
+
 
     }
 
     m_left = -left+1;
-    m_right = right-1;
+    m_width = max_x;
     m_top = -top+1;
-    resize(right-left+2,bottom-top+2);
-    setMinimumSize(right-left+2,bottom-top+2);
+    resize(max_x+right-left+2,bottom-top+2);
+    setMinimumSize(max_x+right-left+2,bottom-top+2);
 }
 
 void FontTestWidget::setText(const QString& text) {
