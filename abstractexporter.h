@@ -55,10 +55,11 @@ public:
 
     void setFontConfig(const FontConfig* config,const LayoutConfig* layout) { m_font_config = config;m_layout_config=layout;}
     void setData(const LayoutData* data,const RendererData& rendered);
+    void setTextureFilename(const QString& fn) { m_texture_file = fn;}
 private:
     QString m_error_string;
     QString m_extension;
-    QString m_filename;
+    QString m_texture_file;
     int m_tex_width;
     int m_tex_height;
     const FontConfig* m_font_config;
@@ -84,6 +85,7 @@ protected:
     void setErrorMessage(const QString& str) { m_error_string=str; }
     int texWidth() const { return m_tex_width;}
     int texHeight() const { return m_tex_height;}
+    const QString& texFilename() const { return m_texture_file;}
     const RenderedMetrics& metrics() const { return m_metrics;}
     int height() const;
     virtual bool Export(QByteArray& out) = 0;

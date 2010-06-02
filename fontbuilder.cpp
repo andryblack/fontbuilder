@@ -279,6 +279,7 @@ void FontBuilder::onFontNameChanged() {
 void FontBuilder::on_pushButtonWriteFont_clicked()
 {
     QDir dir(m_output_config->path());
+    QString texture_filename;
     if (m_output_config->writeImage()) {
         delete m_image_writer;
         m_image_writer = 0;
@@ -291,9 +292,10 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
         }
 
         exporter->setData(m_layout_data,m_layout_config,m_font_renderer->data());
+        texture_filename = m_output_config->imageName();
+        texture_filename+="."+exporter->extension();
+        QString filename = dir.filePath(texture_filename);
 
-        QString filename = dir.filePath(m_output_config->imageName());
-        filename+="."+exporter->extension();
         QFile file(this);
         file.setFileName(filename);
         if (!file.open(QIODevice::WriteOnly)) {
@@ -323,6 +325,7 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
         }
         exporter->setFontConfig(m_font_config,m_layout_config);
         exporter->setData(m_layout_data,m_font_renderer->data());
+        exporter->setTextureFilename(texture_filename);
         QString filename = dir.filePath(m_output_config->descriptionName());
         filename+="."+exporter->getExtension();
         QByteArray data;

@@ -63,6 +63,7 @@ bool GHLExporter::Export(QByteArray& out) {
     QDomElement tex = doc.createElement("texture");
     tex.setAttribute("width",texWidth());
     tex.setAttribute("height",texHeight());
+    tex.setAttribute("file",texFilename());
     root.appendChild(tex);
 
     QDomElement chars = doc.createElement("chars");
