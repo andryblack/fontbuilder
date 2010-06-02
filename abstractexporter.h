@@ -67,12 +67,12 @@ private:
 protected:
     struct Symbol {
         ushort id;
-        int place_x;
-        int place_y;
-        int place_w;
-        int place_h;
-        int offset_x;
-        int offset_y;
+        int placeX;
+        int placeY;
+        int placeW;
+        int placeH;
+        int offsetX;
+        int offsetY;
         int advance;
         QMap<ushort,int> kerning;
     };
@@ -85,6 +85,7 @@ protected:
     int texWidth() const { return m_tex_width;}
     int texHeight() const { return m_tex_height;}
     const RenderedMetrics& metrics() const { return m_metrics;}
+    int height() const;
     virtual bool Export(QByteArray& out) = 0;
 private:
      QVector<Symbol> m_symbols;

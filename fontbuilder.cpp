@@ -113,10 +113,12 @@ FontBuilder::FontBuilder(QWidget *parent) :
 
     ui->fontTestFrame->setLayoutData(m_layout_data);
     ui->fontTestFrame->setRendererData(&m_font_renderer->data());
+    ui->fontTestFrame->setFontConfig(m_font_config);
 
     m_font_config->blockSignals(font_config_block);
     m_font_config->emmitChange();
 
+    connect(m_font_config,SIGNAL(spacingChanged()),this,SLOT(onSpacingChanged()));
     ui->fontTestFrame->refresh();
 }
 
@@ -357,4 +359,8 @@ void FontBuilder::onExternalImageChanged(const QString& fn) {
         ui->fontTestFrame->refresh();
         delete image;
     }
+}
+
+void FontBuilder::onSpacingChanged() {
+    ui->fontTestFrame->refresh();
 }

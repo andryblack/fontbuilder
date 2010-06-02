@@ -122,12 +122,6 @@ QString CharactersFrame::sortChars(const QString& text) const {
     return res;
 }
 
-void CharactersFrame::on_pushButton_clicked()
-{
-    bool block = ui->plainTextEdit->blockSignals(true);
-    ui->plainTextEdit->setPlainText(m_config->characters());
-    ui->plainTextEdit->blockSignals(block);
-}
 
 void CharactersFrame::on_pushButtonDefault_clicked()
 {
@@ -147,4 +141,11 @@ void CharactersFrame::on_pushButton_SelectFromCharsMap_clicked()
         ui->plainTextEdit->setPlainText(m_config->characters());
         ui->plainTextEdit->blockSignals(block);
     }
+}
+
+void CharactersFrame::on_pushButtonRefresh_clicked()
+{
+    bool block = ui->plainTextEdit->blockSignals(true);
+    ui->plainTextEdit->setPlainText(m_config->characters());
+    ui->plainTextEdit->blockSignals(block);
 }

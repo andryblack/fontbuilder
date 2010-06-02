@@ -56,9 +56,9 @@ bool DivoExporter::Export(QByteArray& out) {
         QDomElement ce = doc.createElement("Char");
         ce.setAttribute("code",QString().append(c.id));
         char buf[64];
-        ::snprintf(buf,63,"%d %d %d %d",c.place_x,c.place_y,c.place_w,c.place_h);
+        ::snprintf(buf,63,"%d %d %d %d",c.placeX,c.placeY,c.placeW,c.placeH);
         ce.setAttribute("rect",buf);
-        ::snprintf(buf,63,"%d %d",c.offset_x,offset-c.offset_y);
+        ::snprintf(buf,63,"%d %d",c.offsetX,offset-c.offsetY);
         ce.setAttribute("offset",buf);
         ce.setAttribute("width",c.advance);
         typedef QMap<ushort,int>::ConstIterator Kerning;

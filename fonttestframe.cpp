@@ -65,6 +65,10 @@ void FontTestFrame::setRendererData(const RendererData* data) {
     ui->drawWidget->setRendererData(data);
 }
 
+void FontTestFrame::setFontConfig(const FontConfig* config) {
+    ui->drawWidget->setFontConfig(config);
+}
+
 void FontTestFrame::on_plainTextEdit_textChanged()
 {
     ui->drawWidget->setText(ui->plainTextEdit->document()->toPlainText());
@@ -78,4 +82,28 @@ void FontTestFrame::on_useKerningCheckBox_toggled(bool checked)
 {
     ui->drawWidget->setUseKerning(checked);
     ui->drawWidget->refresh();
+}
+
+void FontTestFrame::on_radioButton_toggled(bool checked)
+{
+    if (checked) {
+        ui->drawWidget->setAlign(FontTestWidget::ALIGN_LEFT);
+        ui->drawWidget->refresh();
+    }
+}
+
+void FontTestFrame::on_radioButton_2_toggled(bool checked)
+{
+    if (checked) {
+        ui->drawWidget->setAlign(FontTestWidget::ALIGN_CENTER);
+        ui->drawWidget->refresh();
+    }
+}
+
+void FontTestFrame::on_radioButton_3_toggled(bool checked)
+{
+    if (checked) {
+        ui->drawWidget->setAlign(FontTestWidget::ALIGN_RIGHT);
+        ui->drawWidget->refresh();
+    }
 }

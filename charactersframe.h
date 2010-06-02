@@ -57,9 +57,9 @@ private:
 signals:
 
 private slots:
+    void on_pushButtonRefresh_clicked();
     void on_pushButton_SelectFromCharsMap_clicked();
     void on_pushButtonDefault_clicked();
-    void on_pushButton_clicked();
     void on_plainTextEdit_textChanged();
     void on_pushButtonExport_clicked();
     void on_pushButtonImport_clicked();

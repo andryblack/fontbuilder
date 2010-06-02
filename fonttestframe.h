@@ -39,6 +39,7 @@ namespace Ui {
 
 class LayoutData;
 struct RendererData;
+class FontConfig;
 
 class FontTestFrame : public QFrame {
     Q_OBJECT
@@ -48,7 +49,7 @@ public:
 
     void setLayoutData(const LayoutData* data);
     void setRendererData(const RendererData* data);
-
+    void setFontConfig(const FontConfig* config);
 public slots:
     void refresh();
 protected:
@@ -58,6 +59,9 @@ private:
     Ui::FontTestFrame *ui;
 
 private slots:
+    void on_radioButton_3_toggled(bool checked);
+    void on_radioButton_2_toggled(bool checked);
+    void on_radioButton_toggled(bool checked);
     void on_useKerningCheckBox_toggled(bool checked);
     void on_plainTextEdit_textChanged();
 };

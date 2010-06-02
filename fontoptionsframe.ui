@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>300</height>
+    <width>350</width>
+    <height>291</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -89,6 +89,9 @@
        <property name="text">
         <string>Faux bold</string>
        </property>
+       <property name="buddy">
+        <cstring>horizontalSliderBold</cstring>
+       </property>
       </widget>
      </item>
      <item row="4" column="2">
@@ -111,6 +114,9 @@
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Faux italic</string>
+       </property>
+       <property name="buddy">
+        <cstring>horizontalSliderItalic</cstring>
        </property>
       </widget>
      </item>
@@ -155,13 +161,6 @@
     </layout>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMinimumSize</enum>
-     </property>
-    </layout>
-   </item>
-   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -178,16 +177,22 @@
         <property name="text">
          <string>Width</string>
         </property>
+        <property name="buddy">
+         <cstring>doubleSpinBoxWidth</cstring>
+        </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="0" column="2">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Height</string>
         </property>
+        <property name="buddy">
+         <cstring>doubleSpinBoxHeight</cstring>
+        </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="doubleSpinBoxWidth">
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -200,13 +205,56 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="0" column="3">
        <widget class="QDoubleSpinBox" name="doubleSpinBoxHeight">
         <property name="maximum">
          <double>100.000000000000000</double>
         </property>
         <property name="value">
          <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Spacing</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Char</string>
+        </property>
+        <property name="buddy">
+         <cstring>spinBoxCharSpacing</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinBoxCharSpacing">
+        <property name="minimum">
+         <number>-99</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Line</string>
+        </property>
+        <property name="buddy">
+         <cstring>spinBoxLineSpacing</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QSpinBox" name="spinBoxLineSpacing">
+        <property name="minimum">
+         <number>-99</number>
         </property>
        </widget>
       </item>

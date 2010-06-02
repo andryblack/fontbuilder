@@ -67,15 +67,11 @@ void FontOptionsFrame::setConfig(FontConfig *config) {
         ui->horizontalSliderItalic->setValue(m_config->italic());
         ui->doubleSpinBoxWidth->setValue(m_config->width());
         ui->doubleSpinBoxHeight->setValue(m_config->height());
-
-
+        ui->spinBoxLineSpacing->setValue(m_config->lineSpacing());
+        ui->spinBoxCharSpacing->setValue(m_config->charSpacing());
     }
 }
 
-void FontOptionsFrame::on_checkBoxAutohinting_clicked()
-{
-
-}
 
 void FontOptionsFrame::on_checkBoxAutohinting_toggled(bool checked)
 {
@@ -114,4 +110,14 @@ void FontOptionsFrame::on_doubleSpinBoxWidth_valueChanged(double value)
 void FontOptionsFrame::on_doubleSpinBoxHeight_valueChanged(double value)
 {
     if (m_config) m_config->setHeight(value);
+}
+
+void FontOptionsFrame::on_spinBoxCharSpacing_valueChanged(int value)
+{
+    if (m_config) m_config->setCharSpacing(value);
+}
+
+void FontOptionsFrame::on_spinBoxLineSpacing_valueChanged(int value)
+{
+    if (m_config) m_config->setLineSpacing(value);
 }

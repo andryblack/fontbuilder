@@ -36,6 +36,7 @@
 class LayoutData;
 struct RendererData;
 struct LayoutChar;
+class FontConfig;
 
 class FontTestWidget : public QWidget
 {
@@ -45,14 +46,25 @@ public:
 
     void setLayoutData(const LayoutData* data) { m_layout_data = data;}
     void setRendererData(const RendererData* data) { m_renderer_data = data;}
+    void setFontConfig(const FontConfig* config) { m_font_config = config;}
 
     void setText(const QString& text);
 
     bool useKerning() const { return m_use_kerning;}
     void setUseKerning(bool use) { m_use_kerning=use;}
+
+    enum Align {
+        ALIGN_LEFT,
+        ALIGN_CENTER,
+        ALIGN_RIGHT,
+    };
+
+    void setAlign(Align a) { m_align = a;}
+
 protected:
     virtual void	paintEvent ( QPaintEvent * event );
     void calcBBox();
+    int lineWidth(const ushort* text) const;
 signals:
 
 public slots:
@@ -62,9 +74,12 @@ private:
     const LayoutData*   m_layout_data;
     const LayoutChar*   layoutChar(ushort c) const;
     const RendererData* m_renderer_data;
+    const FontConfig*   m_font_config;
     int m_left;
+    int m_right;
     int m_top;
     bool    m_use_kerning;
+    Align   m_align;
 };
 
 #endif // FONTTESTWIDGET_H

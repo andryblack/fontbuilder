@@ -54,6 +54,8 @@ private:
     FontConfig* m_config;
 
 private slots:
+    void on_spinBoxLineSpacing_valueChanged(int );
+    void on_spinBoxCharSpacing_valueChanged(int );
     void on_doubleSpinBoxHeight_valueChanged(double );
     void on_doubleSpinBoxWidth_valueChanged(double );
     void on_horizontalSliderItalic_valueChanged(int value);
@@ -61,7 +63,6 @@ private slots:
     void on_checkBoxSmoothing_toggled(bool checked);
     void on_checkBoxMissingGlypths_toggled(bool checked);
     void on_checkBoxAutohinting_toggled(bool checked);
-    void on_checkBoxAutohinting_clicked();
 };
 
 #endif // FONTOPTIONSFRAME_H

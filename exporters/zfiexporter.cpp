@@ -20,10 +20,10 @@ bool ZFIExporter::Export(QByteArray& out) {
 
   foreach ( const Symbol& c, symbols() )
   {
-    if ( c.place_h > MaxHeight )
-      MaxHeight = c.place_h;
-    if ( c.place_h - c.offset_y > MaxShiftY )
-      MaxShiftY = c.place_h - c.offset_y;
+    if ( c.placeH > MaxHeight )
+      MaxHeight = c.placeH;
+    if ( c.placeH - c.offsetY > MaxShiftY )
+      MaxShiftY = c.placeH - c.offsetY;
 
     Chars++;
   }
@@ -42,20 +42,20 @@ bool ZFIExporter::Export(QByteArray& out) {
     out.append( (char*)&id, 4 );
 
     CharDesc.Page = 0;
-    CharDesc.Width = c.place_w;
-    CharDesc.Height = c.place_h;
-    CharDesc.ShiftX = c.offset_x;
-    CharDesc.ShiftY = c.place_h - c.offset_y;
+    CharDesc.Width = c.placeW;
+    CharDesc.Height = c.placeH;
+    CharDesc.ShiftX = c.offsetX;
+    CharDesc.ShiftY = c.placeH - c.offsetY;
     CharDesc.ShiftP = c.advance;
 
-    CharDesc.TexCoords[ 0 ].X = (float)u * c.place_x;
-    CharDesc.TexCoords[ 0 ].Y = 1 - (float)v * c.place_y;
-    CharDesc.TexCoords[ 1 ].X = (float)u * ( c.place_x + c.place_w );
-    CharDesc.TexCoords[ 1 ].Y = 1 - (float)v * c.place_y;
-    CharDesc.TexCoords[ 2 ].X = (float)u * ( c.place_x + c.place_w );
-    CharDesc.TexCoords[ 2 ].Y = 1 - (float)v * ( c.place_y + c.place_h );
-    CharDesc.TexCoords[ 3 ].X = (float)u * c.place_x;
-    CharDesc.TexCoords[ 3 ].Y = 1 - (float)v * ( c.place_y + c.place_h );
+    CharDesc.TexCoords[ 0 ].X = (float)u * c.placeX;
+    CharDesc.TexCoords[ 0 ].Y = 1 - (float)v * c.placeY;
+    CharDesc.TexCoords[ 1 ].X = (float)u * ( c.placeX + c.placeW );
+    CharDesc.TexCoords[ 1 ].Y = 1 - (float)v * c.placeY;
+    CharDesc.TexCoords[ 2 ].X = (float)u * ( c.placeX + c.placeW );
+    CharDesc.TexCoords[ 2 ].Y = 1 - (float)v * ( c.placeY + c.placeH );
+    CharDesc.TexCoords[ 3 ].X = (float)u * c.placeX;
+    CharDesc.TexCoords[ 3 ].Y = 1 - (float)v * ( c.placeY + c.placeH );
 
     out.append( (char*)&CharDesc.Page, 4 );
     out.append( (char*)&CharDesc.Width, 1 );

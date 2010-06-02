@@ -98,6 +98,14 @@ public:
     void setHeight(float b);
     Q_PROPERTY( float height READ height WRITE setHeight );
 
+    int lineSpacing() const { return m_line_spacing;}
+    void setLineSpacing(int s);
+    Q_PROPERTY( int lineSpacing READ lineSpacing WRITE setLineSpacing );
+
+    int charSpacing() const { return m_char_spacing;}
+    void setCharSpacing(int s);
+    Q_PROPERTY( int charSpacing READ charSpacing WRITE setCharSpacing );
+
     void emmitChange();
 private:
     QString m_path;
@@ -114,6 +122,8 @@ private:
     int    m_italic;
     float   m_width;
     float   m_height;
+    int m_char_spacing;
+    int m_line_spacing;
 signals:
     void nameChanged();
     void fileChanged();
@@ -121,6 +131,7 @@ signals:
     void sizeChanged();
     void charactersChanged();
     void renderingOptionsChanged();
+    void spacingChanged();
 public slots:
 
 };

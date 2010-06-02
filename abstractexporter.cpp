@@ -32,6 +32,7 @@
 #include "layoutdata.h"
 #include "layoutconfig.h"
 #include "rendererdata.h"
+#include "fontconfig.h"
 
 AbstractExporter::AbstractExporter(QObject *parent) :
     QObject(parent)
@@ -44,18 +45,19 @@ AbstractExporter::AbstractExporter(QObject *parent) :
 
 void AbstractExporter::setData(const LayoutData* data,const RendererData& rendered) {
     m_metrics = rendered.metrics;
+    m_metrics.height+=fontConfig()->lineSpacing();
     m_symbols.clear();
     foreach ( const LayoutChar& lc, data->placed()) {
         Symbol symb;
         symb.id = lc.symbol;
-        symb.place_x = lc.x;
-        symb.place_y = lc.y;
-        symb.place_w = lc.w;
-        symb.place_h = lc.h;
+        symb.placeX = lc.x;
+        symb.placeY = lc.y;
+        symb.placeW = lc.w;
+        symb.placeH = lc.h;
         const RenderedChar& rc = rendered.chars[symb.id];
-        symb.offset_x = rc.offset_x-layoutConfig()->offsetLeft();
-        symb.offset_y = rc.offset_y+layoutConfig()->offsetTop();
-        symb.advance = rc.advance;
+        symb.offsetX = rc.offsetX-layoutConfig()->offsetLeft();
+        symb.offsetY = rc.offsetY+layoutConfig()->offsetTop();
+        symb.advance = rc.advance + fontConfig()->charSpacing();
         symb.kerning = rc.kerning;
         m_symbols.push_back(symb);
     }
@@ -70,3 +72,4 @@ bool AbstractExporter::Write(QByteArray& bytes) {
     }
     return false;
 }
+

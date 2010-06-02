@@ -44,6 +44,8 @@ FontConfig::FontConfig(QObject *parent) :
     m_italic = false;
     m_width = 100.0f;
     m_height = 100.0f;
+    m_line_spacing = 0;
+    m_char_spacing = 0;
 }
 
 
@@ -161,4 +163,18 @@ void FontConfig::emmitChange() {
     fileChanged();
     nameChanged();
     sizeChanged();
+}
+
+void FontConfig::setLineSpacing(int s) {
+    if (m_line_spacing!=s) {
+        m_line_spacing = s;
+        spacingChanged();
+    }
+}
+
+void FontConfig::setCharSpacing(int s) {
+    if (m_char_spacing!=s) {
+        m_char_spacing = s;
+        spacingChanged();
+    }
 }
