@@ -69,6 +69,7 @@ signals:
 
 public slots:
     void refresh();
+    void setBGColor(QColor c);
 private:
     QString m_text;
     const LayoutData*   m_layout_data;
@@ -80,6 +81,7 @@ private:
     int m_top;
     bool    m_use_kerning;
     Align   m_align;
+    QColor  m_bg_color;
 };
 
 #endif // FONTTESTWIDGET_H

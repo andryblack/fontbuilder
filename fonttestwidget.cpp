@@ -79,7 +79,7 @@ void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
     Q_UNUSED(event);
     calcBBox();
     QPainter painter(this);
-    painter.fillRect(rect(),QBrush(QColor(0,0,0)));
+    painter.fillRect(rect(),QBrush(m_bg_color));
     if (!m_renderer_data || !m_layout_data) return;
 
     int x = m_left;
@@ -195,5 +195,10 @@ void FontTestWidget::setText(const QString& text) {
 
 void FontTestWidget::refresh() {
 
+    repaint();
+}
+
+void FontTestWidget::setBGColor(QColor c) {
+    m_bg_color = c;
     repaint();
 }

@@ -37,6 +37,7 @@ FontTestFrame::FontTestFrame(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->drawWidget->setText(ui->plainTextEdit->document()->toPlainText());
+    connect(ui->widgetBgColor,SIGNAL(colorChanged(QColor)),ui->drawWidget,SLOT(setBGColor(QColor)));
 }
 
 FontTestFrame::~FontTestFrame()

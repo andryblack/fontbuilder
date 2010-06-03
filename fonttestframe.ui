@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>459</width>
-    <height>327</height>
+    <width>456</width>
+    <height>396</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>427</width>
-        <height>146</height>
+        <width>430</width>
+        <height>135</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -101,8 +101,27 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
-     <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="1" rowspan="2">
+      <widget class="QPlainTextEdit" name="plainTextEdit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="plainText">
+        <string>Test</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
       <widget class="QGroupBox" name="groupBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -147,22 +166,13 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QPlainTextEdit" name="plainTextEdit">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
+     <item row="1" column="0">
+      <widget class="ColorButton" name="widgetBgColor" native="true">
+       <property name="minimumSize">
         <size>
-         <width>16777215</width>
-         <height>100</height>
+         <width>20</width>
+         <height>20</height>
         </size>
-       </property>
-       <property name="plainText">
-        <string>Test</string>
        </property>
       </widget>
      </item>
@@ -182,6 +192,12 @@
    <class>FontTestWidget</class>
    <extends>QWidget</extends>
    <header>fonttestwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ColorButton</class>
+   <extends>QWidget</extends>
+   <header>colorbutton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
