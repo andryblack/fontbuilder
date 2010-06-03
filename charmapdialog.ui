@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>558</width>
+    <width>498</width>
     <height>403</height>
    </rect>
   </property>
@@ -16,8 +16,11 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">
+   <item row="0" column="0">
+    <widget class="QListWidget" name="listWidget"/>
+   </item>
+   <item row="0" column="1">
     <widget class="QScrollArea" name="scrollArea">
      <property name="widgetResizable">
       <bool>true</bool>
@@ -27,7 +30,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>536</width>
+        <width>214</width>
         <height>342</height>
        </rect>
       </property>
@@ -46,7 +49,7 @@
      </widget>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

@@ -33,6 +33,9 @@
 
 #include <QDialog>
 #include <QSet>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QCheckBox>
 
 namespace Ui {
     class CharMapDialog;
@@ -49,9 +52,16 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+
+
 private:
     Ui::CharMapDialog *ui;
     QSet<uint>  m_codes;
+
+private slots:
+    void on_listWidget_itemChanged(QListWidgetItem* item);
+    void on_listWidget_currentItemChanged(QListWidgetItem* current, QListWidgetItem* previous);
+    void onCharsChanged(uint code,bool add);
 };
 
 #endif // CHARMAPDIALOG_H

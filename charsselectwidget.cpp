@@ -34,7 +34,7 @@
 #include <QPainter>
 
 static const int cell_size = 24;
-static const int columns = 32;
+static const int columns = 16;
 
 CharsSelectWidget::CharsSelectWidget(QWidget *parent) :
     QWidget(parent) , m_codes_begin(0x0000),m_codes_end(0xFFFF)
@@ -46,13 +46,15 @@ CharsSelectWidget::CharsSelectWidget(QWidget *parent) :
 
 
 QSize CharsSelectWidget::sizeHint() const {
-    return QSize(columns*cell_size, ((m_codes_end-m_codes_begin)/columns)*cell_size);
+    return QSize(columns*cell_size, ((m_codes_end-m_codes_begin)/columns+1)*cell_size);
 }
 
 
 void CharsSelectWidget::setRange(uint begin,uint end) {
     m_codes_begin = begin;
     m_codes_end = end;
+    setMinimumSize(sizeHint());
+    setMaximumSize(sizeHint());
     adjustSize();
     update();
 }
@@ -101,14 +103,21 @@ void CharsSelectWidget::paintEvent(QPaintEvent *event) {
 void CharsSelectWidget::mousePressEvent(QMouseEvent *event)
 {
      if (event->button() == Qt::LeftButton) {
-         m_select_last_code = m_select_begin_code = (event->y()/cell_size)*columns + event->x()/cell_size;
+         if (event->x()<0) return;
+         if (event->x()>=width()) return;
+         if (event->y()<0) return;
+         if (event->y()>=height()) return;
+
+         m_select_last_code = m_select_begin_code = m_codes_begin + (event->y()/cell_size)*columns + event->x()/cell_size;
          if (QChar(m_select_begin_code).category() != QChar::NoCategory) {
              m_track_mouse = true;
              if (m_codes->contains(m_select_begin_code)) {
                  m_codes->erase(m_codes->find(m_select_begin_code));
+                 codesChanged(m_select_begin_code,false);
                  m_track_erase = true;
              } else {
                  m_codes->insert(m_select_begin_code);
+                 codesChanged(m_select_begin_code,true);
                  m_track_erase = false;
              }
          } else {
@@ -130,18 +139,25 @@ void CharsSelectWidget::mouseReleaseEvent(QMouseEvent *event) {
 
 void CharsSelectWidget::mouseMoveEvent(QMouseEvent *event) {
     if (m_track_mouse) {
-        uint code = (event->y()/cell_size)*columns + event->x()/cell_size;
+        if (event->x()<0) return;
+        if (event->x()>=width()) return;
+        if (event->y()<0) return;
+        if (event->y()>=height()) return;
+        uint code = m_codes_begin +(event->y()/cell_size)*columns + event->x()/cell_size;
         if (code!=m_select_last_code) {
             if (code!=m_select_begin_code) {
-                uint from = qMin(m_select_begin_code,code);
-                uint to = qMax(m_select_begin_code,code);
-                for (uint c = from;c<=to;c++) {
+                /*uint from = qMin(m_select_begin_code,code);
+                uint to = qMax(m_select_begin_code,code);*/
+                /*for (uint c = from;c<=to;c++)*/ {
                     if (m_track_erase) {
-                        QSet<uint>::Iterator i=m_codes->find(c);
-                        if ( i!=m_codes->end())
+                        QSet<uint>::Iterator i=m_codes->find(code);
+                        if ( i!=m_codes->end()) {
                             m_codes->erase(i);
+                            codesChanged(code,false);
+                        }
                     } else {
-                        m_codes->insert(c);
+                        m_codes->insert(code);
+                        codesChanged(code,true);
                     }
                 }
             }

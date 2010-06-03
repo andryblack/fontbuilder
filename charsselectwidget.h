@@ -49,7 +49,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *);
     virtual QSize sizeHint() const ;
 signals:
-
+    void codesChanged(uint code,bool add);
 public slots:
 
 private:
