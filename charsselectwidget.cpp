@@ -32,6 +32,7 @@
 
 #include <QPaintEvent>
 #include <QPainter>
+#include <QToolTip>
 
 static const int cell_size = 24;
 static const int columns = 16;
@@ -42,6 +43,7 @@ CharsSelectWidget::CharsSelectWidget(QWidget *parent) :
     m_codes = 0;
     m_track_mouse = false;
     m_track_erase = false;
+    setMouseTracking(true);
 }
 
 
@@ -138,12 +140,13 @@ void CharsSelectWidget::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void CharsSelectWidget::mouseMoveEvent(QMouseEvent *event) {
+    if (event->x()<0) return;
+    if (event->x()>=width()) return;
+    if (event->y()<0) return;
+    if (event->y()>=height()) return;
+    uint code = m_codes_begin +(event->y()/cell_size)*columns + event->x()/cell_size;
+
     if (m_track_mouse) {
-        if (event->x()<0) return;
-        if (event->x()>=width()) return;
-        if (event->y()<0) return;
-        if (event->y()>=height()) return;
-        uint code = m_codes_begin +(event->y()/cell_size)*columns + event->x()/cell_size;
         if (code!=m_select_last_code) {
             if (code!=m_select_begin_code) {
                 /*uint from = qMin(m_select_begin_code,code);
@@ -164,5 +167,11 @@ void CharsSelectWidget::mouseMoveEvent(QMouseEvent *event) {
             m_select_last_code = code;
             update();
         }
+    } else {
+        QString text = QString::fromLatin1("<p>Character: <span>")
+                           + QChar(code)
+                           + QString::fromLatin1("</span><p>Value: 0x")
+                           + QString::number(code, 16);
+        QToolTip::showText(event->globalPos(), text, this);
     }
 }
