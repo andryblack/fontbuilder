@@ -35,6 +35,7 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QProgressDialog>
+#include <QDesktopServices>
 
 #include "fontconfig.h"
 
@@ -347,4 +348,9 @@ void FontSelectFrame::on_comboBoxSize_currentIndexChanged(QString size_str)
     if (m_config) {
         m_config->setSize(size);
     }
+}
+
+void FontSelectFrame::on_pushButtonDefault_clicked()
+{
+    setFontsDirectory(QDesktopServices::storageLocation(QDesktopServices::FontsLocation));
 }

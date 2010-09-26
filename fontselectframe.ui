@@ -58,6 +58,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonDefault">
+       <property name="text">
+        <string>Default</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

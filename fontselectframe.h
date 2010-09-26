@@ -78,6 +78,7 @@ private:
     FontConfig* m_config;
 signals:
 private slots:
+    void on_pushButtonDefault_clicked();
     void on_comboBoxSize_currentIndexChanged(QString );
     void on_comboBoxSize_editTextChanged(QString );
     void on_comboBoxStyle_currentIndexChanged(int index );

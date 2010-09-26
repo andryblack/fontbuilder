@@ -28,31 +28,22 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "exporterfactory.h"
+#ifndef NGLEXPORTER_H
+#define NGLEXPORTER_H
 
+#include "../abstractexporter.h"
 
-extern AbstractExporter* GHLExporterFactoryFunc (QObject*);
-extern AbstractExporter* ZFIExporterFactoryFunc (QObject* parent);
-extern AbstractExporter* DivoExporterFactoryFunc (QObject*);
-extern AbstractExporter* NGLExporterFactoryFunc (QObject*);
-
-ExporterFactory::ExporterFactory(QObject *parent) :
-    QObject(parent)
+class NGLExporter : public AbstractExporter
 {
-    m_factorys["GHL"] = &GHLExporterFactoryFunc;
-    m_factorys["ZenGL-zfi"] = &ZFIExporterFactoryFunc;
-    m_factorys["Divo compatible - xml"] = &DivoExporterFactoryFunc;
-    m_factorys["NGL"] = &NGLExporterFactoryFunc;
-}
+Q_OBJECT
+public:
+    explicit NGLExporter(QObject *parent = 0);
+protected:
+    virtual bool Export(QByteArray& out);
+signals:
 
+public slots:
 
-QStringList ExporterFactory::names() const {
-    return m_factorys.keys();
-}
+};
 
-AbstractExporter* ExporterFactory::build(const QString &name,QObject* parent) {
-    if (m_factorys.contains(name)) {
-        return m_factorys[name](parent);
-    }
-    return 0;
-}
+#endif // NGLEXPORTER_H

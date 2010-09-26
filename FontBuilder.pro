@@ -61,7 +61,8 @@ SOURCES += main.cpp \
     fonttestwidget.cpp \
     exporters/divoexporter.cpp \
     charmapdialog.cpp \
-    charsselectwidget.cpp
+    charsselectwidget.cpp \
+    exporters/nglexporter.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -92,7 +93,8 @@ HEADERS += fontbuilder.h \
     fonttestwidget.h \
     exporters/divoexporter.h \
     charmapdialog.h \
-    charsselectwidget.h
+    charsselectwidget.h \
+    exporters/nglexporter.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \
@@ -104,11 +106,18 @@ FORMS += fontbuilder.ui \
 TRANSLATIONS = fontbuilder_en.ts \
     fontbuilder_ru.ts
 QT += xml
+
+DESTDIR = bin
+OBJECTS_DIR = .obj
+MOC_DIR = .obj
+UI_DIR = .obj
+TARGET = FontBuilder
+
+
 mac { 
-    INCLUDEPATH += ../../src/include
-    INCLUDEPATH += ../../src/include/freetype2
-    LIBS += -L../../src/lib \
-        -lfreetype
+    INCLUDEPATH += ../include
+    INCLUDEPATH += ../include/freetype2
+    LIBS += -L../lib -lfreetype -lz
 }
 win32 { 
     INCLUDEPATH += ../include
