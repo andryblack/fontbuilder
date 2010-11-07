@@ -272,7 +272,7 @@ void FontRenderer::on_fontSizeChanged() {
         int size_y = static_cast<int>(m_config->height()*size*64.0f/100.0f);
         int error = FT_Set_Char_Size(m_ft_face,
                                      FT_F26Dot6(size_x),
-                                     FT_F26Dot6(size_y),96,96);
+                                     FT_F26Dot6(size_y),m_config->DPI(),m_config->DPI());
         //int error = FT_Set_Pixel_Sizes(m_ft_face,size_x/64,size_y/64);
         if (error) {
             qDebug() << "FT_Set_Char_Size error " << error;

@@ -69,6 +69,10 @@ void FontOptionsFrame::setConfig(FontConfig *config) {
         ui->doubleSpinBoxHeight->setValue(m_config->height());
         ui->spinBoxLineSpacing->setValue(m_config->lineSpacing());
         ui->spinBoxCharSpacing->setValue(m_config->charSpacing());
+        QString dpi_val = QString::number(m_config->DPI());
+        for (int i=0;i<ui->comboBoxDPI->count();i++)
+            if (ui->comboBoxDPI->itemText(i)==dpi_val)
+                ui->comboBoxDPI->setCurrentIndex(i);
     }
 }
 
@@ -120,4 +124,14 @@ void FontOptionsFrame::on_spinBoxCharSpacing_valueChanged(int value)
 void FontOptionsFrame::on_spinBoxLineSpacing_valueChanged(int value)
 {
     if (m_config) m_config->setLineSpacing(value);
+}
+
+void FontOptionsFrame::on_comboBoxDPI_currentIndexChanged(QString val)
+{
+    if (m_config) {
+        bool ok = false;
+        int new_dpi = val.toInt(&ok);
+        if (ok)
+            m_config->setDPI(new_dpi);
+    }
 }

@@ -54,6 +54,7 @@ private:
     FontConfig* m_config;
 
 private slots:
+    void on_comboBoxDPI_currentIndexChanged(QString );
     void on_spinBoxLineSpacing_valueChanged(int );
     void on_spinBoxCharSpacing_valueChanged(int );
     void on_doubleSpinBoxHeight_valueChanged(double );

@@ -106,6 +106,10 @@ public:
     void setCharSpacing(int s);
     Q_PROPERTY( int charSpacing READ charSpacing WRITE setCharSpacing );
 
+    int DPI() const { return m_dpi;}
+    void setDPI(int dpi);
+    Q_PROPERTY( int DPI READ DPI WRITE setDPI );
+
     void emmitChange();
 private:
     QString m_path;
@@ -124,6 +128,7 @@ private:
     float   m_height;
     int m_char_spacing;
     int m_line_spacing;
+    int m_dpi;
 signals:
     void nameChanged();
     void fileChanged();

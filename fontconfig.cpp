@@ -46,6 +46,7 @@ FontConfig::FontConfig(QObject *parent) :
     m_height = 100.0f;
     m_line_spacing = 0;
     m_char_spacing = 0;
+    m_dpi = 96;
 }
 
 
@@ -176,5 +177,12 @@ void FontConfig::setCharSpacing(int s) {
     if (m_char_spacing!=s) {
         m_char_spacing = s;
         spacingChanged();
+    }
+}
+
+void FontConfig::setDPI(int dpi) {
+    if (m_dpi!=dpi) {
+        m_dpi = dpi;
+        sizeChanged();
     }
 }
