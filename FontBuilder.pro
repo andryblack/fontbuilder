@@ -113,7 +113,7 @@ MOC_DIR = .obj
 UI_DIR = .obj
 TARGET = FontBuilder
 
-
+INCLUDEPATH+=./
 mac { 
     INCLUDEPATH += ../include
     INCLUDEPATH += ../include/freetype2
