@@ -35,6 +35,7 @@ extern AbstractExporter* GHLExporterFactoryFunc (QObject*);
 extern AbstractExporter* ZFIExporterFactoryFunc (QObject* parent);
 extern AbstractExporter* DivoExporterFactoryFunc (QObject*);
 extern AbstractExporter* NGLExporterFactoryFunc (QObject*);
+extern AbstractExporter* LuaExporterFactoryFunc (QObject*);
 
 ExporterFactory::ExporterFactory(QObject *parent) :
     QObject(parent)
@@ -43,6 +44,7 @@ ExporterFactory::ExporterFactory(QObject *parent) :
     m_factorys["ZenGL-zfi"] = &ZFIExporterFactoryFunc;
     m_factorys["Divo compatible - xml"] = &DivoExporterFactoryFunc;
     m_factorys["NGL"] = &NGLExporterFactoryFunc;
+    m_factorys["Lua"] = &LuaExporterFactoryFunc;
 }
 
 

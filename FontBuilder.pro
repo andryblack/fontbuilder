@@ -62,7 +62,8 @@ SOURCES += main.cpp \
     exporters/divoexporter.cpp \
     charmapdialog.cpp \
     charsselectwidget.cpp \
-    exporters/nglexporter.cpp
+    exporters/nglexporter.cpp \
+    exporters/luaexporter.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -94,7 +95,8 @@ HEADERS += fontbuilder.h \
     exporters/divoexporter.h \
     charmapdialog.h \
     charsselectwidget.h \
-    exporters/nglexporter.h
+    exporters/nglexporter.h \
+    exporters/luaexporter.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \
