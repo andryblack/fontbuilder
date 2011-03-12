@@ -40,6 +40,7 @@ LuaExporter::LuaExporter(QObject *parent) :
 }
 static QString charCode(uint code) {
     if (code=='\"') return QString().append('\'').append(code).append('\'');
+    if (code=='\\') return QString("\"\\\\\"");
     return QString().append('\"').append(code).append('\"');
 }
 
@@ -78,14 +79,6 @@ bool LuaExporter::Export(QByteArray& out) {
 
         charDef+=QString("ox=")+QString().number(c.offsetX)+QString(",");
         charDef+=QString("oy=")+QString().number(c.offsetY)+QString("}");
-
-        /*typedef QMap<ushort,int>::ConstIterator Kerning;
-        for ( Kerning k = c.kerning.begin();k!=c.kerning.end();k++) {
-            QDomElement ke = doc.createElement("kerning");
-            ke.setAttribute("id",QString().append(k.key()));
-            ke.setAttribute("advance",k.value());
-            ce.appendChild(ke);
-        }*/
 
         res+=QString("\t\t")+charDef+QString(",\n");
     }
