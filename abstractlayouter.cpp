@@ -144,6 +144,8 @@ void AbstractLayouter::place(const LayoutChar& c) {
         if (m_config->onePixelOffset()) {
             out.x++;
             out.y++;
+            out.w--;
+            out.h--;
         }
     }
     if (m_data)

@@ -33,6 +33,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QPixmap>
+#include <QImage>
 #include <QSettings>
 #include <QMetaProperty>
 #include <QDir>
@@ -86,6 +87,7 @@ FontBuilder::FontBuilder(QWidget *parent) :
     readConfig(settings,"layoutconfig",m_layout_config);
     readConfig(settings,"outputconfig",m_output_config);
     ui->checkBoxDrawGrid->setChecked(settings.value("draw_grid").toBool());
+    ui->widgetFontPreview->setDrawGrid(ui->checkBoxDrawGrid->isChecked());
     connect(ui->checkBoxDrawGrid,SIGNAL(toggled(bool)),this,SLOT(on_checkBoxDrawGrid_toggled(bool)));
 
     ui->frameCharacters->setConfig(m_font_config);
@@ -114,6 +116,10 @@ FontBuilder::FontBuilder(QWidget *parent) :
     ui->fontTestFrame->setLayoutData(m_layout_data);
     ui->fontTestFrame->setRendererData(&m_font_renderer->data());
     ui->fontTestFrame->setFontConfig(m_font_config);
+
+    ui->widgetFontPreview->setLayoutData(m_layout_data);
+    ui->widgetFontPreview->setRendererData(&m_font_renderer->data());
+    ui->widgetFontPreview->setLayoutConfig(m_layout_config);
 
     m_font_config->blockSignals(font_config_block);
     m_font_config->emmitChange();
@@ -211,36 +217,7 @@ void FontBuilder::onRenderedChanged() {
 
 
 void FontBuilder::setLayoutImage(const QImage& image) {
-    QPixmap pixmap(m_layout_data->width(),m_layout_data->height());
-    pixmap.fill(QColor(0,0,0,255));
-
-    {
-        QPainter painter(&pixmap);
-        painter.drawImage(0,0,image);
-
-        if (ui->checkBoxDrawGrid->isChecked()) {
-            if (m_layout_config->onePixelOffset())
-               foreach (const LayoutChar& c,m_layout_data->placed()) {
-                   if (m_font_renderer->data().chars[c.symbol].locked)
-                       painter.setPen(QColor(255,0,0,255));
-                   else
-                       painter.setPen(QColor(0,0,255,255));
-                   painter.drawRect(c.x-1,c.y-1,c.w,c.h);
-               }
-            else
-               foreach (const LayoutChar& c,m_layout_data->placed()) {
-                   if (m_font_renderer->data().chars[c.symbol].locked)
-                       painter.setPen(QColor(255,0,0,255));
-                   else
-                       painter.setPen(QColor(0,0,255,255));
-                   painter.drawRect(c.x,c.y,c.w-1,c.h-1);
-               }
-        }
-    }
-
-
-    ui->label_Image->setPixmap(pixmap);
-    ui->label_Image->repaint();
+    ui->widgetFontPreview->setImage(image);
     ui->label_ImageSize->setText(tr("Image size: ")+
             QString().number(m_layout_data->width()) + "x" +
             QString().number(m_layout_data->height())
@@ -267,8 +244,8 @@ void FontBuilder::onLayoutChanged() {
         m_image_writer->forget();
 }
 
-void FontBuilder::on_checkBoxDrawGrid_toggled(bool ) {
-    setLayoutImage(m_layout_data->image());
+void FontBuilder::on_checkBoxDrawGrid_toggled(bool dg) {
+    ui->widgetFontPreview->setDrawGrid(dg);
 }
 
 void FontBuilder::onFontNameChanged() {
@@ -364,12 +341,12 @@ void FontBuilder::onExternalImageChanged(const QString& fn) {
     }
     QImage* image = m_image_writer->Read(f);
     if (image) {
-        foreach (LayoutChar c, m_layout_data->placed()) {
+        /*foreach (LayoutChar c, m_layout_data->placed()) {
             QImage img = image->copy(c.x+m_layout_config->offsetLeft(),c.y+m_layout_config->offsetTop(),
                                      c.w-m_layout_config->offsetLeft()-m_layout_config->offsetRight(),
                                      c.h-m_layout_config->offsetTop()-m_layout_config->offsetBottom());
             m_font_renderer->SetImage(c.symbol,img);
-        }
+        }*/
         setLayoutImage(*image);
         m_layout_data->setImage(*image);
         qDebug() << "set layout image from exernal";
@@ -380,4 +357,10 @@ void FontBuilder::onExternalImageChanged(const QString& fn) {
 
 void FontBuilder::onSpacingChanged() {
     ui->fontTestFrame->refresh();
+}
+
+void FontBuilder::on_comboBox_currentIndexChanged(int index)
+{
+    static const float scales[] = { 0.5,1.0,2.0,4.0,8.0 };
+    ui->widgetFontPreview->setScale(scales[index]);
 }

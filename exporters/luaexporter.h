@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2010 Andrey AndryBlack Kunitsyn
+ * Copyright (c) 2010-2011 Andrey AndryBlack Kunitsyn
  * email:support.andryblack@gmail.com
  *
  * Report bugs and download new versions at http://code.google.com/p/fontbuilder

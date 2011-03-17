@@ -91,6 +91,7 @@ private slots:
     void onFontNameChanged();
     void onExternalImageChanged(const QString& img);
     void onSpacingChanged();
+    void on_comboBox_currentIndexChanged(int index);
 };
 
 #endif // FONTBUILDER_H
