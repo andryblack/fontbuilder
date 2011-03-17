@@ -53,6 +53,8 @@ public:
     const QVector<LayoutChar>& rendered() const { return m_chars;}
     void placeImage(QPainter& p,ushort sybol,int x,int y);
     const RendererData& data() const { return m_rendered;}
+    void LockAll();
+    void SetImage(ushort symb,const QImage& img);
 private:
     const FontConfig* m_config;
     FT_Library m_ft_library;
@@ -62,7 +64,7 @@ private:
     RendererData m_rendered;
     QVector<LayoutChar> m_chars;
     void clear_bitmaps();
-    void append_bitmap(ushort symbol);
+    bool append_bitmap(ushort symbol);
     void append_kerning(ushort symbol,const ushort* other,int amount);
 signals:
     void imagesChanged();

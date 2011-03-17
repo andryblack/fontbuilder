@@ -44,9 +44,10 @@ struct RenderedChar {
     int advance;
     QImage img;
     QMap<ushort,int> kerning;
-    RenderedChar() : symbol(0) {}
+    bool    locked;
+    RenderedChar() : symbol(0),locked(false) {}
     RenderedChar(ushort symbol,int x,int y,int a,const QImage& img) :
-            symbol(symbol),offsetX(x),offsetY(y),advance(a),img(img) {}
+            symbol(symbol),offsetX(x),offsetY(y),advance(a),img(img) ,locked(false){}
 };
 
 struct RenderedMetrics {

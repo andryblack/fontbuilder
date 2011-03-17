@@ -219,14 +219,21 @@ void FontBuilder::setLayoutImage(const QImage& image) {
         painter.drawImage(0,0,image);
 
         if (ui->checkBoxDrawGrid->isChecked()) {
-            painter.setPen(QColor(255,0,255,255));
             if (m_layout_config->onePixelOffset())
                foreach (const LayoutChar& c,m_layout_data->placed()) {
-                  painter.drawRect(c.x-1,c.y-1,c.w,c.h);
+                   if (m_font_renderer->data().chars[c.symbol].locked)
+                       painter.setPen(QColor(255,0,0,255));
+                   else
+                       painter.setPen(QColor(0,0,255,255));
+                   painter.drawRect(c.x-1,c.y-1,c.w,c.h);
                }
             else
                foreach (const LayoutChar& c,m_layout_data->placed()) {
-                  painter.drawRect(c.x,c.y,c.w-1,c.h-1);
+                   if (m_font_renderer->data().chars[c.symbol].locked)
+                       painter.setPen(QColor(255,0,0,255));
+                   else
+                       painter.setPen(QColor(0,0,255,255));
+                   painter.drawRect(c.x,c.y,c.w-1,c.h-1);
                }
         }
     }
@@ -280,6 +287,7 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
 {
     QDir dir(m_output_config->path());
     QString texture_filename;
+    setLayoutImage(m_layout_data->image());
     if (m_output_config->writeImage()) {
         delete m_image_writer;
         m_image_writer = 0;
@@ -356,8 +364,14 @@ void FontBuilder::onExternalImageChanged(const QString& fn) {
     }
     QImage* image = m_image_writer->Read(f);
     if (image) {
-        m_layout_data->setImage(*image);
+        foreach (LayoutChar c, m_layout_data->placed()) {
+            QImage img = image->copy(c.x+m_layout_config->offsetLeft(),c.y+m_layout_config->offsetTop(),
+                                     c.w-m_layout_config->offsetLeft()-m_layout_config->offsetRight(),
+                                     c.h-m_layout_config->offsetTop()-m_layout_config->offsetBottom());
+            m_font_renderer->SetImage(c.symbol,img);
+        }
         setLayoutImage(*image);
+        m_layout_data->setImage(*image);
         qDebug() << "set layout image from exernal";
         ui->fontTestFrame->refresh();
         delete image;

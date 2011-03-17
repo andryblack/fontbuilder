@@ -82,8 +82,8 @@ void FontRenderer::rasterize() {
         const float angle = (-M_PI*m_config->italic()) / 180.0f;
         matrix.xx = (FT_Fixed)( cos( angle ) * 0x10000L );
         matrix.xy = (FT_Fixed)(-sin( angle ) * 0x10000L );
-        matrix.yx = (FT_Fixed)( sin( angle ) * 0x10000L );
-        matrix.yy = (FT_Fixed)( cos( angle ) * 0x10000L );
+        matrix.yx = (FT_Fixed)( 0/*sin( angle )*/ * 0x10000L );
+        matrix.yy = (FT_Fixed)( 1/*cos( angle )*/ * 0x10000L );
         FT_Set_Transform(m_ft_face,&matrix,0);
     } else {
         FT_Set_Transform(m_ft_face,0,0);
@@ -132,9 +132,10 @@ void FontRenderer::rasterize() {
         }
         if ( error )
            continue;
-        append_bitmap(chars[i]);
-        if (use_kerning)
-            append_kerning(chars[i],chars,amount);
+        if (append_bitmap(chars[i])) {
+            if (use_kerning)
+                append_kerning(chars[i],chars,amount);
+        }
     }
     imagesChanged(m_chars);
     imagesChanged();
@@ -142,11 +143,25 @@ void FontRenderer::rasterize() {
 
 
 void FontRenderer::clear_bitmaps() {
-       m_rendered.chars.clear();
-       m_chars.clear();
+    QMap<ushort,RenderedChar>::iterator it = m_rendered.chars.begin();
+    while (it!=m_rendered.chars.end()) {
+        if (!it->locked) {
+            ushort symb = it.key();
+            QVector<LayoutChar>::iterator ci = m_chars.begin();
+            while (ci!=m_chars.end()) {
+                if (ci->symbol==symb)
+                    ci = m_chars.erase(ci);
+                else ci++;
+            }
+            it = m_rendered.chars.erase(it);
+        } else {
+            it++;
+        }
+    }
 }
 
-void FontRenderer::append_bitmap(ushort symbol) {
+bool FontRenderer::append_bitmap(ushort symbol) {
+    if (m_rendered.chars[symbol].locked) return false;
     const FT_GlyphSlot  slot = m_ft_face->glyph;
     const FT_Bitmap* bm = &(slot->bitmap);
     int w = bm->width;
@@ -206,6 +221,7 @@ void FontRenderer::append_bitmap(ushort symbol) {
     m_rendered.chars[symbol]=RenderedChar(symbol,slot->bitmap_left,slot->bitmap_top,slot->advance.x/64,img);
     m_chars.push_back(LayoutChar(symbol,slot->bitmap_left,-slot->bitmap_top,w,h));
 
+    return true;
 }
 
 void FontRenderer::append_kerning(ushort symbol,const ushort* other,int amount) {
@@ -295,3 +311,18 @@ void FontRenderer::on_fontOptionsChanged() {
 void FontRenderer::placeImage(QPainter& p,ushort symbol,int x,int y) {
     p.drawImage(x,y,m_rendered.chars[symbol].img);
 }
+
+
+void FontRenderer::LockAll() {
+     QMap<ushort,RenderedChar>::iterator it = m_rendered.chars.begin();
+     while (it!=m_rendered.chars.end()) {
+         it->locked = true;
+         it++;
+     }
+}
+
+void FontRenderer::SetImage(ushort symb,const QImage& img) {
+    m_rendered.chars[symb].img = img;
+    m_rendered.chars[symb].locked = true;
+}
+
