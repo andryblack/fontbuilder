@@ -168,10 +168,14 @@ void CharsSelectWidget::mouseMoveEvent(QMouseEvent *event) {
             update();
         }
     } else {
+        QString scode = QString::number(code, 16);
+        while (scode.length()<4) {
+            scode=QString("0")+scode;
+        }
         QString text = QString::fromLatin1("<p>Character: <span>")
                            + QChar(code)
-                           + QString::fromLatin1("</span><p>Value: 0x")
-                           + QString::number(code, 16);
+                           + QString::fromLatin1("</span><p>Value: U+")
+                           + scode;
         QToolTip::showText(event->globalPos(), text, this);
     }
 }

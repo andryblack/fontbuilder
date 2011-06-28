@@ -37,78 +37,89 @@
 class FontConfig : public QObject
 {
 Q_OBJECT
+Q_ENUMS(HintingMethod)
 public:
     explicit FontConfig(QObject *parent = 0);
 
+    void normalize();
+
+    enum HintingMethod {
+        HintingDisable,
+        HintingDefault,
+        HintingForceFreetypeAuto,
+        HintingDisableFreetypeAuto
+    };
+
     const QString& path() const { return m_path; }
     void setPath(const QString& path);
-    Q_PROPERTY( QString path READ path WRITE setPath );
+    Q_PROPERTY( QString path READ path WRITE setPath )
 
     const QString& filename() const { return m_filename; }
     void setFilename(const QString& filename);
-    Q_PROPERTY( QString filename READ filename WRITE setFilename );
+    Q_PROPERTY( QString filename READ filename WRITE setFilename )
 
     const QString& family() const { return m_family; }
     void setFamily(const QString& family);
-    Q_PROPERTY( QString family READ family WRITE setFamily );
+    Q_PROPERTY( QString family READ family WRITE setFamily )
 
     const QString& style() const { return m_style; }
     void setStyle(const QString& style);
-    Q_PROPERTY( QString style READ style WRITE setStyle );
+    Q_PROPERTY( QString style READ style WRITE setStyle )
 
     int faceIndex() const { return m_face_index;}
     void setFaceIndex(int indx);
-    Q_PROPERTY( int faceIndex READ faceIndex WRITE setFaceIndex );
+    Q_PROPERTY( int faceIndex READ faceIndex WRITE setFaceIndex )
 
     int size() const { return m_size;}
     void setSize(int size);
-    Q_PROPERTY( int size READ size WRITE setSize );
+    Q_PROPERTY( int size READ size WRITE setSize )
 
     const QString& characters() const { return m_characters; }
     void setCharacters(const QString& characters);
-    Q_PROPERTY( QString characters READ characters WRITE setCharacters );
+    Q_PROPERTY( QString characters READ characters WRITE setCharacters )
 
     const QString& defaultCharacters() const;
 
-    bool autohinting() const { return m_autohinting;}
-    void setAutohinting(bool b);
-    Q_PROPERTY( bool autohinting READ autohinting WRITE setAutohinting );
+    int hinting() const { return m_hinting;}
+    void setHinting(int b);
+    void resetHinting() { m_hinting = HintingDefault;}
+    Q_PROPERTY( int hinting READ hinting WRITE setHinting RESET resetHinting )
 
     bool renderMissing() const { return m_render_missing;}
     void setRenderMissing(bool b);
-    Q_PROPERTY( bool renderMissing READ renderMissing WRITE setRenderMissing );
+    Q_PROPERTY( bool renderMissing READ renderMissing WRITE setRenderMissing )
 
     bool antialiased() const { return m_antialiased;}
     void setAntialiased(bool b);
-    Q_PROPERTY( bool antialiased READ antialiased WRITE setAntialiased );
+    Q_PROPERTY( bool antialiased READ antialiased WRITE setAntialiased )
 
     int bold() const { return m_bold;}
     void setBold(int b);
-    Q_PROPERTY( int bold READ bold WRITE setBold );
+    Q_PROPERTY( int bold READ bold WRITE setBold )
 
     int italic() const { return m_italic;}
     void setItalic(int b);
-    Q_PROPERTY( int italic READ italic WRITE setItalic );
+    Q_PROPERTY( int italic READ italic WRITE setItalic )
 
     float width() const { return m_width;}
     void setWidth(float b);
-    Q_PROPERTY( float width READ width WRITE setWidth );
+    Q_PROPERTY( float width READ width WRITE setWidth )
 
     float height() const { return m_height;}
     void setHeight(float b);
-    Q_PROPERTY( float height READ height WRITE setHeight );
+    Q_PROPERTY( float height READ height WRITE setHeight )
 
     int lineSpacing() const { return m_line_spacing;}
     void setLineSpacing(int s);
-    Q_PROPERTY( int lineSpacing READ lineSpacing WRITE setLineSpacing );
+    Q_PROPERTY( int lineSpacing READ lineSpacing WRITE setLineSpacing )
 
     int charSpacing() const { return m_char_spacing;}
     void setCharSpacing(int s);
-    Q_PROPERTY( int charSpacing READ charSpacing WRITE setCharSpacing );
+    Q_PROPERTY( int charSpacing READ charSpacing WRITE setCharSpacing )
 
     int DPI() const { return m_dpi;}
     void setDPI(int dpi);
-    Q_PROPERTY( int DPI READ DPI WRITE setDPI );
+    Q_PROPERTY( int DPI READ DPI WRITE setDPI )
 
     void emmitChange();
 private:
@@ -119,7 +130,7 @@ private:
     int m_face_index;
     int m_size;
     QString m_characters;
-    bool    m_autohinting;
+    int    m_hinting;
     bool    m_render_missing;
     bool    m_antialiased;
     int    m_bold;

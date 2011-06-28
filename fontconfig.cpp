@@ -37,7 +37,7 @@ FontConfig::FontConfig(QObject *parent) :
     m_path = QDesktopServices::storageLocation(QDesktopServices::FontsLocation);
     m_size = 0;
     m_characters = defaultCharacters();
-    m_autohinting = false;
+    m_hinting = HintingDefault;
     m_render_missing = false;
     m_antialiased = true;
     m_bold = 0;
@@ -111,9 +111,9 @@ void FontConfig::setCharacters(const QString& characters) {
 }
 
 
-void FontConfig::setAutohinting(bool b) {
-    if (m_autohinting!=b) {
-        m_autohinting = b;
+void FontConfig::setHinting(int h) {
+    if (m_hinting!=h) {
+        m_hinting = h;
         renderingOptionsChanged();
     }
 }
@@ -184,5 +184,18 @@ void FontConfig::setDPI(int dpi) {
     if (m_dpi!=dpi) {
         m_dpi = dpi;
         sizeChanged();
+    }
+}
+
+void FontConfig::normalize() {
+    switch (m_hinting) {
+    case HintingDisable:
+    case HintingDefault:
+    case HintingForceFreetypeAuto:
+    case HintingDisableFreetypeAuto:
+        break;
+    default:
+        m_hinting = HintingDefault;
+        break;
     }
 }

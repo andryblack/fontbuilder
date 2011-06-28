@@ -38,6 +38,7 @@
 #include <QMetaProperty>
 #include <QDir>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "fontconfig.h"
 #include "fontrenderer.h"
@@ -47,6 +48,7 @@
 #include "outputconfig.h"
 #include "exporterfactory.h"
 #include "imagewriterfactory.h"
+#include "fontloader.h"
 
 
 FontBuilder::FontBuilder(QWidget *parent) :
@@ -84,6 +86,7 @@ FontBuilder::FontBuilder(QWidget *parent) :
     QSettings settings;
     restoreGeometry(settings.value("geometry").toByteArray());
     readConfig(settings,"fontconfig",m_font_config);
+    m_font_config->normalize();
     readConfig(settings,"layoutconfig",m_layout_config);
     readConfig(settings,"outputconfig",m_output_config);
     ui->checkBoxDrawGrid->setChecked(settings.value("draw_grid").toBool());
@@ -126,6 +129,8 @@ FontBuilder::FontBuilder(QWidget *parent) :
 
     connect(m_font_config,SIGNAL(spacingChanged()),this,SLOT(onSpacingChanged()));
     ui->fontTestFrame->refresh();
+
+    m_font_loader = new FontLoader(this);
 }
 
 FontBuilder::~FontBuilder()
@@ -363,4 +368,19 @@ void FontBuilder::on_comboBox_currentIndexChanged(int index)
 {
     static const float scales[] = { 0.5,1.0,2.0,4.0,8.0 };
     ui->widgetFontPreview->setScale(scales[index]);
+}
+
+void FontBuilder::on_action_Open_triggered()
+{
+
+    QString file = QFileDialog::getOpenFileName(this,tr("Select file"),
+                                                QString(),
+                                                tr("Font file(*.xml)"));
+    if (!file.isEmpty()) {
+        if (m_font_loader->Load(file)) {
+
+        }
+    }
+
+
 }

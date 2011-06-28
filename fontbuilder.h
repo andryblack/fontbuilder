@@ -49,6 +49,7 @@ class ExporterFactory;
 class AbstractExporter;
 class ImageWriterFactory;
 class AbstractImageWriter;
+class FontLoader;
 
 
 class FontBuilder : public QMainWindow {
@@ -76,6 +77,7 @@ private:
     ExporterFactory* m_exporter_factory;
     ImageWriterFactory* m_image_writer_factory;
     AbstractImageWriter* m_image_writer;
+    FontLoader*     m_font_loader;
 
     void setLayoutImage(const QImage& img);
 public slots:
@@ -92,6 +94,7 @@ private slots:
     void onExternalImageChanged(const QString& img);
     void onSpacingChanged();
     void on_comboBox_currentIndexChanged(int index);
+    void on_action_Open_triggered();
 };
 
 #endif // FONTBUILDER_H

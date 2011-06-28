@@ -64,7 +64,8 @@ SOURCES += main.cpp \
     charsselectwidget.cpp \
     exporters/nglexporter.cpp \
     exporters/luaexporter.cpp \
-    fontdrawwidget.cpp
+    fontdrawwidget.cpp \
+    fontloader.cpp
 HEADERS += fontbuilder.h \
     colorbutton.h \
     fontselectframe.h \
@@ -98,7 +99,8 @@ HEADERS += fontbuilder.h \
     charsselectwidget.h \
     exporters/nglexporter.h \
     exporters/luaexporter.h \
-    fontdrawwidget.h
+    fontdrawwidget.h \
+    fontloader.h
 FORMS += fontbuilder.ui \
     fontselectframe.ui \
     fontoptionsframe.ui \

@@ -112,13 +112,28 @@ void FontRenderer::rasterize() {
         int glyph_index = FT_Get_Char_Index( m_ft_face, chars[i] );
         if (glyph_index==0 && !m_config->renderMissing())
             continue;
-        error = FT_Load_Glyph( m_ft_face, glyph_index,
-                      FT_LOAD_DEFAULT |
-                      /*FT_LOAD_NO_BITMAP |*/
-                      (!m_config->antialiased() ?
-                         ( FT_LOAD_MONOCHROME | FT_LOAD_TARGET_MONO) :
-                         FT_LOAD_TARGET_NORMAL) |
-                      (m_config->autohinting() ? FT_LOAD_FORCE_AUTOHINT : FT_LOAD_NO_AUTOHINT) );
+
+        FT_Int32 flags = FT_LOAD_DEFAULT;
+        if (!m_config->antialiased()) {
+            flags = flags | FT_LOAD_MONOCHROME | FT_LOAD_TARGET_MONO;
+        } else {
+            flags = flags | FT_LOAD_TARGET_NORMAL;
+        }
+        switch (m_config->hinting()) {
+        case  FontConfig::HintingDisable:
+            flags = flags | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT;
+            break;
+        case  FontConfig::HintingForceFreetypeAuto:
+            flags = flags | FT_LOAD_FORCE_AUTOHINT;
+            break;
+        case  FontConfig::HintingDisableFreetypeAuto:
+            flags = flags | FT_LOAD_NO_AUTOHINT;
+            break;
+        default:
+            break;
+        }
+
+        error = FT_Load_Glyph( m_ft_face, glyph_index, flags );
         if ( error )
            continue;
         if (m_config->bold()!=0) {
