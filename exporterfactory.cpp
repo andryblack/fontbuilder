@@ -44,7 +44,7 @@ ExporterFactory::ExporterFactory(QObject *parent) :
     m_factorys["ZenGL-zfi"] = &ZFIExporterFactoryFunc;
     m_factorys["Divo compatible - xml"] = &DivoExporterFactoryFunc;
     m_factorys["NGL"] = &NGLExporterFactoryFunc;
-    m_factorys["Lua"] = &LuaExporterFactoryFunc;
+    m_factorys["Lua table"] = &LuaExporterFactoryFunc;
 }
 
 

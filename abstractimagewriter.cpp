@@ -36,6 +36,7 @@
 #include <QFileSystemWatcher>
 #include <QTimer>
 #include <QDebug>
+#include <QPaintEngine>
 
 
 AbstractImageWriter::AbstractImageWriter(QObject *parent ) : QObject(parent),m_watcher(0) {
@@ -53,18 +54,42 @@ void AbstractImageWriter::setData(const LayoutData* data,const LayoutConfig* con
     m_tex_height = data->height();
 }
 
+static void placeImage(QImage& dst,int x,int y,const QImage& src) {
+    int size = src.width()*4;
+    for (int yy=0;yy<src.height();yy++) {
+        const uchar* src_d = src.constScanLine(yy);
+        uchar* dst_d = dst.scanLine(y+yy);
+        dst_d += x*4;
+        ::memcpy(dst_d,src_d,size);
+    }
+}
+
 QImage AbstractImageWriter::buildImage() {
     QImage pixmap(layout()->width(),layout()->height(),QImage::Format_ARGB32);
 
-    pixmap.fill(0);
+    pixmap.fill(0x00ffffff);
 
+
+    /*
+    /// hm.. Qt bug ?
     QPainter painter(&pixmap);
+
+    painter.setBackgroundMode(Qt::TransparentMode);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
     foreach (const LayoutChar& c,layout()->placed())
         if (rendered()->chars.contains(c.symbol)) {
             const RenderedChar& rend = rendered()->chars[c.symbol];
             painter.drawImage(c.x + layoutConfig()->offsetLeft(),
                               c.y + layoutConfig()->offsetTop(),rend.img);
         }
+    */
+    foreach (const LayoutChar& c,layout()->placed())
+            if (rendered()->chars.contains(c.symbol)) {
+                const RenderedChar& rend = rendered()->chars[c.symbol];
+                int x = c.x + layoutConfig()->offsetLeft();
+                int y = c.y + layoutConfig()->offsetTop();
+                placeImage(pixmap,x,y,rend.img);
+            }
     return pixmap;
 }
 

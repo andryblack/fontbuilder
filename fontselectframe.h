@@ -86,6 +86,7 @@ private slots:
     void on_pushButtonChangeDir_clicked();
 
     void setFontsDirectory(QString dir);
+    void on_pushButtonDefault_pressed();
 };
 
 #endif // FONTSELECTFRAME_H

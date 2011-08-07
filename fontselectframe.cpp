@@ -106,6 +106,7 @@ void FontSelectFrame::setConfig(FontConfig* config) {
 
 void FontSelectFrame::setFontsDirectory(QString dir_name) {
 
+    if (m_config) m_config->setPath(dir_name);
 
     m_database.clear();
 
@@ -353,4 +354,9 @@ void FontSelectFrame::on_comboBoxSize_currentIndexChanged(QString size_str)
 void FontSelectFrame::on_pushButtonDefault_clicked()
 {
     setFontsDirectory(QDesktopServices::storageLocation(QDesktopServices::FontsLocation));
+}
+
+void FontSelectFrame::on_pushButtonDefault_pressed()
+{
+
 }

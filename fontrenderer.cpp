@@ -182,6 +182,7 @@ bool FontRenderer::append_bitmap(ushort symbol) {
     int w = bm->width;
     int h = bm->rows;
     QImage img(w,h,QImage::Format_ARGB32);
+    img.fill(0x00ffffff);
     const uchar* src = bm->buffer;
     //QColor bg = m_config->bgColor();
     //QColor fg = m_config->fgColor();
@@ -191,7 +192,7 @@ bool FontRenderer::append_bitmap(ushort symbol) {
             for (int col=0;col<w;col++) {
                  {
                     uchar s = src[col];
-                    *dst = qRgba(255,255,255,
+                    *dst = qRgba(0xff,0xff,0xff,
                             s);
                 }
                 dst++;
