@@ -1,0 +1,5 @@
+Makefile
+Makefile.*
+object_script.*
+.obj
+bin

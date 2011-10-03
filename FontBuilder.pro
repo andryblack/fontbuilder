@@ -32,83 +32,83 @@
 # -------------------------------------------------
 TARGET = FontBuilder
 TEMPLATE = app
-SOURCES += main.cpp \
-    fontbuilder.cpp \
-    colorbutton.cpp \
-    fontselectframe.cpp \
-    fontoptionsframe.cpp \
-    fontrenderer.cpp \
-    charactersframe.cpp \
-    fontconfig.cpp \
-    abstractlayouter.cpp \
-    layoutconfig.cpp \
-    layoutdata.cpp \
-    layouters/linelayouter.cpp \
-    layouterfactory.cpp \
-    layouters/boxlayouter.cpp \
-    layoutconfigframe.cpp \
-    outputconfig.cpp \
-    outputframe.cpp \
-    abstractexporter.cpp \
-    exporters/ghlexporter.cpp \
-    exporterfactory.cpp \
-    abstractimagewriter.cpp \
-    imagewriterfactory.cpp \
-    image/builtinimagewriter.cpp \
-    exporters/zfiexporter.cpp \
-    image/targawriter.cpp \
-    fonttestframe.cpp \
-    fonttestwidget.cpp \
-    exporters/divoexporter.cpp \
-    charmapdialog.cpp \
-    charsselectwidget.cpp \
-    exporters/nglexporter.cpp \
-    exporters/luaexporter.cpp \
-    fontdrawwidget.cpp \
-    fontloader.cpp
-HEADERS += fontbuilder.h \
-    colorbutton.h \
-    fontselectframe.h \
-    fontoptionsframe.h \
-    fontrenderer.h \
-    charactersframe.h \
-    fontconfig.h \
-    rendererdata.h \
-    abstractlayouter.h \
-    layoutconfig.h \
-    layoutdata.h \
-    layouters/linelayouter.h \
-    layouterfactory.h \
-    layoutchar.h \
-    layouters/boxlayouter.h \
-    layoutconfigframe.h \
-    outputconfig.h \
-    outputframe.h \
-    abstractexporter.h \
-    exporters/ghlexporter.h \
-    exporterfactory.h \
-    abstractimagewriter.h \
-    imagewriterfactory.h \
-    image/builtinimagewriter.h \
-    exporters/zfiexporter.h \
-    image/targawriter.h \
-    fonttestframe.h \
-    fonttestwidget.h \
-    exporters/divoexporter.h \
-    charmapdialog.h \
-    charsselectwidget.h \
-    exporters/nglexporter.h \
-    exporters/luaexporter.h \
-    fontdrawwidget.h \
-    fontloader.h
-FORMS += fontbuilder.ui \
-    fontselectframe.ui \
-    fontoptionsframe.ui \
-    charactersframe.ui \
-    layoutconfigframe.ui \
-    outputframe.ui \
-    fonttestframe.ui \
-    charmapdialog.ui
+SOURCES += src/main.cpp \
+    src/fontbuilder.cpp \
+    src/colorbutton.cpp \
+    src/fontselectframe.cpp \
+    src/fontoptionsframe.cpp \
+    src/fontrenderer.cpp \
+    src/charactersframe.cpp \
+    src/fontconfig.cpp \
+    src/abstractlayouter.cpp \
+    src/layoutconfig.cpp \
+    src/layoutdata.cpp \
+    src/layouters/linelayouter.cpp \
+    src/layouterfactory.cpp \
+    src/layouters/boxlayouter.cpp \
+    src/layoutconfigframe.cpp \
+    src/outputconfig.cpp \
+    src/outputframe.cpp \
+    src/abstractexporter.cpp \
+    src/exporters/ghlexporter.cpp \
+    src/exporterfactory.cpp \
+    src/abstractimagewriter.cpp \
+    src/imagewriterfactory.cpp \
+    src/image/builtinimagewriter.cpp \
+    src/exporters/zfiexporter.cpp \
+    src/image/targawriter.cpp \
+    src/fonttestframe.cpp \
+    src/fonttestwidget.cpp \
+    src/exporters/divoexporter.cpp \
+    src/charmapdialog.cpp \
+    src/charsselectwidget.cpp \
+    src/exporters/nglexporter.cpp \
+    src/exporters/luaexporter.cpp \
+    src/fontdrawwidget.cpp \
+    src/fontloader.cpp
+HEADERS += src/fontbuilder.h \
+    src/colorbutton.h \
+    src/fontselectframe.h \
+    src/fontoptionsframe.h \
+    src/fontrenderer.h \
+    src/charactersframe.h \
+    src/fontconfig.h \
+    src/rendererdata.h \
+    src/abstractlayouter.h \
+    src/layoutconfig.h \
+    src/layoutdata.h \
+    src/layouters/linelayouter.h \
+    src/layouterfactory.h \
+    src/layoutchar.h \
+    src/layouters/boxlayouter.h \
+    src/layoutconfigframe.h \
+    src/outputconfig.h \
+    src/outputframe.h \
+    src/abstractexporter.h \
+    src/exporters/ghlexporter.h \
+    src/exporterfactory.h \
+    src/abstractimagewriter.h \
+    src/imagewriterfactory.h \
+    src/image/builtinimagewriter.h \
+    src/exporters/zfiexporter.h \
+    src/image/targawriter.h \
+    src/fonttestframe.h \
+    src/fonttestwidget.h \
+    src/exporters/divoexporter.h \
+    src/charmapdialog.h \
+    src/charsselectwidget.h \
+    src/exporters/nglexporter.h \
+    src/exporters/luaexporter.h \
+    src/fontdrawwidget.h \
+    src/fontloader.h
+FORMS += src/fontbuilder.ui \
+    src/fontselectframe.ui \
+    src/fontoptionsframe.ui \
+    src/charactersframe.ui \
+    src/layoutconfigframe.ui \
+    src/outputframe.ui \
+    src/fonttestframe.ui \
+    src/charmapdialog.ui
 TRANSLATIONS = fontbuilder_en.ts \
     fontbuilder_ru.ts
 QT += xml
@@ -119,7 +119,7 @@ MOC_DIR = .obj
 UI_DIR = .obj
 TARGET = FontBuilder
 
-INCLUDEPATH+=./
+INCLUDEPATH+=src/
 mac { 
     INCLUDEPATH += ../include
     INCLUDEPATH += ../include/freetype2
