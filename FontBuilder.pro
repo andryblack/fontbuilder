@@ -65,7 +65,8 @@ SOURCES += src/main.cpp \
     src/exporters/nglexporter.cpp \
     src/exporters/luaexporter.cpp \
     src/fontdrawwidget.cpp \
-    src/fontloader.cpp
+    src/fontloader.cpp \
+    src/exporters/sparrowexporter.cpp
 HEADERS += src/fontbuilder.h \
     src/colorbutton.h \
     src/fontselectframe.h \
@@ -100,7 +101,8 @@ HEADERS += src/fontbuilder.h \
     src/exporters/nglexporter.h \
     src/exporters/luaexporter.h \
     src/fontdrawwidget.h \
-    src/fontloader.h
+    src/fontloader.h \
+    src/exporters/sparrowexporter.h
 FORMS += src/fontbuilder.ui \
     src/fontselectframe.ui \
     src/fontoptionsframe.ui \
@@ -124,6 +126,9 @@ mac {
     INCLUDEPATH += ../include
     INCLUDEPATH += ../include/freetype2
     LIBS += -L../lib -lfreetype -lz
+# macports support
+    INCLUDEPATH += /opt/local/include /opt/local/include/freetype2
+    LIBS += -L/opt/local/lib
 }
 win32 { 
     INCLUDEPATH += ../include
