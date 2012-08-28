@@ -1,6 +1,6 @@
 Utility create texture atlas with placed bitmap chars.
 
-Downloads : [from code.google.com](http://code.google.com/p/fontbuilder/downloads/list)
+Downloads : [from github](https://github.com/andryblack/fontbuilder/downloads)
 
 Support : [gamedev.ru forum theme](http://www.gamedev.ru/projects/forum/?id=133540) (russian)
 
