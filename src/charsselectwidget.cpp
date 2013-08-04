@@ -111,7 +111,7 @@ void CharsSelectWidget::mousePressEvent(QMouseEvent *event)
          if (event->y()>=height()) return;
 
          m_select_last_code = m_select_begin_code = m_codes_begin + (event->y()/cell_size)*columns + event->x()/cell_size;
-         if (QChar(m_select_begin_code).category() != QChar::NoCategory) {
+         if (QChar(m_select_begin_code).category() != QChar::Other_NotAssigned) {
              m_track_mouse = true;
              if (m_codes->contains(m_select_begin_code)) {
                  m_codes->erase(m_codes->find(m_select_begin_code));
