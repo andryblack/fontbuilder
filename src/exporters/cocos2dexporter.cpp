@@ -1,6 +1,5 @@
 #include "cocos2dexporter.h"
 #include "../fontconfig.h"
-#include <QtXml>
 
 Cocos2dExporter::Cocos2dExporter(QObject *parent) :
     AbstractExporter(parent)
@@ -9,56 +8,33 @@ Cocos2dExporter::Cocos2dExporter(QObject *parent) :
 }
 
 bool Cocos2dExporter::Export(QByteArray& out) {
-    QDomDocument doc;
-    QDomElement root = doc.createElement("font");
-    doc.appendChild(root);
-    QDomElement info = doc.createElement("info");
-    root.appendChild(info);
-    info.setAttribute("face", fontConfig()->family());
-    info.setAttribute("size", fontConfig()->size());
-    QDomElement common = doc.createElement("common");
-    root.appendChild(common);
-    int height = metrics().height;
-    common.setAttribute("lineHeight", height);
-    QDomElement pages = doc.createElement("pages");
-    root.appendChild(pages);
-    QDomElement page = doc.createElement("page");
-    pages.appendChild(page);
-    page.setAttribute("id", "0");
-    page.setAttribute("file", texFilename());
-    QDomElement chars = doc.createElement("chars");
-    root.appendChild(chars);
-    chars.setAttribute("count", symbols().size());
-    QDomElement kernings = doc.createElement("kernings");
-    int kernNumber = 0;
-    foreach(const Symbol& c , symbols()) {
-        QDomElement ch = doc.createElement("char");
-        ch.setAttribute("id", QString::number(c.id));
-        ch.setAttribute("x", QString::number(c.placeX));
-        ch.setAttribute("y", QString::number(c.placeY));
-        ch.setAttribute("width", QString::number(c.placeW));
-        ch.setAttribute("height", QString::number(c.placeH));
-        ch.setAttribute("xoffset", QString::number(c.offsetX));
-        ch.setAttribute("yoffset", QString::number(height - c.offsetY));
-        ch.setAttribute("xadvance", QString::number(c.advance));
-        ch.setAttribute("page", "0");
-        ch.setAttribute("chnl", "0");
-        ch.setAttribute("letter", c.id==32 ? "space" : QString().append(c.id));
-        chars.appendChild(ch);
-        typedef QMap<ushort,int>::ConstIterator Kerning;
-        for ( Kerning k = c.kerning.begin();k!=c.kerning.end();k++) {
-            QDomElement ker = doc.createElement("kerning");
-            ker.setAttribute("first", QString::number(c.id));
-            ker.setAttribute("second", QString::number(k.key()));
-            ker.setAttribute("amount", k.value());
-            kernings.appendChild(ker);
-            kernNumber ++;
-        }
-    }
-    kernings.setAttribute("count", QString::number(kernNumber));
-    root.appendChild(kernings);
+    QString res = "info ";
+    res += QString("face=\"") + fontConfig()->family() +  QString("\" ");
+    res += QString("size=") + QString().number(metrics().height) + QString(" bold=") + QString().number(fontConfig()->size()) + QString(" italic=0 charset="" unicode=0 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=2,2\n");
+    res += QString("common lineHeight=") + QString().number(metrics().height) + QString(" base=29 scaleW=") + QString().number(texWidth()) + QString(" scaleH=") + QString().number(texWidth()) + QString(" pages=1 packed=0\n");
+    res += QString("page id=0 file=\"") + texFilename() + QString("\"\n");
+    res += QString("chars count=") + QString().number(symbols().size()) + QString("\n");
 
-    out = doc.toByteArray(1);
+    foreach(const Symbol& c , symbols())
+    {
+        res += QString("char id=") + QString().number(c.id) + QString(" x=") + QString().number(c.placeX) + QString(" y=") + QString().number(c.placeY);
+        res += QString(" width=") + QString().number(c.placeW) + QString(" height=") + QString().number(c.placeH);
+        res += QString(" xoffset=") + QString().number(c.offsetX) + QString(" yoffset=") + QString().number(c.offsetY);
+        res += QString(" xadvance=") + QString().number(c.advance) + QString(" page=0 chnl=0 ");
+
+        if(c.id==32)
+        {
+            res += QString("letter=\"space\"");
+        }
+        else
+        {
+            res += QString("letter=\"" + QString().append(c.id) + "\"");
+        }
+
+        res += QString("\n");
+    }
+
+    out = res.toUtf8();
     return true;
 }
 
