@@ -34,7 +34,8 @@
 FontConfig::FontConfig(QObject *parent) :
     QObject(parent)
 {
-    m_path = QDesktopServices::storageLocation(QDesktopServices::FontsLocation);
+    //m_path = QDesktopServices::storageLocation(QDesktopServices::FontsLocation);
+    m_path = QStandardPaths::writableLocation(QStandardPaths::FontsLocation);
     m_size = 0;
     m_characters = defaultCharacters();
     m_hinting = HintingDefault;

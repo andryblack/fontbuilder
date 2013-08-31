@@ -37,6 +37,7 @@ extern AbstractExporter* DivoExporterFactoryFunc (QObject*);
 extern AbstractExporter* NGLExporterFactoryFunc (QObject*);
 extern AbstractExporter* LuaExporterFactoryFunc (QObject*);
 extern AbstractExporter* SparrowExporterFactoryFunc (QObject*);
+extern AbstractExporter* Cocos2dExporterFactoryFunc (QObject*);
 
 ExporterFactory::ExporterFactory(QObject *parent) :
     QObject(parent)
@@ -47,6 +48,7 @@ ExporterFactory::ExporterFactory(QObject *parent) :
     m_factorys["NGL"] = &NGLExporterFactoryFunc;
     m_factorys["Lua table"] = &LuaExporterFactoryFunc;
     m_factorys["Sparrow"] = &SparrowExporterFactoryFunc;
+    m_factorys["Cocos 2d"] = &Cocos2dExporterFactoryFunc;
 }
 
 
