@@ -13,7 +13,7 @@ bool SimpleExporter::Export(QByteArray &out)
     int height = metrics().height;
 
     // Font family
-    out.append(cfg->family().toUtf8()).append(' ');
+    out.append(cfg->family().toUtf8()).append('\n');
     // Font size
     out.append(QString::number(cfg->size()).toUtf8()).append(' ');
     // Line height
