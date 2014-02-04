@@ -67,7 +67,7 @@ private:
     RenderedMetrics m_metrics;
 protected:
     struct Symbol {
-        ushort id;
+        uint id;
         int placeX;
         int placeY;
         int placeW;
@@ -75,7 +75,7 @@ protected:
         int offsetX;
         int offsetY;
         int advance;
-        QMap<ushort,int> kerning;
+        QMap<uint,int> kerning;
     };
 
     const FontConfig* fontConfig() const { return m_font_config;}

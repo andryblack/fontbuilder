@@ -45,7 +45,7 @@ FontTestWidget::FontTestWidget(QWidget *parent) :
 }
 
 
-const LayoutChar*   FontTestWidget::layoutChar(ushort c) const {
+const LayoutChar*   FontTestWidget::layoutChar(uint c) const {
     foreach (const LayoutChar& lc, m_layout_data->placed()) {
         if (c==lc.symbol)
             return &lc;
@@ -53,10 +53,10 @@ const LayoutChar*   FontTestWidget::layoutChar(ushort c) const {
     return 0;
 }
 
-int FontTestWidget::lineWidth(const ushort* chars) const {
+int FontTestWidget::lineWidth(const uint * chars) const {
     int x = 0;
     while (*chars) {
-        ushort c = *chars++;
+        uint c = *chars++;
         if (c=='\n') {
             break;
         } else
@@ -74,7 +74,7 @@ int FontTestWidget::lineWidth(const ushort* chars) const {
     return x;
 }
 
-void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
+void FontTestWidget::paintEvent ( QPaintEvent * event ) {
     if (!m_renderer_data || !m_layout_data || !m_font_config) return;
     Q_UNUSED(event);
     calcBBox();
@@ -85,7 +85,9 @@ void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
     int x = m_left;
 
     int y = m_top;
-    const ushort* chars = m_text.utf16();
+    QVector<uint> ucs4chars = m_text.toUcs4();
+    ucs4chars.push_back(0);
+    const uint* chars = ucs4chars.data();
 
     if (m_align!=ALIGN_LEFT) {
         int width = lineWidth(chars);
@@ -96,7 +98,7 @@ void	FontTestWidget::paintEvent ( QPaintEvent * event ) {
         }
     }
     while (*chars) {
-        ushort c = *chars++;
+        uint c = *chars++;
         if (c=='\n') {
             x = m_left;
             if (m_align!=ALIGN_LEFT) {
@@ -135,14 +137,16 @@ void FontTestWidget::calcBBox() {
     int right = 1;
     int top = 0;
     int bottom = 1;
-    const ushort* chars = m_text.utf16();
+    QVector<uint> ucs4chars = m_text.toUcs4();
+    ucs4chars.push_back(0);
+    const uint* chars = ucs4chars.data();
     int x = left;
     int y = top;
     int max_x = x;
     bool first = true;
     bool last = false;
     while (*chars) {
-        ushort c = *chars++;
+        uint c = *chars++;
         if (c=='\n') {
             x=0;
             y += m_renderer_data->metrics.height+m_font_config->lineSpacing();

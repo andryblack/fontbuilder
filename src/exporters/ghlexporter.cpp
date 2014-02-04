@@ -76,7 +76,7 @@ bool GHLExporter::Export(QByteArray& out) {
         ::snprintf(buf,63,"%d %d",c.offsetX,c.offsetY);
         ce.setAttribute("offset",buf);
         ce.setAttribute("advance",c.advance);
-        typedef QMap<ushort,int>::ConstIterator Kerning;
+        typedef QMap<uint,int>::ConstIterator Kerning;
         for ( Kerning k = c.kerning.begin();k!=c.kerning.end();k++) {
             QDomElement ke = doc.createElement("kerning");
             ke.setAttribute("id",QString().append(k.key()));

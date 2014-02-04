@@ -31,6 +31,7 @@
 #include "charactersframe.h"
 #include "ui_charactersframe.h"
 #include <QFileDialog>
+#include <QDebug>
 #include "fontconfig.h"
 #include "charmapdialog.h"
 
@@ -69,7 +70,7 @@ void CharactersFrame::on_pushButtonImport_clicked()
         if (f.open(QFile::ReadOnly | QFile::Text)) {
             QByteArray data = f.readAll();
             QString text = QString::fromUtf8(data.constData(),data.size());
-            text = sortChars(removeDuplicates(text));
+            text = removeDuplicates(sortChars(text));
             ui->plainTextEdit->setPlainText(text);
         }
     }
@@ -98,7 +99,7 @@ QString CharactersFrame::getCharacters() const {
 void CharactersFrame::on_plainTextEdit_textChanged()
 {
     if (m_config) {
-        m_config->setCharacters(sortChars(removeDuplicates(getCharacters())));
+        m_config->setCharacters(removeDuplicates(sortChars(getCharacters())));
     }
 }
 
@@ -108,18 +109,24 @@ void CharactersFrame::setConfig(FontConfig* config) {
 }
 
 QString CharactersFrame::removeDuplicates(const QString& text) const {
-    QString res;
-    foreach (QChar c, text) {
-        if (!res.contains(c))
-            res.append(c);
-    }
-    return res;
+    std::vector<uint> ucs4chars = text.toUcs4().toStdVector();
+
+    // Remove duplicates with C++ algorithm
+    typename std::vector<uint>::const_iterator newEnd;
+    newEnd = std::unique(ucs4chars.begin(), ucs4chars.end());
+
+    // Drop NUL character(s) at the beginning
+    typename std::vector<uint>::const_iterator newStart = ucs4chars.begin();
+    while (newStart != newEnd && *newStart == 0)
+        ++newStart;
+
+    return QString::fromUcs4(&*newStart, newEnd - newStart);
 }
 
 QString CharactersFrame::sortChars(const QString& text) const {
-    QString res = text;
-    qSort(res.begin(),res.end());
-    return res;
+    QVector<uint> ucs4chars = text.toUcs4();
+    qSort(ucs4chars);
+    return QString::fromUcs4(&ucs4chars.front(), ucs4chars.size());
 }
 
 
@@ -136,7 +143,7 @@ void CharactersFrame::on_pushButton_SelectFromCharsMap_clicked()
     int result = dialog.exec();
     (void)result;
     if (dialog.result()==QDialog::Accepted) {
-        m_config->setCharacters(sortChars(removeDuplicates(dialog.getCharacters())));
+        m_config->setCharacters(removeDuplicates(sortChars(dialog.getCharacters())));
         bool block = ui->plainTextEdit->blockSignals(true);
         ui->plainTextEdit->setPlainText(m_config->characters());
         ui->plainTextEdit->blockSignals(block);

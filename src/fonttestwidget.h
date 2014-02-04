@@ -62,9 +62,9 @@ public:
     void setAlign(Align a) { m_align = a;}
 
 protected:
-    virtual void	paintEvent ( QPaintEvent * event );
+    virtual void paintEvent ( QPaintEvent * event );
     void calcBBox();
-    int lineWidth(const ushort* text) const;
+    int lineWidth(const uint* text) const;
 signals:
 
 public slots:
@@ -73,7 +73,7 @@ public slots:
 private:
     QString m_text;
     const LayoutData*   m_layout_data;
-    const LayoutChar*   layoutChar(ushort c) const;
+    const LayoutChar*   layoutChar(uint c) const;
     const RendererData* m_renderer_data;
     const FontConfig*   m_font_config;
     int m_left;

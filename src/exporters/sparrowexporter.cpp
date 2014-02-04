@@ -45,7 +45,7 @@ bool SparrowExporter::Export(QByteArray& out) {
         ch.setAttribute("chnl", "0");
         ch.setAttribute("letter", c.id==32 ? "space" : QString().append(c.id));
         chars.appendChild(ch);
-        typedef QMap<ushort,int>::ConstIterator Kerning;
+        typedef QMap<uint,int>::ConstIterator Kerning;
         for ( Kerning k = c.kerning.begin();k!=c.kerning.end();k++) {
             QDomElement ker = doc.createElement("kerning");
             ker.setAttribute("first", QString::number(c.id));
