@@ -104,12 +104,11 @@ void FontRenderer::rasterize() {
 
     bool use_kerning = FT_HAS_KERNING( m_ft_face );
 
-    const ushort* chars = m_config->characters().utf16();
-    size_t amount = 0;
-    while (chars[amount]!=0) amount++;
+    QVector<uint> ucs4chars = m_config->characters().toUcs4();
+    ucs4chars.push_back(0);
     int error = 0;
-    for (size_t i=0;i<amount;i++) {
-        int glyph_index = FT_Get_Char_Index( m_ft_face, chars[i] );
+	for (int i=0;i+1<ucs4chars.size();i++) {
+        int glyph_index = FT_Get_Char_Index( m_ft_face, ucs4chars[i] );
         if (glyph_index==0 && !m_config->renderMissing())
             continue;
 
@@ -147,9 +146,9 @@ void FontRenderer::rasterize() {
         }
         if ( error )
            continue;
-        if (append_bitmap(chars[i])) {
+        if (append_bitmap(ucs4chars[i])) {
             if (use_kerning)
-                append_kerning(chars[i],chars,amount);
+                append_kerning(ucs4chars[i],&ucs4chars.front(),ucs4chars.size()-1);
         }
     }
     imagesChanged(m_chars);
@@ -158,10 +157,10 @@ void FontRenderer::rasterize() {
 
 
 void FontRenderer::clear_bitmaps() {
-    QMap<ushort,RenderedChar>::iterator it = m_rendered.chars.begin();
+    QMap<uint,RenderedChar>::iterator it = m_rendered.chars.begin();
     while (it!=m_rendered.chars.end()) {
         if (!it->locked) {
-            ushort symb = it.key();
+            uint symb = it.key();
             QVector<LayoutChar>::iterator ci = m_chars.begin();
             while (ci!=m_chars.end()) {
                 if (ci->symbol==symb)
@@ -175,7 +174,7 @@ void FontRenderer::clear_bitmaps() {
     }
 }
 
-bool FontRenderer::append_bitmap(ushort symbol) {
+bool FontRenderer::append_bitmap(uint symbol) {
     if (m_rendered.chars[symbol].locked) return false;
     const FT_GlyphSlot  slot = m_ft_face->glyph;
     const FT_Bitmap* bm = &(slot->bitmap);
@@ -240,7 +239,7 @@ bool FontRenderer::append_bitmap(ushort symbol) {
     return true;
 }
 
-void FontRenderer::append_kerning(ushort symbol,const ushort* other,int amount) {
+void FontRenderer::append_kerning(uint symbol,const uint* other,int amount) {
      FT_Vector  kerning;
      FT_UInt left =  FT_Get_Char_Index( m_ft_face, symbol );
     for (int i=0;i<amount;i++) {
@@ -324,20 +323,20 @@ void FontRenderer::on_fontOptionsChanged() {
 
 
 
-void FontRenderer::placeImage(QPainter& p,ushort symbol,int x,int y) {
+void FontRenderer::placeImage(QPainter& p,uint symbol,int x,int y) {
     p.drawImage(x,y,m_rendered.chars[symbol].img);
 }
 
 
 void FontRenderer::LockAll() {
-     QMap<ushort,RenderedChar>::iterator it = m_rendered.chars.begin();
+     QMap<uint,RenderedChar>::iterator it = m_rendered.chars.begin();
      while (it!=m_rendered.chars.end()) {
          it->locked = true;
          it++;
      }
 }
 
-void FontRenderer::SetImage(ushort symb,const QImage& img) {
+void FontRenderer::SetImage(uint symb,const QImage& img) {
     m_rendered.chars[symb].img = img;
     m_rendered.chars[symb].locked = true;
 }

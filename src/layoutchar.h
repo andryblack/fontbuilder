@@ -34,16 +34,16 @@
 #include <Qt>
 
 struct LayoutChar {
-    ushort symbol;
+    uint symbol;
     int x;
     int y;
     int w;
     int h;
-    LayoutChar(ushort s,int x,int y,int w,int h) :
+    LayoutChar(uint s,int x,int y,int w,int h) :
             symbol(s),x(x),y(y),w(w),h(h)
     {
     }
-    LayoutChar(ushort s,int w,int h) :
+    LayoutChar(uint s,int w,int h) :
             symbol(s),x(0),y(0),w(w),h(h)
     {
     }

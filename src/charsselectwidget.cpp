@@ -93,9 +93,10 @@ void CharsSelectWidget::paintEvent(QPaintEvent *event) {
              if (key<=m_codes_end) {
                  painter.setClipRect(column*cell_size, row*cell_size, cell_size, cell_size);
 
-                 painter.drawText(column*cell_size + (cell_size / 2) - fontMetrics.width(QChar(key))/2,
+                 QString qs = QString::fromUcs4(&key, 1);
+                 painter.drawText(column*cell_size + (cell_size / 2) - fontMetrics.width(qs)/2,
                                   row*cell_size + 4 + fontMetrics.ascent(),
-                                  QString(QChar(key)));
+                                  qs);
              }
          }
      }
@@ -111,7 +112,7 @@ void CharsSelectWidget::mousePressEvent(QMouseEvent *event)
          if (event->y()>=height()) return;
 
          m_select_last_code = m_select_begin_code = m_codes_begin + (event->y()/cell_size)*columns + event->x()/cell_size;
-         if (QChar(m_select_begin_code).category() != QChar::NoCategory) {
+         if (QChar::category(m_select_begin_code) != QChar::NoCategory) {
              m_track_mouse = true;
              if (m_codes->contains(m_select_begin_code)) {
                  m_codes->erase(m_codes->find(m_select_begin_code));

@@ -88,7 +88,7 @@ bool LuaExporter::Export(QByteArray& out) {
         QString charDef="{from=";
         charDef+=charCode(c.id);
         charDef+=QString(",to=");
-        typedef QMap<ushort,int>::ConstIterator Kerning;
+        typedef QMap<uint,int>::ConstIterator Kerning;
         for ( Kerning k = c.kerning.begin();k!=c.kerning.end();k++) {
             QString def = charDef;
             def+=charCode(k.key());
