@@ -60,38 +60,10 @@ struct Line {
     QVector<const LayoutChar*> chars;
 };
 
-struct SortCharsByHeight
-{
-    bool operator()(const LayoutChar &a, const LayoutChar &b)
-    {
-        if (a.h + a.y > b.h + b.y)
-            return false;
-        else if (a.h + a.y == b.h + b.y)
-        {
-            if (a.w > b.w)
-                return false;
-            else if (a.w == b.w)
-            {
-                if (a.y > b.y)
-                    return false;
-                else if (a.y == b.y)
-                {
-                    if (a.symbol > b.symbol)
-                        return false;
-                }
-            }
-        }
-        return true;
-    }
-};
-
-void BoxLayouter::PlaceImages(const QVector<LayoutChar>& inputChars) {
+void BoxLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
     int h = 0;
     int w = 0;
-    if (inputChars.isEmpty()) return;
-
-    QVector<LayoutChar> chars(inputChars);
-    std::sort(chars.begin(), chars.end(), SortCharsByHeight());
+    if (chars.isEmpty()) return;
 
     /// speed up
     int area = 0;

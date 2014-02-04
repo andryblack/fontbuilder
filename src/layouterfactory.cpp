@@ -33,12 +33,14 @@
 
 extern AbstractLayouter* LineLayouterFactoryFunc (QObject*);
 extern AbstractLayouter* BoxLayouterFactoryFunc (QObject*);
+extern AbstractLayouter* BoxLayouterOptimizedFactoryFunc (QObject*);
 
 LayouterFactory::LayouterFactory(QObject *parent) :
     QObject(parent)
 {
     m_factorys["Line layout"] = &LineLayouterFactoryFunc;
     m_factorys["Box layout"] = &BoxLayouterFactoryFunc;
+    m_factorys["Box layout (optimized)"] = &BoxLayouterOptimizedFactoryFunc;
 }
 
 

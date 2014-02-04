@@ -58,6 +58,10 @@ void AbstractLayouter::DoPlace(const QVector<LayoutChar>& chars) {
     m_data->endPlacing();
 }
 
+void AbstractLayouter::OptimizeLayout(QVector<LayoutChar> &chars)
+{
+}
+
 void AbstractLayouter::on_ReplaceImages(const QVector<LayoutChar>& chars) {
     m_chars = chars;
 
@@ -80,6 +84,7 @@ void AbstractLayouter::on_LayoutDataChanged() {
                 chars[i].h+=m_config->offsetTop()+m_config->offsetBottom();
             }
         }
+        OptimizeLayout(chars);
         DoPlace(chars);
     }
 }

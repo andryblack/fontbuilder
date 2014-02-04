@@ -55,6 +55,7 @@ private:
     int m_compact_w;
     int m_compact_h;
     void DoPlace(const QVector<LayoutChar>& chars);
+    virtual void OptimizeLayout(QVector<LayoutChar>& chars);
 protected:
     void resize(int w,int h);
     int width() const;
