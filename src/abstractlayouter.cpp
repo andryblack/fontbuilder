@@ -105,6 +105,10 @@ void AbstractLayouter::resize(int w,int h) {
         if (m_config->potImage()) {
             w = nextpot(w);
             h = nextpot(h);
+        } else {
+            // Round up to multiple of 4
+            w = (w + 3) & -4;
+            h = (h + 3) & -4;
         }
     }
     if (m_data) {
