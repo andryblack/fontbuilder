@@ -35,6 +35,7 @@ LayoutConfig::LayoutConfig(QObject *parent) :
 {
     m_one_pixel_offset = true;
     m_pot_image = true;
+    m_size_increment = 1;
     m_offset_left = 0;
     m_offset_top = 0;
     m_offset_right = 0;
@@ -56,6 +57,12 @@ void LayoutConfig::setPotImage(bool b) {
     }
 }
 
+void LayoutConfig::setSizeIncrement(int v) {
+    if (m_size_increment!=v) {
+        m_size_increment = v;
+        layoutConfigChanged();
+    }
+}
 
 void LayoutConfig::setOffsetLeft(int v) {
     if (m_offset_left!=v) {

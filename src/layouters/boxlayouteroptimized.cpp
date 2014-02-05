@@ -1,7 +1,5 @@
 #include "boxlayouteroptimized.h"
 
-#include <QDebug>
-
 BoxLayouterOptimized::BoxLayouterOptimized(QObject *parent)
     : BoxLayouter(parent)
 {
@@ -31,7 +29,6 @@ bool BoxLayouterOptimized::SortCharsByHeight(const LayoutChar &a, const LayoutCh
 
 void BoxLayouterOptimized::OptimizeLayout(QVector<LayoutChar> &chars)
 {
-    qDebug() << "Optimizing layout of " << chars.size() << " chars";
     qSort(chars.begin(), chars.end(), SortCharsByHeight);
 }
 

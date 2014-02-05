@@ -29,6 +29,7 @@ private slots:
     void on_spinBoxLeftOffset_valueChanged(int );
     void on_spinBoxTopOffset_valueChanged(int );
     void on_checkBoxPOT_toggled(bool checked);
+    void on_spinBoxSizeIncrement_valueChanged(int );
     void on_checkBoxOnePixelOffset_toggled(bool checked);
 };
 

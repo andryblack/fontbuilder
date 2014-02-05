@@ -58,7 +58,7 @@ void AbstractLayouter::DoPlace(const QVector<LayoutChar>& chars) {
     m_data->endPlacing();
 }
 
-void AbstractLayouter::OptimizeLayout(QVector<LayoutChar> &chars)
+void AbstractLayouter::OptimizeLayout(QVector<LayoutChar> &)
 {
 }
 
@@ -107,13 +107,17 @@ void AbstractLayouter::resize(int w,int h) {
             w+=2;
             h+=2;
         }
+
         if (m_config->potImage()) {
             w = nextpot(w);
             h = nextpot(h);
-        } else {
-            // Round up to multiple of 4
-            w = (w + 3) & -4;
-            h = (h + 3) & -4;
+        }
+
+        int sizeIncrement = m_config->sizeIncrement();
+        if (sizeIncrement > 1)
+        {
+            w = ((w + sizeIncrement - 1) / sizeIncrement) * sizeIncrement;
+            h = ((h + sizeIncrement - 1) / sizeIncrement) * sizeIncrement;
         }
     }
     if (m_data) {

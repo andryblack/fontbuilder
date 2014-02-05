@@ -20,6 +20,7 @@ void LayoutConfigFrame::setConfig(LayoutConfig* config) {
     if (config) {
         ui->checkBoxOnePixelOffset->setChecked(config->onePixelOffset());
         ui->checkBoxPOT->setChecked(config->potImage());
+        ui->spinBoxSizeIncrement->setValue(config->sizeIncrement());
         ui->spinBoxLeftOffset->setValue(config->offsetLeft());
         ui->spinBoxTopOffset->setValue(config->offsetTop());
         ui->spinBoxRightOffset->setValue(config->offsetRight());
@@ -47,6 +48,11 @@ void LayoutConfigFrame::on_checkBoxOnePixelOffset_toggled(bool checked)
 void LayoutConfigFrame::on_checkBoxPOT_toggled(bool checked)
 {
     if (m_config) m_config->setPotImage(checked);
+}
+
+void LayoutConfigFrame::on_spinBoxSizeIncrement_valueChanged(int value)
+{
+    if (m_config) m_config->setSizeIncrement(value);
 }
 
 void LayoutConfigFrame::on_spinBoxTopOffset_valueChanged(int value)
