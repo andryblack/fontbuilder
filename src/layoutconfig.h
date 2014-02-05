@@ -47,6 +47,10 @@ public:
     void setPotImage(bool b);
     Q_PROPERTY( bool potImage READ potImage WRITE setPotImage );
 
+    int sizeIncrement() const { return m_size_increment;}
+    void setSizeIncrement(int v);
+    Q_PROPERTY( int sizeIncrement READ sizeIncrement WRITE setSizeIncrement);
+
     void setOffsetLeft(int v);
     void setOffsetTop(int v);
     void setOffsetRight(int v);
@@ -70,6 +74,7 @@ private:
     QString m_layouter;
     bool    m_one_pixel_offset;
     bool    m_pot_image;
+    int     m_size_increment;
     int     m_offset_left;
     int     m_offset_top;
     int     m_offset_right;
