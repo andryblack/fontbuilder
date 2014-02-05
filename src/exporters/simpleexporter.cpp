@@ -17,7 +17,7 @@ bool SimpleExporter::Export(QByteArray &out)
     // Font size
     out.append(QString::number(cfg->size()).toUtf8()).append(' ');
     // Line height
-    out.append(QString::number(height).toUtf8()).append(' ');
+    out.append(QString::number(height).toUtf8()).append('\n');
     // Texture filename
     out.append(texFilename().toUtf8()).append('\n');
     // Number of symbols
