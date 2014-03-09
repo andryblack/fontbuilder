@@ -353,7 +353,7 @@ void FontSelectFrame::on_comboBoxSize_currentIndexChanged(QString size_str)
 
 void FontSelectFrame::on_pushButtonDefault_clicked()
 {
-    setFontsDirectory(QDesktopServices::storageLocation(QDesktopServices::FontsLocation));
+    setFontsDirectory(FontConfig::defaultFontsPath());
 }
 
 void FontSelectFrame::on_pushButtonDefault_pressed()

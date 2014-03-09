@@ -38,7 +38,7 @@ namespace Ui {
     class FontBuilder;
 }
 
-struct FontRenderer;
+class FontRenderer;
 class FontConfig;
 class LayoutConfig;
 class LayoutData;

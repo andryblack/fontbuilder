@@ -117,7 +117,12 @@ FORMS += src/fontbuilder.ui \
     src/charmapdialog.ui
 TRANSLATIONS = fontbuilder_en.ts \
     fontbuilder_ru.ts
+
 QT += xml
+
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets
+}
 
 DESTDIR = bin
 OBJECTS_DIR = .obj
@@ -126,23 +131,30 @@ UI_DIR = .obj
 TARGET = FontBuilder
 
 INCLUDEPATH+=src/
-mac { 
-    INCLUDEPATH += ../include
-    INCLUDEPATH += ../include/freetype2
-    LIBS += -L../lib -lfreetype -lz
-# macports support
-    INCLUDEPATH += /opt/local/include /opt/local/include/freetype2
-    LIBS += -L/opt/local/lib
-}
-win32 { 
-    INCLUDEPATH += ../include
-    INCLUDEPATH += ../include/freetype2
-    LIBS += -L../lib \
-        -lfreetype
-}
-linux*|freebsd* { 
-    CONFIG += link_pkgconfig
-    PKGCONFIG += freetype2
+FREETYPE2CONFIG = $$(FREETYPE2CONFIG)
+isEmpty(FREETYPE2CONFIG) {
+    mac {
+        INCLUDEPATH += ../include
+        INCLUDEPATH += ../include/freetype2
+        LIBS += -L../lib -lfreetype -lz
+    # macports support
+        INCLUDEPATH += /opt/local/include /opt/local/include/freetype2
+        LIBS += -L/opt/local/lib
+    }
+    win32 {
+        INCLUDEPATH += ../include
+        INCLUDEPATH += ../include/freetype2
+        LIBS += -L../lib \
+            -lfreetype
+    }
+    linux*|freebsd* {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += freetype2
+    }
+} else {
+    message("configured freetype2 config: $$FREETYPE2CONFIG" )
+    INCLUDEPATH+=$$system("$$FREETYPE2CONFIG --prefix")/include/freetype2
+    LIBS += $$system("$$FREETYPE2CONFIG --libs")
 }
 OTHER_FILES += fontbuilder_ru.ts \
     fontbuilder_en.ts

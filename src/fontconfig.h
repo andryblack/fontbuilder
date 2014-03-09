@@ -121,6 +121,7 @@ public:
     void setDPI(int dpi);
     Q_PROPERTY( int DPI READ DPI WRITE setDPI )
 
+    static QString defaultFontsPath();
     void emmitChange();
 private:
     QString m_path;

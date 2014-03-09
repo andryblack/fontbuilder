@@ -112,11 +112,11 @@ QString CharactersFrame::removeDuplicates(const QString& text) const {
     std::vector<uint> ucs4chars = text.toUcs4().toStdVector();
 
     // Remove duplicates with C++ algorithm
-    typename std::vector<uint>::const_iterator newEnd;
+    std::vector<uint>::const_iterator newEnd;
     newEnd = std::unique(ucs4chars.begin(), ucs4chars.end());
 
     // Drop NUL character(s) at the beginning
-    typename std::vector<uint>::const_iterator newStart = ucs4chars.begin();
+    std::vector<uint>::const_iterator newStart = ucs4chars.begin();
     while (newStart != newEnd && *newStart == 0)
         ++newStart;
 
