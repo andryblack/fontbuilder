@@ -57,6 +57,7 @@ class FontBuilder : public QMainWindow {
 public:
     FontBuilder(QWidget *parent = 0);
     ~FontBuilder();
+    void reloadConfig(QSettings& settings);
 
 protected:
     void changeEvent(QEvent *e);

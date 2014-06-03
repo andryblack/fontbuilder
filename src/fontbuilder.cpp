@@ -165,6 +165,18 @@ void FontBuilder::saveConfig(QSettings& settings,
     settings.endGroup();
 }
 
+void FontBuilder::reloadConfig(QSettings &settings) {
+    readConfig(settings,"fontconfig",m_font_config);
+    m_font_config->normalize();
+    readConfig(settings,"layoutconfig",m_layout_config);
+
+    //m_font_config->blockSignals(font_config_block);
+    m_font_config->emmitChange();
+
+    readConfig(settings,"outputconfig",m_output_config);
+    on_pushButtonWriteFont_clicked();
+}
+
 void FontBuilder::readConfig(QSettings& settings,
                              const QString& name,
                              QObject* object) {
@@ -381,6 +393,4 @@ void FontBuilder::on_action_Open_triggered()
 
         }
     }
-
-
 }

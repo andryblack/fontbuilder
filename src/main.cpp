@@ -31,10 +31,18 @@
 #include <Qt>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QApplication>
+#include <QCommandLineParser>
 #else
 #include <QtGui/QApplication>
 #endif
 #include <QCoreApplication>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QSettings>
+#include <QObject>
+#include <QDebug>
 #include "fontbuilder.h"
 
 int main(int argc, char *argv[])
@@ -43,7 +51,49 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("AndryBlack");
     QCoreApplication::setOrganizationDomain("andryblack.com");
     QCoreApplication::setApplicationName("FontBuilder");
+    QCoreApplication::setApplicationVersion("0.7");
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Test");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument("config", QCoreApplication::translate("main","config file"));
+    parser.process(a);
+
+    const QStringList args = parser.positionalArguments();
+
     FontBuilder w;
-    w.show();
+
+    if (args.count() > 0)
+    {
+        QString configFile = args.at(0);
+        QFile file(configFile);
+        file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QByteArray rawData =  file.readAll();
+
+        QJsonDocument document(QJsonDocument::fromJson(rawData));
+        QJsonObject config = document.object();
+        file.close();
+
+        QSettings settings;
+        for(QJsonObject::const_iterator iter=config.begin(); iter!= config.end(); iter++)
+        {
+            settings.beginGroup(iter.key());
+
+            QJsonObject node = iter.value().toObject();
+            for(QJsonObject::const_iterator niter= node.begin(); niter!=node.end(); niter++)
+            {
+                settings.setValue(niter.key(),niter.value().toVariant());
+            }
+
+            settings.endGroup();
+        }
+        w.reloadConfig(settings);
+        return 0;
+    }else
+    {
+        w.show();
+    }
+
     return a.exec();
 }
