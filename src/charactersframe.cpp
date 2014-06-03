@@ -124,6 +124,10 @@ QString CharactersFrame::removeDuplicates(const QString& text) const {
 }
 
 QString CharactersFrame::sortChars(const QString& text) const {
+    if(text.size()==0)
+    {
+        return text;
+    }
     QVector<uint> ucs4chars = text.toUcs4();
     qSort(ucs4chars);
     return QString::fromUcs4(&ucs4chars.front(), ucs4chars.size());
