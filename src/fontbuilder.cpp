@@ -165,7 +165,7 @@ void FontBuilder::saveConfig(QSettings& settings,
     settings.endGroup();
 }
 
-void FontBuilder::reloadConfig(QSettings &settings) {
+void FontBuilder::exportWithConfig(QSettings &settings) {
     readConfig(settings,"fontconfig",m_font_config);
     m_font_config->normalize();
     readConfig(settings,"layoutconfig",m_layout_config);

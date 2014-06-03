@@ -67,11 +67,19 @@ int main(int argc, char *argv[])
     if (args.count() > 0)
     {
         QString configFile = args.at(0);
+        qDebug() << "Export with config file " << configFile;
         QFile file(configFile);
         file.open(QIODevice::ReadOnly | QIODevice::Text);
         QByteArray rawData =  file.readAll();
-
+        qDebug() << "With content:\n" << rawData;
         QJsonDocument document(QJsonDocument::fromJson(rawData));
+
+        if(document.isNull())
+        {
+            qDebug() << "Config prase error.";
+            exit(1);
+        }
+
         QJsonObject config = document.object();
         file.close();
 
@@ -88,8 +96,10 @@ int main(int argc, char *argv[])
 
             settings.endGroup();
         }
-        w.reloadConfig(settings);
-        return 0;
+        w.exportWithConfig(settings);
+
+        qDebug() << "Export finished";
+        exit(0);
     }else
     {
         w.show();
