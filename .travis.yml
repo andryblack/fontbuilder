@@ -2,11 +2,14 @@ language: cpp
 compiler:
     - gcc
 env:
-    - CONFIG=debug QT=qt5
-    - CONFIG=release QT=qt5
+    - CONFIG=debug QT=qt5 QMAKE=/usr/lib/x86_64-linux-gnu/qt5/bin/qmake
+    - CONFIG=release QT=qt5 QMAKE=/usr/lib/x86_64-linux-gnu/qt5/bin/qmake
+    - CONFIG=debug QT=qt4 QMAKE=qmake
+    - CONFIG=release QT=qt4 QMAKE=qmake
 
 before_install:
     - sudo apt-get update -qq
-    - sh -c "sudo apt-add-repository -y ppa:ubuntu-sdk-team/ppa; sudo apt-get update -qq; sudo apt-get install -qq build-essential qtdeclarative5-dev"
+    - sh -c "if [ '$QT' = 'qt4' ]; then sudo apt-get install -qq libqt4-dev zlib1g-dev qt4-dev-tools libqtwebkit-dev; fi"
+    - sh -c "if [ '$QT' = 'qt5' ]; then sudo apt-add-repository -y ppa:ubuntu-sdk-team/ppa; sudo apt-get update -qq; sudo apt-get install -qq build-essential qtdeclarative5-dev; fi"
 
-script: sh -c "mkdir _build; cd _build; /usr/lib/x86_64-linux-gnu/qt5/bin/qmake QMAKE_CXX=$CXX CONFIG+=$CONFIG ../FontBuilder.pro && make"
+script: sh -c "mkdir _build; cd _build; $QMAKE QMAKE_CXX=$CXX CONFIG+=$CONFIG ../FontBuilder.pro && make"
