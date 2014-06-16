@@ -1,4 +1,5 @@
 language: cpp
+cache: apt
 compiler:
     - gcc
 env:
@@ -16,4 +17,3 @@ script: sh -c "mkdir _build; cd _build; $QMAKE QMAKE_CXX=$CXX CONFIG+=$CONFIG ..
 
 os:
     - linux
-    - osx
