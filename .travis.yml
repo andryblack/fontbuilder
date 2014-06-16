@@ -1,0 +1,13 @@
+language: cpp
+compiler:
+ - gcc
+ - clang
+env:
+ - CONFIG=debug QT=qt5
+ - CONFIG=release QT=qt5
+
+ before_install:
+ - sudo apt-get update -qq
+ - sudo apt-add-repository -y ppa:beineri/opt-qt50; sudo apt-get update -qq; sudo apt-get install -qq qt5-meta-minimal
+
+script: sh -c "mkdir _build; cd _build; /opt/qt5/bin/qmake QMAKE_CXX=$CXX CONFIG+=$CONFIG ../fontbuilder.pro && make"
