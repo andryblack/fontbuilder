@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/andryblack/fontbuilder.svg?branch=master)](https://travis-ci.org/andryblack/fontbuilder)
+
 Yet another bitmap font generator.
 
 Utility for create texture atlases with bitmap chars from FreeType,TrueType and some other font formats.
