@@ -8,6 +8,6 @@ env:
 
 before_install:
     - sudo apt-get update -qq
-    - sh -c "sudo apt-add-repository -y ppa:ubuntu-sdk-team/ppa; sudo apt-get update -qq; sudo apt-get install -qq qt5-meta-minimal"
+    - sh -c "sudo apt-add-repository -y ppa:ubuntu-sdk-team/ppa; sudo apt-get update -qq; sudo apt-get install -qq qtdeclarative5-dev"
 
-script: sh -c "mkdir _build; cd _build; /opt/qt5/bin/qmake QMAKE_CXX=$CXX CONFIG+=$CONFIG ../FontBuilder.pro && make"
+script: sh -c "mkdir _build; cd _build; /usr/lib/x86_64-linux-gnu/qt5/bin/qmake QMAKE_CXX=$CXX CONFIG+=$CONFIG ../FontBuilder.pro && make"
