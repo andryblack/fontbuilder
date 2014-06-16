@@ -13,3 +13,8 @@ before_install:
     - sh -c "if [ '$QT' = 'qt5' ]; then sudo apt-add-repository -y ppa:ubuntu-sdk-team/ppa; sudo apt-get update -qq; sudo apt-get install -qq build-essential qtdeclarative5-dev; fi"
 
 script: sh -c "mkdir _build; cd _build; $QMAKE QMAKE_CXX=$CXX CONFIG+=$CONFIG ../FontBuilder.pro && make"
+
+os:
+    - linux
+    - osx
+    
