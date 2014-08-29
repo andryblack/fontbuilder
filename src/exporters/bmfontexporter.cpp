@@ -15,11 +15,12 @@ bool BMFontExporter::Export(QByteArray &out)
     const FontConfig* cfg = fontConfig();
 
     out.append( QString("info")
-        + QString(" face=%1").arg(cfg->family())
+        + QString(" face=\"%1\"").arg(cfg->family())
         + QString(" size=%1").arg(cfg->size())
-        + QString("%1").arg(cfg->bold() ? " bold" : "")
-        + QString("%1").arg(cfg->italic() ? " italic" : "")
+        + QString(" bold=%1").arg(cfg->bold() ? 1 : 0)
+        + QString(" italic=%1").arg(cfg->italic() ? 1 : 0)
         + QString(" smooth=%1").arg(cfg->antialiased() ? 1 : 0)
+        + QString(" spacing=%1,%2").arg(cfg->charSpacing()).arg(cfg->lineSpacing())
         .toUtf8()).append('\n');
 
     out.append( QString("common")
