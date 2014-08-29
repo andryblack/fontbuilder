@@ -33,7 +33,7 @@ bool BMFontExporter::Export(QByteArray &out)
 
     out.append( QString("page")
         + QString(" id=%1").arg(0)
-        + QString(" file=%1").arg(texFilename())
+        + QString(" file=\"%1\"").arg(texFilename())
         .toUtf8()).append('\n');
 
     foreach(const Symbol& c , symbols()) {
