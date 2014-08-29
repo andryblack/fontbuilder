@@ -44,7 +44,7 @@ bool BMFontExporter::Export(QByteArray &out)
             + QString(" width=%1").arg(c.placeW)
             + QString(" height=%1").arg(c.placeH)
             + QString(" xoffset=%1").arg(c.offsetX)
-            + QString(" yoffset=%1").arg(c.offsetY)
+            + QString(" yoffset=%1").arg(metrics().ascender - c.offsetY)
             + QString(" xadvance=%1").arg(c.advance)
             + QString(" page=%1").arg(0)
             .toUtf8()).append('\n');
