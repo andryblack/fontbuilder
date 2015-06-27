@@ -42,19 +42,19 @@ MonoBoxLayouter::MonoBoxLayouter(QObject *parent) :
 struct Line {
     int min_y;
     int max_y;
+    int max_h;
     int y;
-    Line() : min_y(0),max_y(0),y(0) {}
-    explicit Line(const LayoutChar& c) : y(0) {
+    Line() : min_y(0),max_y(0),max_h(0),y(0) {}
+    Line(const LayoutChar& c,int const max_h) : max_h(max_h),y(0) {
         min_y = c.y;
-        max_y = c.y + c.h;
-        //chars.push_back(&c);
+	max_y = c.y + max_h;
     }
     int h() const { return max_y - min_y;}
     void append(const LayoutChar& c) {
-        if (c.y < min_y)
+        if (c.y < min_y) {
             min_y = c.y;
-        if ((c.y+c.h)>max_y)
-            max_y = c.y + c.h;
+	    max_y = c.y+max_h;
+        }
         chars.push_back(&c);
     }
 
@@ -66,13 +66,14 @@ void MonoBoxLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
     int w = 0;
     if (chars.isEmpty()) return;
 
-    /// speed up
-    int area = 0;
     int maxw = -1;
-    foreach (const LayoutChar& c, chars)
+    int maxh = -1;
+    foreach (const LayoutChar& c, chars) {
 	maxw = std::max(c.w,maxw);
-    foreach (const LayoutChar& c, chars)
-        area+=maxw*c.h;
+	maxh = std::max(c.h,maxh);
+    }
+    /// speed up
+    int area = chars.size() * maxw * maxh;
     int dim = ::sqrt(area);
 
     resize(dim,dim);
@@ -80,13 +81,13 @@ void MonoBoxLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
     h = height();
 
 
-    QVector<Line> lines;
+    std::vector<Line> lines;
 
     bool iteration = true;
     while (iteration) {
         int x = 0;
         lines.clear();
-        lines.push_back(Line(chars.front()));
+        lines.push_back(Line(chars.front(),maxh));
         iteration = false;
         foreach (const LayoutChar& c, chars) {
 
@@ -94,13 +95,13 @@ void MonoBoxLayouter::PlaceImages(const QVector<LayoutChar>& chars) {
                 x = 0;
                 int y = lines.back().y;
                 int h = lines.back().h();
-                lines.push_back(Line(c));
+                lines.push_back(Line(c,maxh));
                 lines.back().y = y + h;
             }
 
-           if ( (lines.back().y+c.h)>h ) {
+           if ( (lines.back().y+maxh)>h ) {
                 if (w>h) {
-                    resize(width(),lines.back().y+c.h);
+                    resize(width(),lines.back().y+maxh);
                     h=height();
                 }
                 else {
