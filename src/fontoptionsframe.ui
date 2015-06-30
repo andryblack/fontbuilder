@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>272</height>
+    <width>456</width>
+    <height>276</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,7 +26,16 @@
    <property name="sizeConstraint">
     <enum>QLayout::SetMinimumSize</enum>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -40,6 +49,9 @@
      </item>
      <item row="0" column="4">
       <widget class="QComboBox" name="comboBoxDPI">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
        <item>
         <property name="text">
          <string>72</string>
