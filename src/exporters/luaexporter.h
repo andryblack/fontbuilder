@@ -37,12 +37,14 @@ class LuaExporter : public AbstractExporter
 {
 Q_OBJECT
 public:
-    explicit LuaExporter(QObject *parent = 0);
+    explicit LuaExporter(bool write_function,QObject *parent = 0);
 protected:
     virtual bool Export(QByteArray& out);
 signals:
 
 public slots:
+private:
+    bool    m_write_function;
 
 };
 

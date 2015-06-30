@@ -35,7 +35,8 @@ extern AbstractExporter* GHLExporterFactoryFunc (QObject*);
 extern AbstractExporter* ZFIExporterFactoryFunc (QObject* parent);
 extern AbstractExporter* DivoExporterFactoryFunc (QObject*);
 extern AbstractExporter* NGLExporterFactoryFunc (QObject*);
-extern AbstractExporter* LuaExporterFactoryFunc (QObject*);
+extern AbstractExporter* LuaTableExporterFactoryFunc (QObject*);
+extern AbstractExporter* LuaFunctionExporterFactoryFunc (QObject*);
 extern AbstractExporter* SparrowExporterFactoryFunc (QObject*);
 extern AbstractExporter* SimpleExporterFactoryFunc (QObject*);
 
@@ -46,7 +47,8 @@ ExporterFactory::ExporterFactory(QObject *parent) :
     m_factorys["ZenGL-zfi"] = &ZFIExporterFactoryFunc;
     m_factorys["Divo compatible - xml"] = &DivoExporterFactoryFunc;
     m_factorys["NGL"] = &NGLExporterFactoryFunc;
-    m_factorys["Lua table"] = &LuaExporterFactoryFunc;
+    m_factorys["Lua table"] = &LuaTableExporterFactoryFunc;
+    m_factorys["Lua function"] = &LuaFunctionExporterFactoryFunc;
     m_factorys["Sparrow"] = &SparrowExporterFactoryFunc;
     m_factorys["Simple"] = &SimpleExporterFactoryFunc;
 }

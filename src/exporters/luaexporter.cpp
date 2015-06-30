@@ -33,8 +33,8 @@
 #include "../layoutdata.h"
 
 #include <QString>
-LuaExporter::LuaExporter(QObject *parent) :
-    AbstractExporter(parent)
+LuaExporter::LuaExporter(bool write_function,QObject *parent) :
+    AbstractExporter(parent), m_write_function(write_function)
 {
     setExtension("lua");
 }
@@ -45,28 +45,31 @@ static QString charCode(uint code) {
 }
 
 bool LuaExporter::Export(QByteArray& out) {
-    QString res = "return {\n";
-    res+=QString("\tfile=\"")+texFilename()+QString("\",\n");
-    res+=QString("\theight=")+QString().number(metrics().height)+QString(",\n");
-    res+=QString("\tdescription={\n");
-    res+=QString("\t\tfamily=\"")+fontConfig()->family()+QString("\",\n");
-    res+=QString("\t\tstyle=\"")+fontConfig()->style()+QString("\",\n");
-    res+=QString("\t\tsize=")+QString().number(fontConfig()->size())+QString("\n");
-    res+=QString("\t},\n");
+    QString res;
+    if (m_write_function)
+        res+="return {\n";
+    const QString p(m_write_function ? "\t":"");
+    res+=p+QString("file=\"")+texFilename()+QString(m_write_function ? "\",\n" : "\"\n");
+    res+=p+QString("height=")+QString().number(metrics().height)+QString(m_write_function?",\n":"\n");
+    res+=p+QString("description={\n");
+    res+=p+QString("\tfamily=\"")+fontConfig()->family()+QString("\",\n");
+    res+=p+QString("\tstyle=\"")+fontConfig()->style()+QString("\",\n");
+    res+=p+QString("\tsize=")+QString().number(fontConfig()->size())+QString("\n");
+    res+=p+QString(m_write_function?"},\n":"}\n");
 
-    res+=QString("\tmetrics={\n");
-    res+=QString("\t\tascender=")+QString().number(metrics().ascender)+QString(",\n");
-    res+=QString("\t\tdescender=")+QString().number(metrics().descender)+QString(",\n");
-    res+=QString("\t\theight=")+QString().number(metrics().height)+QString("\n");
-    res+=QString("\t},\n");
+    res+=p+QString("metrics={\n");
+    res+=p+QString("\tascender=")+QString().number(metrics().ascender)+QString(",\n");
+    res+=p+QString("\tdescender=")+QString().number(metrics().descender)+QString(",\n");
+    res+=p+QString("\theight=")+QString().number(metrics().height)+QString("\n");
+    res+=p+QString(m_write_function?"},\n":"}\n");
 
-    res+=QString("\ttexture={\n");
-    res+=QString("\t\tfile=\"")+texFilename()+QString("\",\n");
-    res+=QString("\t\twidth=")+QString().number(texWidth())+QString(",\n");
-    res+=QString("\t\theight=")+QString().number(texHeight())+QString("\n");
-    res+=QString("\t},\n");
+    res+=p+QString("texture={\n");
+    res+=p+QString("\tfile=\"")+texFilename()+QString("\",\n");
+    res+=p+QString("\twidth=")+QString().number(texWidth())+QString(",\n");
+    res+=p+QString("\theight=")+QString().number(texHeight())+QString("\n");
+    res+=p+QString(m_write_function?"},\n":"}\n");
 
-    res+=QString("\tchars={\n");
+    res+=p+QString("chars={\n");
     foreach (const Symbol& c , symbols()) {
         QString charDef="{char=";
         charDef+=charCode(c.id);
@@ -80,9 +83,9 @@ bool LuaExporter::Export(QByteArray& out) {
         charDef+=QString("ox=")+QString().number(c.offsetX)+QString(",");
         charDef+=QString("oy=")+QString().number(c.offsetY)+QString("}");
 
-        res+=QString("\t\t")+charDef+QString(",\n");
+        res+=p+QString("\t")+charDef+QString(",\n");
     }
-    res+=QString("\t},\n");
+    res+=p+QString(m_write_function?"},\n":"}\n");
     QString kernings;
     foreach (const Symbol& c , symbols()) {
         QString charDef="{from=";
@@ -93,20 +96,24 @@ bool LuaExporter::Export(QByteArray& out) {
             QString def = charDef;
             def+=charCode(k.key());
             def+=QString(",offset=")+QString().number(k.value())+QString("}");
-            kernings+=QString("\t\t")+def+QString(",\n");
+            kernings+=p+QString("\t")+def+QString(",\n");
         }
     }
     if (kernings.length()>2) {
-        res+=QString("\tkernings={\n");
+        res+=p+QString("kernings={\n");
         res+=kernings;
-        res+=QString("\t}\n");
+        res+=p+QString("}\n");
     }
-    res+=QString("}\n");
+    if (m_write_function)
+        res+=QString("}\n");
     out = res.toUtf8();
     return true;
 }
 
 
-AbstractExporter* LuaExporterFactoryFunc (QObject* parent) {
-    return new LuaExporter(parent);
+AbstractExporter* LuaTableExporterFactoryFunc (QObject* parent) {
+    return new LuaExporter(false,parent);
+}
+AbstractExporter* LuaFunctionExporterFactoryFunc (QObject* parent) {
+    return new LuaExporter(true,parent);
 }
