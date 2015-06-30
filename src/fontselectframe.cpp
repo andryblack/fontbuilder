@@ -42,6 +42,15 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#undef __FTERRORS_H__
+static const char* get_error_descr(FT_Error err) {
+#define FT_ERRORDEF( e, v, s )  case e: return s;
+#define FT_ERROR_START_LIST     switch (err) {
+#define FT_ERROR_END_LIST      }
+#include FT_ERRORS_H
+    return "unknown";
+}
+
 
 FontSelectFrame::FontSelectFrame(QWidget *parent) :
     QFrame(parent),
@@ -129,7 +138,9 @@ void FontSelectFrame::setFontsDirectory(QString dir_name) {
             << "*.ttf"
             << "*.pcf"
             << "*.pcf.gz"
-            << "*.otf",
+            << "*.otf"
+            << "*.fon"
+            << "*.FON",
             QDir::Files | QDir::Readable
             );
     QProgressDialog* progress = 0;
@@ -159,7 +170,10 @@ void FontSelectFrame::setFontsDirectory(QString dir_name) {
                     error =  FT_New_Memory_Face(library,
                                                 data,bytes.size(),face_n,&face);
                     /// skip font if load error
-                    if (error!=0)  continue;
+                    if (error!=0) {
+                         qDebug() << "failed read font " << file_name << " " << face_n << " " << get_error_descr(error);
+                        continue;
+                    }
 
                     QString family = face->family_name;
                     //qDebug() << "face " << family << " "
@@ -187,6 +201,8 @@ void FontSelectFrame::setFontsDirectory(QString dir_name) {
                     FT_Done_Face(face);
 
                 }
+            } else {
+                qDebug() << "failed read font " << file_name << " " << get_error_descr(error);
             }
 
         }
