@@ -65,7 +65,10 @@ SOURCES += src/main.cpp \
     src/exporters/nglexporter.cpp \
     src/exporters/luaexporter.cpp \
     src/fontdrawwidget.cpp \
-    src/fontloader.cpp
+    src/fontloader.cpp \
+    src/exporters/sparrowexporter.cpp \
+    src/exporters/simpleexporter.cpp \
+    src/layouters/boxlayouteroptimized.cpp
 HEADERS += src/fontbuilder.h \
     src/colorbutton.h \
     src/fontselectframe.h \
@@ -100,7 +103,10 @@ HEADERS += src/fontbuilder.h \
     src/exporters/nglexporter.h \
     src/exporters/luaexporter.h \
     src/fontdrawwidget.h \
-    src/fontloader.h
+    src/fontloader.h \
+    src/exporters/sparrowexporter.h \
+    src/exporters/simpleexporter.h \
+    src/layouters/boxlayouteroptimized.h
 FORMS += src/fontbuilder.ui \
     src/fontselectframe.ui \
     src/fontoptionsframe.ui \
@@ -111,7 +117,12 @@ FORMS += src/fontbuilder.ui \
     src/charmapdialog.ui
 TRANSLATIONS = fontbuilder_en.ts \
     fontbuilder_ru.ts
+
 QT += xml
+
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets
+}
 
 DESTDIR = bin
 OBJECTS_DIR = .obj
@@ -120,21 +131,30 @@ UI_DIR = .obj
 TARGET = FontBuilder
 
 INCLUDEPATH+=src/
-mac { 
-    INCLUDEPATH += /usr/local/include/
-    INCLUDEPATH += /usr/local/include/freetype2
-    INCLUDEPATH += /usr/local/include/freetype2/config
-    LIBS += -L../lib -lfreetype -lz
-}
-win32 { 
-    INCLUDEPATH += ../include
-    INCLUDEPATH += ../include/freetype2
-    LIBS += -L../lib \
-        -lfreetype
-}
-linux*|freebsd* { 
-    CONFIG += link_pkgconfig
-    PKGCONFIG += freetype2
+FREETYPE2CONFIG = $$(FREETYPE2CONFIG)
+isEmpty(FREETYPE2CONFIG) {
+    mac {
+        INCLUDEPATH += ../include
+        INCLUDEPATH += ../include/freetype2
+        LIBS += -L../lib -lfreetype -lz
+    # macports support
+        INCLUDEPATH += /opt/local/include /opt/local/include/freetype2
+        LIBS += -L/opt/local/lib
+    }
+    win32 {
+        INCLUDEPATH += ../include
+        INCLUDEPATH += ../include/freetype2
+        LIBS += -L../lib \
+            -lfreetype
+    }
+    linux*|freebsd* {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += freetype2
+    }
+} else {
+    message("configured freetype2 config: $$FREETYPE2CONFIG" )
+    INCLUDEPATH+=$$system("$$FREETYPE2CONFIG --prefix")/include/freetype2
+    LIBS += $$system("$$FREETYPE2CONFIG --libs")
 }
 OTHER_FILES += fontbuilder_ru.ts \
     fontbuilder_en.ts
