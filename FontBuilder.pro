@@ -69,7 +69,9 @@ SOURCES += src/main.cpp \
     src/exporters/sparrowexporter.cpp \
     src/exporters/simpleexporter.cpp \
     src/layouters/boxlayouteroptimized.cpp \
-    src/exporters/myguiexporter.cpp
+    src/exporters/myguiexporter.cpp \
+    src/exporters/bmfontexporter.cpp
+
 HEADERS += src/fontbuilder.h \
     src/colorbutton.h \
     src/fontselectframe.h \
@@ -108,7 +110,9 @@ HEADERS += src/fontbuilder.h \
     src/exporters/sparrowexporter.h \
     src/exporters/simpleexporter.h \
     src/layouters/boxlayouteroptimized.h \
-    src/exporters/myguiexporter.h
+    src/exporters/myguiexporter.h \
+    src/exporters/bmfontexporter.h
+
 FORMS += src/fontbuilder.ui \
     src/fontselectframe.ui \
     src/fontoptionsframe.ui \
