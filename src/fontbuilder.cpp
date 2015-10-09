@@ -265,8 +265,7 @@ void FontBuilder::onFontNameChanged() {
         m_image_writer->forget();
 }
 
-void FontBuilder::on_pushButtonWriteFont_clicked()
-{
+void FontBuilder::doExport(bool x2) {
     QDir dir(m_output_config->path());
     QString texture_filename;
     setLayoutImage(m_layout_data->image());
@@ -283,6 +282,9 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
 
         exporter->setData(m_layout_data,m_layout_config,m_font_renderer->data());
         texture_filename = m_output_config->imageName();
+        if (x2) {
+            texture_filename += "_x2";
+        }
         texture_filename+="."+exporter->extension();
         QString filename = dir.filePath(texture_filename);
 
@@ -313,10 +315,15 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
             msgBox.exec();
             return;
         }
+        exporter->setFace(m_font_renderer->face());
         exporter->setFontConfig(m_font_config,m_layout_config);
         exporter->setData(m_layout_data,m_font_renderer->data());
         exporter->setTextureFilename(texture_filename);
+        exporter->setScale(m_font_renderer->scale());
         QString filename = dir.filePath(m_output_config->descriptionName());
+        if (x2) {
+            filename += "_x2";
+        }
         filename+="."+exporter->getExtension();
         QByteArray data;
         if (!exporter->Write(data)) {
@@ -332,6 +339,16 @@ void FontBuilder::on_pushButtonWriteFont_clicked()
              }
          }
         delete exporter;
+    }
+}
+
+void FontBuilder::on_pushButtonWriteFont_clicked()
+{
+    doExport(false);
+    if (m_output_config->generateX2()) {
+        m_font_renderer->render(2.0f);
+        doExport(true);
+        m_font_renderer->render(1.0f);
     }
 }
 

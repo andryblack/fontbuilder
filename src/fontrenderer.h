@@ -55,6 +55,9 @@ public:
     const RendererData& data() const { return m_rendered;}
     void LockAll();
     void SetImage(uint symb,const QImage& img);
+    FT_Face face() const { return m_ft_face; }
+    void render(float scale);
+    float scale() const { return m_scale; }
 private:
     const FontConfig* m_config;
     FT_Library m_ft_library;
@@ -66,6 +69,7 @@ private:
     void clear_bitmaps();
     bool append_bitmap(uint symbol);
     void append_kerning(uint symbol,const uint* other,int amount);
+    float   m_scale;
 signals:
     void imagesChanged();
     void imagesChanged(const QVector<LayoutChar>&);

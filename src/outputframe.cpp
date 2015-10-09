@@ -89,6 +89,7 @@ void OutputFrame::setConfig(OutputConfig* config) {
             if (ui->comboBoxDescriptionType->itemText(i)==config->descriptionFormat())
                 ui->comboBoxDescriptionType->setCurrentIndex(i);
         config->setDescriptionFormat(ui->comboBoxDescriptionType->currentText());
+        ui->checkBoxGenerateX2->setChecked(config->generateX2());
     }
 }
 
@@ -159,4 +160,9 @@ void OutputFrame::setImageWriters(const QStringList& writers) {
 void OutputFrame::on_comboBoxDescriptionType_currentIndexChanged(QString name)
 {
     if (m_config) m_config->setDescriptionFormat(name);
+}
+
+void OutputFrame::on_checkBoxGenerateX2_stateChanged(int arg1)
+{
+    if (m_config) m_config->setGenerateX2(arg1==Qt::Checked);
 }

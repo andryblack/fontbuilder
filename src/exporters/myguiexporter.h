@@ -1,8 +1,8 @@
 /**
- * Copyright (c) 2010-2010 Andrey AndryBlack Kunitsyn
+ * Copyright (c) 2010-2015 Andrey AndryBlack Kunitsyn
  * email:support.andryblack@gmail.com
  *
- * Report bugs and download new versions at http://code.google.com/p/fontbuilder
+ * Report bugs and download new versions at https://github.com/andryblack/fontbuilder
  *
  * This software is distributed under the MIT License.
  *
@@ -28,27 +28,23 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "outputconfig.h"
+#ifndef MYGUIEXPORTER_H
+#define MYGUIEXPORTER_H
 
-OutputConfig::OutputConfig(QObject *parent) :
-    QObject(parent)
+#include "../abstractexporter.h"
+
+class MyGUIExporter : public AbstractExporter
 {
-    m_write_image = true;
-    m_write_description = true;
-    m_image_format = "PNG";
-    m_generate_x2 = false;
-}
+    Q_OBJECT
+public:
+    explicit MyGUIExporter(QObject *parent = 0);
 
-void OutputConfig::setImageName(const QString& name) {
-    if (m_image_name!=name) {
-        m_image_name = name;
-        imageNameChanged(name);
-    }
-}
+    virtual bool Export(QByteArray& out);
+signals:
 
-void OutputConfig::setDescriptionName(const QString& name) {
-    if (m_description_name!=name) {
-        m_description_name = name;
-        descriptionNameChanged(name);
-    }
-}
+public slots:
+
+};
+
+
+#endif // MYGUIEXPORTER_H

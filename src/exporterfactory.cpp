@@ -39,6 +39,7 @@ extern AbstractExporter* LuaTableExporterFactoryFunc (QObject*);
 extern AbstractExporter* LuaFunctionExporterFactoryFunc (QObject*);
 extern AbstractExporter* SparrowExporterFactoryFunc (QObject*);
 extern AbstractExporter* SimpleExporterFactoryFunc (QObject*);
+extern AbstractExporter* MyGUIExporterFactoryFunc (QObject*);
 
 ExporterFactory::ExporterFactory(QObject *parent) :
     QObject(parent)
@@ -51,6 +52,7 @@ ExporterFactory::ExporterFactory(QObject *parent) :
     m_factorys["Lua function"] = &LuaFunctionExporterFactoryFunc;
     m_factorys["Sparrow"] = &SparrowExporterFactoryFunc;
     m_factorys["Simple"] = &SimpleExporterFactoryFunc;
+    m_factorys["MyGUI"] = &MyGUIExporterFactoryFunc;
 }
 
 

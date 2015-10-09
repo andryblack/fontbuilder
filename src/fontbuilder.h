@@ -79,6 +79,7 @@ private:
     AbstractImageWriter* m_image_writer;
     FontLoader*     m_font_loader;
 
+    void doExport(bool x2);
     void setLayoutImage(const QImage& img);
 public slots:
 

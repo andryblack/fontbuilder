@@ -42,31 +42,35 @@ public:
 
     const QString& path() const { return m_path;}
     void setPath(const QString& path) { m_path=path;}
-    Q_PROPERTY(QString path READ path WRITE setPath);
+    Q_PROPERTY(QString path READ path WRITE setPath)
 
     const QString& imageName() const { return m_image_name;}
     void setImageName(const QString& name);
-    Q_PROPERTY(QString imageName READ imageName WRITE setImageName);
+    Q_PROPERTY(QString imageName READ imageName WRITE setImageName)
 
     const QString& imageFormat() const { return m_image_format;}
     void setImageFormat(const QString& format) { m_image_format=format;}
-    Q_PROPERTY(QString imageFormat READ imageFormat WRITE setImageFormat);
+    Q_PROPERTY(QString imageFormat READ imageFormat WRITE setImageFormat)
 
     const QString& descriptionName() const { return m_description_name;}
     void setDescriptionName(const QString& name);
-    Q_PROPERTY(QString descriptionName READ descriptionName WRITE setDescriptionName);
+    Q_PROPERTY(QString descriptionName READ descriptionName WRITE setDescriptionName)
 
     const QString& descriptionFormat() const { return m_description_format;}
     void setDescriptionFormat(const QString& format) { m_description_format=format;}
-    Q_PROPERTY(QString descriptionFormat READ descriptionFormat WRITE setDescriptionFormat);
+    Q_PROPERTY(QString descriptionFormat READ descriptionFormat WRITE setDescriptionFormat)
 
     bool writeImage() const { return m_write_image;}
     void setWriteImage(bool write) { m_write_image = write;}
-    Q_PROPERTY(bool writeImage READ writeImage WRITE setWriteImage );
+    Q_PROPERTY(bool writeImage READ writeImage WRITE setWriteImage )
 
     bool writeDescription() const { return m_write_description;}
     void setWriteDescription(bool write) { m_write_description = write;}
-    Q_PROPERTY(bool writeDescription READ writeDescription WRITE setWriteDescription );
+    Q_PROPERTY(bool writeDescription READ writeDescription WRITE setWriteDescription )
+
+    bool generateX2() const { return m_generate_x2;}
+    void setGenerateX2(bool write) { m_generate_x2 = write;}
+    Q_PROPERTY(bool generateX2 READ generateX2 WRITE setGenerateX2 )
 private:
     QString m_path;
     bool    m_write_image;
@@ -75,6 +79,7 @@ private:
     bool    m_write_description;
     QString m_description_name;
     QString m_description_format;
+    bool    m_generate_x2;
 signals:
     void imageNameChanged(const QString&);
     void descriptionNameChanged(const QString&);

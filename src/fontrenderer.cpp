@@ -32,6 +32,7 @@
 #include "fontconfig.h"
 
 #include FT_OUTLINE_H
+#include FT_TRUETYPE_TABLES_H
 
 #include <QDir>
 #include <QFile>
@@ -46,6 +47,7 @@ FontRenderer::FontRenderer(QObject *parent,const FontConfig* config) :
 {
     m_ft_library = 0;
     m_ft_face = 0;
+    m_scale = 1.0f;
     connect(config,SIGNAL(fileChanged()),this,SLOT(on_fontFileChanged()));
     connect(config,SIGNAL(faceIndexChanged()),this,SLOT(on_fontFaceIndexChanged()));
     connect(config,SIGNAL(sizeChanged()),this,SLOT(on_fontSizeChanged()));
@@ -95,6 +97,7 @@ void FontRenderer::rasterize() {
         m_rendered.metrics.ascender = m_ft_face->size->metrics.ascender / 64;
         m_rendered.metrics.descender = m_ft_face->size->metrics.descender/ 64;
         m_rendered.metrics.height = m_ft_face->size->metrics.height/ 64;
+
     } else {
         m_rendered.metrics.ascender = m_ft_face->ascender;
         m_rendered.metrics.descender = m_ft_face->descender;
@@ -269,6 +272,7 @@ void FontRenderer::on_fontFileChanged() {
     }
 }
 
+
 void FontRenderer::on_fontFaceIndexChanged() {
     if (m_ft_face) {
         FT_Done_Face(m_ft_face);
@@ -303,7 +307,7 @@ void FontRenderer::on_fontSizeChanged() {
         int size_y = static_cast<int>(m_config->height()*size*64.0f/100.0f);
         int error = FT_Set_Char_Size(m_ft_face,
                                      FT_F26Dot6(size_x),
-                                     FT_F26Dot6(size_y),m_config->DPI(),m_config->DPI());
+                                     FT_F26Dot6(size_y),m_config->DPI()*m_scale,m_config->DPI()*m_scale);
         //int error = FT_Set_Pixel_Sizes(m_ft_face,size_x/64,size_y/64);
         if (error) {
             qDebug() << "FT_Set_Char_Size error " << error;
@@ -319,6 +323,11 @@ void FontRenderer::on_fontCharactersChanged() {
 void FontRenderer::on_fontOptionsChanged() {
 
     rasterize();
+}
+
+void FontRenderer::render(float scale) {
+    m_scale = scale;
+    on_fontSizeChanged();
 }
 
 
