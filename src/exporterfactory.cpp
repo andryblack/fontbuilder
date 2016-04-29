@@ -41,6 +41,7 @@ extern AbstractExporter* SparrowExporterFactoryFunc (QObject*);
 extern AbstractExporter* SimpleExporterFactoryFunc (QObject*);
 extern AbstractExporter* MyGUIExporterFactoryFunc (QObject*);
 extern AbstractExporter* BMFontExporterFactoryFunc (QObject*);
+extern AbstractExporter* AGEExporterFactoryFunc (QObject*);
 
 ExporterFactory::ExporterFactory(QObject *parent) :
     QObject(parent)
@@ -55,6 +56,7 @@ ExporterFactory::ExporterFactory(QObject *parent) :
     m_factorys["Simple"] = &SimpleExporterFactoryFunc;
     m_factorys["MyGUI"] = &MyGUIExporterFactoryFunc;
     m_factorys["BMFont"] = &BMFontExporterFactoryFunc;
+    m_factorys["AGE"] = &AGEExporterFactoryFunc;
 }
 
 
