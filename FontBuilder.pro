@@ -70,7 +70,8 @@ SOURCES += src/main.cpp \
     src/exporters/simpleexporter.cpp \
     src/layouters/boxlayouteroptimized.cpp \
     src/exporters/myguiexporter.cpp \
-    src/exporters/bmfontexporter.cpp
+    src/exporters/bmfontexporter.cpp \
+    src/exporters/ageexporter.cpp
 
 HEADERS += src/fontbuilder.h \
     src/colorbutton.h \
@@ -111,7 +112,8 @@ HEADERS += src/fontbuilder.h \
     src/exporters/simpleexporter.h \
     src/layouters/boxlayouteroptimized.h \
     src/exporters/myguiexporter.h \
-    src/exporters/bmfontexporter.h
+    src/exporters/bmfontexporter.h \
+    src/exporters/ageexporter.h
 
 FORMS += src/fontbuilder.ui \
     src/fontselectframe.ui \
