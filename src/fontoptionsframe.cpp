@@ -61,6 +61,7 @@ void FontOptionsFrame::setConfig(FontConfig *config) {
     m_config = config;
     if (config) {
         ui->comboBox_Hinting->setCurrentIndex(m_config->hinting());
+        ui->comboBoxAA->setCurrentIndex(m_config->antialiasing());
         ui->checkBoxMissingGlypths->setChecked(m_config->renderMissing());
         ui->checkBoxSmoothing->setChecked(m_config->antialiased());
         ui->horizontalSliderBold->setValue(m_config->bold());
@@ -139,4 +140,9 @@ void FontOptionsFrame::on_comboBoxDPI_currentIndexChanged(QString val)
 void FontOptionsFrame::on_comboBox_Hinting_currentIndexChanged(int index)
 {
     if (index>=0) if (m_config) m_config->setHinting(static_cast<FontConfig::HintingMethod>(index));
+}
+
+void FontOptionsFrame::on_comboBoxAA_currentIndexChanged(int index)
+{
+    if (index>0) if (m_config) m_config->setAntiAliasing(static_cast<FontConfig::AAMethod>(index));
 }

@@ -25,7 +25,7 @@
        <locale language="English" country="UnitedStates"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_Font">
        <attribute name="title">
@@ -156,7 +156,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_Preview">
        <attribute name="title">
@@ -173,8 +173,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>246</width>
-             <height>406</height>
+             <width>360</width>
+             <height>425</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout">
@@ -318,7 +318,7 @@
      <x>0</x>
      <y>0</y>
      <width>612</width>
-     <height>22</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
