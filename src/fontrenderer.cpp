@@ -119,7 +119,22 @@ void FontRenderer::rasterize() {
         if (!m_config->antialiased()) {
             flags = flags | FT_LOAD_MONOCHROME | FT_LOAD_TARGET_MONO;
         } else {
-            flags = flags | FT_LOAD_TARGET_NORMAL;
+            switch (m_config->antialiasing()) {
+            case FontConfig::AAliasingNormal:
+                flags |= FT_LOAD_TARGET_NORMAL;
+                break;
+            case FontConfig::AAliasingLight:
+                flags |= FT_LOAD_TARGET_LIGHT;
+                break;
+            case FontConfig::AAliasingLCDhor:
+                flags |= FT_LOAD_TARGET_LCD;
+                break;
+            case FontConfig::AAliasingLCDvert:
+                flags |= FT_LOAD_TARGET_LCD_V;
+                break;
+            default:
+                break;
+            }
         }
         switch (m_config->hinting()) {
         case  FontConfig::HintingDisable:

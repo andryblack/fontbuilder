@@ -44,6 +44,7 @@ FontConfig::FontConfig(QObject *parent) :
     m_hinting = HintingDefault;
     m_render_missing = false;
     m_antialiased = true;
+    m_aamethod = AAliasingNormal;
     m_bold = 0;
     m_italic = false;
     m_width = 100.0f;
@@ -125,6 +126,13 @@ void FontConfig::setHinting(int h) {
 void FontConfig::setAntialiased(bool b) {
     if (m_antialiased!=b) {
         m_antialiased = b;
+        renderingOptionsChanged();
+    }
+}
+
+void FontConfig::setAntiAliasing(int b) {
+    if (m_aamethod!=b) {
+        m_aamethod = b;
         renderingOptionsChanged();
     }
 }

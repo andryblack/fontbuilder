@@ -65,6 +65,7 @@ private slots:
     void on_checkBoxMissingGlypths_toggled(bool checked);
     void on_checkBoxAutohinting_toggled(bool checked);
     void on_comboBox_Hinting_currentIndexChanged(int index);
+    void on_comboBoxAA_currentIndexChanged(int index);
 };
 
 #endif // FONTOPTIONSFRAME_H

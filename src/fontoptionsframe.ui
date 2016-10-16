@@ -40,6 +40,13 @@
    </property>
    <item>
     <layout class="QGridLayout" name="gridLayout_4">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="checkBoxSmoothing">
+       <property name="text">
+        <string>Smoothing</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="2" colspan="3">
       <widget class="QCheckBox" name="checkBoxMissingGlypths">
        <property name="text">
@@ -135,11 +142,28 @@
        </item>
       </widget>
      </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QCheckBox" name="checkBoxSmoothing">
-       <property name="text">
-        <string>Smoothing</string>
-       </property>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBoxAA">
+       <item>
+        <property name="text">
+         <string>Standard-grayscale</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Light</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>LCD horizontal</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>LCD vertical</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>

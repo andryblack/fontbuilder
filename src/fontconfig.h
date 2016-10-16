@@ -38,6 +38,7 @@ class FontConfig : public QObject
 {
 Q_OBJECT
 Q_ENUMS(HintingMethod)
+Q_ENUMS(AAMethod)
 public:
     explicit FontConfig(QObject *parent = 0);
 
@@ -48,6 +49,13 @@ public:
         HintingDefault,
         HintingForceFreetypeAuto,
         HintingDisableFreetypeAuto
+    };
+
+    enum AAMethod {
+        AAliasingNormal,
+        AAliasingLight,
+        AAliasingLCDhor,
+        AAliasingLCDvert
     };
 
     const QString& path() const { return m_path; }
@@ -93,6 +101,11 @@ public:
     void setAntialiased(bool b);
     Q_PROPERTY( bool antialiased READ antialiased WRITE setAntialiased )
 
+    int antialiasing() const { return m_aamethod;}
+    void setAntiAliasing(int b);
+    void resetAntiAliasing() {m_aamethod = AAliasingNormal;}
+    Q_PROPERTY( int antialiasing READ antialiasing WRITE setAntiAliasing RESET resetAntiAliasing)
+
     int bold() const { return m_bold;}
     void setBold(int b);
     Q_PROPERTY( int bold READ bold WRITE setBold )
@@ -134,6 +147,7 @@ private:
     int    m_hinting;
     bool    m_render_missing;
     bool    m_antialiased;
+    int     m_aamethod;
     int    m_bold;
     int    m_italic;
     float   m_width;
