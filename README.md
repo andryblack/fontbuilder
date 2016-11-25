@@ -41,3 +41,9 @@ why here?:
 
 ![screen1](http://www.gamedev.ru/files/images/54213_1274102379_screen.jpg)
 ![screen2](http://www.gamedev.ru/files/images/screen1.jpeg)
+
+Building:
+
+```bash
+qmake && make
+```
