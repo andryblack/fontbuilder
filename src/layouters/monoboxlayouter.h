@@ -28,31 +28,22 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "layouterfactory.h"
+#ifndef MONOBOXLAYOUTER_H
+#define MONOBOXLAYOUTER_H
 
+#include "../abstractlayouter.h"
 
-extern AbstractLayouter* LineLayouterFactoryFunc (QObject*);
-extern AbstractLayouter* BoxLayouterFactoryFunc (QObject*);
-extern AbstractLayouter* MonoBoxLayouterFactoryFunc (QObject*);
-extern AbstractLayouter* BoxLayouterOptimizedFactoryFunc (QObject*);
-
-LayouterFactory::LayouterFactory(QObject *parent) :
-    QObject(parent)
+class MonoBoxLayouter : public AbstractLayouter
 {
-    m_factorys["Line layout"] = &LineLayouterFactoryFunc;
-    m_factorys["Box layout"] = &BoxLayouterFactoryFunc;
-    m_factorys["Box layout (optimized)"] = &BoxLayouterOptimizedFactoryFunc;
-    m_factorys["Mono Box layout"] = &MonoBoxLayouterFactoryFunc;
-}
+Q_OBJECT
+public:
+    explicit MonoBoxLayouter(QObject *parent = 0);
 
+    virtual void PlaceImages(const QVector<LayoutChar>& chars) ;
+signals:
 
-QStringList LayouterFactory::names() const {
-    return m_factorys.keys();
-}
+public slots:
 
-AbstractLayouter* LayouterFactory::build(const QString &name,QObject* parent) {
-    if (m_factorys.contains(name)) {
-        return m_factorys[name](parent);
-    }
-    return 0;
-}
+};
+
+#endif // BOXLAYOUTER_H
