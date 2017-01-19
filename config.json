@@ -1,0 +1,41 @@
+{
+    "test": 123,
+    "fontconfig": {
+        "path": "/Users/cdingpeng/gs/DevGame/branches/X-Men_1.0.X-i18n/font",
+        "filename": "simsun.ttf",
+        "family": "SimSun",
+        "style": "Regular",
+        "faceIndex": 0,
+        "size": 24,
+        "characters": "abcsfwej",
+        "hinting": 1,
+        "renderMissing": false,
+        "antialiased": true,
+        "bold": 0,
+        "italic": 0,
+        "width": 100,
+        "height": 100,
+        "lineSpacing": 2,
+        "charSpacing": 2,
+        "DPI": 120
+    },
+    "layoutconfig": {
+        "onePixelOffset": true,
+        "potImage": true,
+        "sizeIncrement": 2,
+        "offsetLeft": 0,
+        "offsetTop": 0,
+        "offsetRight": 0,
+        "offsetBottom": 0,
+        "layouter": "Box layout"
+    },
+    "outputconfig": {
+        "path": "/Users/cdingpeng/gs/DevGame/branches/X-Men_1.0.X-i18n/font",
+        "writeImage": true,
+        "imageName": "simsun_regular",
+        "imageFormat": "png",
+        "writeDescription": true,
+        "descriptionName": "simsun_regular",
+        "descriptionFormat": "Sparrow"
+    }
+}

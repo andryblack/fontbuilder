@@ -29,6 +29,7 @@ Features:
 * font view testing (both original bitmap and edited)
 * kerning support
 * selection of characters set from the char map
+* command line support
 
 what next?:
 
