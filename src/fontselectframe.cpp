@@ -330,6 +330,7 @@ void FontSelectFrame::readFontSizes(const FontDef& def) {
         for (size_t i=0;i<sizeof(sizes)/sizeof(sizes[0]);i++)
             ui->comboBoxSize->addItem(QString().number(
                     sizes[i]));
+        ui->comboBoxSize->setEnabled(true);
         ui->comboBoxSize->setEditable(true);
     }
     if (index>=0 )
