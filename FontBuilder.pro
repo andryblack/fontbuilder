@@ -148,6 +148,8 @@ isEmpty(FREETYPE2CONFIG) {
     # macports support
         INCLUDEPATH += /opt/local/include /opt/local/include/freetype2
         LIBS += -L/opt/local/lib
+    # homebrew support
+        INCLUDEPATH += /usr/local/include /usr/local/include/freetype2
     }
     win32 {
         INCLUDEPATH += ../include
