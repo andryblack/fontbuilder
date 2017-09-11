@@ -69,6 +69,8 @@ SOURCES += src/main.cpp \
     src/exporters/sparrowexporter.cpp \
     src/exporters/simpleexporter.cpp \
     src/layouters/boxlayouteroptimized.cpp \
+    src/layouters/gridlayouter.cpp \
+    src/layouters/gridlinelayouter.cpp \
     src/exporters/myguiexporter.cpp \
     src/exporters/bmfontexporter.cpp \
     src/exporters/ageexporter.cpp
@@ -111,6 +113,8 @@ HEADERS += src/fontbuilder.h \
     src/exporters/sparrowexporter.h \
     src/exporters/simpleexporter.h \
     src/layouters/boxlayouteroptimized.h \
+    src/layouters/gridlayouter.h \
+    src/layouters/gridlinelayouter.h \
     src/exporters/myguiexporter.h \
     src/exporters/bmfontexporter.h \
     src/exporters/ageexporter.h
