@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2010 Andrey AndryBlack Kunitsyn
+ * Copyright (c) 2010-2010 Andrey AndryBlack Kunitsyn DougGale
  * email:support.andryblack@gmail.com
  *
  * Report bugs and download new versions at http://code.google.com/p/fontbuilder
@@ -28,33 +28,23 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "layouterfactory.h"
+#ifndef GRIDLAYOUTER_H
+#define GRIDLAYOUTER_H
 
+#include "../abstractlayouter.h"
 
-extern AbstractLayouter* LineLayouterFactoryFunc (QObject*);
-extern AbstractLayouter* BoxLayouterFactoryFunc (QObject*);
-extern AbstractLayouter* BoxLayouterOptimizedFactoryFunc (QObject*);
-extern AbstractLayouter* GridLayouterFactoryFunc (QObject*);
-extern AbstractLayouter* GridLineLayouterFactoryFunc (QObject*);
-
-LayouterFactory::LayouterFactory(QObject *parent) :
-    QObject(parent)
+class GridLayouter : public AbstractLayouter
 {
-    m_factorys["Line layout"] = &LineLayouterFactoryFunc;
-    m_factorys["Box layout"] = &BoxLayouterFactoryFunc;
-    m_factorys["Box layout (optimized)"] = &BoxLayouterOptimizedFactoryFunc;
-    m_factorys["Grid layout"] = &GridLayouterFactoryFunc;
-    m_factorys["Grid layout (single line)"] = &GridLineLayouterFactoryFunc;
-}
+public:
+    GridLayouter(QObject *parent);
 
+private:
 
-QStringList LayouterFactory::names() const {
-    return m_factorys.keys();
-}
+    // AbstractLayouter interface
+protected:
+    void PlaceImages(const QVector<LayoutChar> &chars);
 
-AbstractLayouter* LayouterFactory::build(const QString &name,QObject* parent) {
-    if (m_factorys.contains(name)) {
-        return m_factorys[name](parent);
-    }
-    return 0;
-}
+    virtual void calculateSize(int maxW, int maxH, size_t count);
+};
+
+#endif // GRIDLAYOUTER_H
