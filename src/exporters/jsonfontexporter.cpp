@@ -54,14 +54,16 @@ bool JSONFontExporter::Export(QByteArray &out)
             continue;
         }
 
-        QJsonObject jsonKernel;
+        
         for (Kerning k = c.kerning.begin();k!=c.kerning.end();k++)
         {
+            QJsonObject jsonKernel;
             jsonKernel.insert("first", int(c.id));
             jsonKernel.insert("second", int(k.key()));
             jsonKernel.insert("amount", k.value());
+            jsonKernels.append( jsonKernel );
         }
-        jsonKernels.append( jsonKernel );
+        
     }
 
     QJsonObject jsonFont;
