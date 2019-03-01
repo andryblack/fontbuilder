@@ -73,8 +73,8 @@ SOURCES += src/main.cpp \
     src/layouters/gridlinelayouter.cpp \
     src/exporters/myguiexporter.cpp \
     src/exporters/bmfontexporter.cpp \
-    src/exporters/ageexporter.cpp \
-    src/exporters/jsonfontexporter.cpp
+    src/exporters/ageexporter.cpp 
+    
 
 HEADERS += src/fontbuilder.h \
     src/colorbutton.h \
@@ -118,8 +118,8 @@ HEADERS += src/fontbuilder.h \
     src/layouters/gridlinelayouter.h \
     src/exporters/myguiexporter.h \
     src/exporters/bmfontexporter.h \
-    src/exporters/ageexporter.h \
-    src/exporters/jsonfontexporter.h
+    src/exporters/ageexporter.h 
+    
 
 FORMS += src/fontbuilder.ui \
     src/fontselectframe.ui \
@@ -135,6 +135,8 @@ TRANSLATIONS = fontbuilder_en.ts \
 QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4) {
+    SOURCES += src/exporters/jsonfontexporter.cpp
+    HEADERS += src/exporters/jsonfontexporter.h
     QT += widgets
 }
 
