@@ -8,6 +8,7 @@ Current state: alpha
 
 Downloads : [from github](https://github.com/andryblack/fontbuilder/downloads)
 Support : [gamedev.ru forum theme](http://www.gamedev.ru/projects/forum/?id=133540) (russian)
+Donate : bitcoin:1P2tXqBRCnmuQcaaD47AUzVWbx3Z4so27m
 
 Program features that make it outstanding comparing to other programs:
 
