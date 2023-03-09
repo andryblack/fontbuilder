@@ -29,11 +29,7 @@
  */
 
 #include "fontconfig.h"
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QStandardPaths>
-#else
-#include <QDesktopServices>
-#endif
 
 FontConfig::FontConfig(QObject *parent) :
     QObject(parent)
@@ -201,15 +197,11 @@ void FontConfig::setDPI(int dpi) {
 
 QString FontConfig::defaultFontsPath()
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     QStringList locations = QStandardPaths::standardLocations(QStandardPaths::FontsLocation);
     if (locations.isEmpty()) {
         return "/usr/X11/share/fonts/TTF";
     }
     return locations.front();
-#else
-    return QDesktopServices::storageLocation(QDesktopServices::FontsLocation);
-#endif
 }
 
 void FontConfig::normalize() {

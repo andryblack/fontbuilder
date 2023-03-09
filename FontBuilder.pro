@@ -73,7 +73,8 @@ SOURCES += src/main.cpp \
     src/layouters/gridlinelayouter.cpp \
     src/exporters/myguiexporter.cpp \
     src/exporters/bmfontexporter.cpp \
-    src/exporters/ageexporter.cpp 
+    src/exporters/ageexporter.cpp \
+    src/exporters/jsonfontexporter.cpp
     
 
 HEADERS += src/fontbuilder.h \
@@ -118,7 +119,8 @@ HEADERS += src/fontbuilder.h \
     src/layouters/gridlinelayouter.h \
     src/exporters/myguiexporter.h \
     src/exporters/bmfontexporter.h \
-    src/exporters/ageexporter.h 
+    src/exporters/ageexporter.h \
+    src/exporters/jsonfontexporter.h
     
 
 FORMS += src/fontbuilder.ui \
@@ -132,12 +134,11 @@ FORMS += src/fontbuilder.ui \
 TRANSLATIONS = fontbuilder_en.ts \
     fontbuilder_ru.ts
 
-QT += xml
+QT += xml widgets
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-    SOURCES += src/exporters/jsonfontexporter.cpp
-    HEADERS += src/exporters/jsonfontexporter.h
-    QT += widgets
+!versionAtLeast(QT_VERSION, 5.0.0) {
+    message("Cannot use Qt $${QT_VERSION}")
+    error("Use Qt 5.0 or newer")
 }
 
 DESTDIR = bin

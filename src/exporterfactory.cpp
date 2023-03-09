@@ -43,9 +43,8 @@ extern AbstractExporter* SimpleExporterFactoryFunc (QObject*);
 extern AbstractExporter* MyGUIExporterFactoryFunc (QObject*);
 extern AbstractExporter* BMFontExporterFactoryFunc (QObject*);
 extern AbstractExporter* AGEExporterFactoryFunc (QObject*);
-#if QT_VERSION >= 0x050000
-    extern AbstractExporter* JSONFontExporterFactoryFunc (QObject*);
-#endif
+extern AbstractExporter* JSONFontExporterFactoryFunc (QObject*);
+
 ExporterFactory::ExporterFactory(QObject *parent) :
     QObject(parent)
 {
@@ -60,9 +59,7 @@ ExporterFactory::ExporterFactory(QObject *parent) :
     m_factorys["MyGUI"] = &MyGUIExporterFactoryFunc;
     m_factorys["BMFont"] = &BMFontExporterFactoryFunc;
     m_factorys["AGE"] = &AGEExporterFactoryFunc;
-#if QT_VERSION >= 0x050000
     m_factorys["JSON"] = &JSONFontExporterFactoryFunc;
-#endif
 }
 
 
