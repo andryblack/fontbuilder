@@ -1,0 +1,48 @@
+name: build
+run-name: ${{ github.actor }} test build
+on: [push]
+jobs:
+  macos:
+    runs-on: macos-latest
+    env:
+      FREETYPE2CONFIG: freetype-config
+    steps:
+      - uses: actions/checkout@v3
+      - run: brew install qt5
+      - run: brew install freetype
+      - name: qmake
+        run: /usr/local/opt/qt@5/bin/qmake
+      - name: make
+        run: make
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 5.15.2
+          cache: true
+      - uses: ConorMacBride/install-package@v1
+        with:
+          apt: libfreetype-dev
+      - name: qmake
+        run: qmake
+      - name: make
+        run: make
+  windows:
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 5.15.2
+          cache: true
+      - name: install freetype
+        run: nuget install packages.config
+      - name: qmake
+        run: qmake -tp vc -r FontBuilder.pro
+      - name: make
+        run: msbuild

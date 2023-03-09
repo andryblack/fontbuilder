@@ -161,10 +161,16 @@ isEmpty(FREETYPE2CONFIG) {
         INCLUDEPATH += /usr/local/include /usr/local/include/freetype2
     }
     win32 {
-        INCLUDEPATH += ../include
-        INCLUDEPATH += ../include/freetype2
-        LIBS += -L../lib \
-            -lfreetype
+        NUGET_PACKAGES += freetype.2.8.0.1
+
+        for (NUGET_PACKAGE, NUGET_PACKAGES) {
+            INCLUDEPATH += $${NUGET_PACKAGE}/build/native/include
+            CONFIG(debug, debug | release) {
+                LIBS += $${NUGET_PACKAGE}/build/native/lib/x64/v141/Static/Debug/*.lib
+            } else {
+                LIBS += $${NUGET_PACKAGE}/build/native/lib/x64/v141/Static/Release/*.lib
+            }
+        }
     }
     linux*|freebsd* {
         CONFIG += link_pkgconfig

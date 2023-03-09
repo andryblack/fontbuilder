@@ -35,7 +35,7 @@
 #include <QImage>
 #include <QPainter>
 #include "../layoutconfig.h"
-
+#include <vector>
 #include <QDebug>
 
 TargaImageWriter::TargaImageWriter(QString ext,QObject *parent) :
@@ -218,11 +218,12 @@ QImage* TargaImageWriter::reload(QFile& file) {
     qDebug() << "header.imagedescriptor : " << int(header.imagedescriptor);
     const int line_len = width*4;
     if ((header.imagedescriptor & (1<<5))==0) {
-        uchar line[width * 4];
+        std::vector<uchar> line;
+        line.resize(line_len);
         for (int i=0;i<height/2;i++) {
-            ::memcpy(line,data+line_len*i,line_len);
+            ::memcpy(line.data(),data+line_len*i,line_len);
             ::memcpy(data+line_len*i,data+line_len*(height-1-i),line_len);
-            ::memcpy(data+line_len*(height-1-i),line,line_len);
+            ::memcpy(data+line_len*(height-1-i),line.data(),line_len);
         }
     }
     return img;

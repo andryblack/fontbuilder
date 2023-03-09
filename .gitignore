@@ -5,3 +5,5 @@ object_script.*
 bin
 FontBuilder.pro.user
 _build
+/.qmake.stash
+/packages/
