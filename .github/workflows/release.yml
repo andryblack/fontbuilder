@@ -32,7 +32,7 @@ jobs:
   create-relese:
     name: "Create release"
     runs-on: ubuntu-latest
-    needs: tagged-release-windows
+    needs: build-windows
     steps:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
