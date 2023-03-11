@@ -1,0 +1,44 @@
+name: release
+run-name: ${{ github.actor }} release build
+on:
+  push:
+    tags:
+      - "v*"
+jobs:
+  build-windows:
+    name: "Build Windows"
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 5.15.2
+          cache: true
+      - name: install freetype
+        run: nuget install packages.config
+      - name: qmake
+        run: qmake -config release -tp vc -r FontBuilder.pro
+      - name: make
+        run: msbuild -p:Configuration=Release
+      - name: package
+        run: windeployqt bin/FontBuilder.exe
+      - name: Archive release
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-build
+          path: bin
+  create-relese:
+    name: "Create release"
+    runs-on: ubuntu-latest
+    needs: tagged-release-windows
+    steps:
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            windows-build
