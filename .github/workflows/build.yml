@@ -1,6 +1,9 @@
 name: build
 run-name: ${{ github.actor }} test build
-on: [push]
+on:
+  push:
+    branches:
+      - 'master'
 jobs:
   macos:
     runs-on: macos-latest
