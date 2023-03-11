@@ -36,10 +36,13 @@ jobs:
     steps:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
+      - name: Compress windows build
+        run: powershell Compress-Archive windows-build FontBuilder-windows.zip
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
+          title: "Release : ${{ github.ref_name }}"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           automatic_release_tag: "latest"
           files: |
-            windows-build
+            *.zip
