@@ -30,7 +30,7 @@ bool SimpleExporter::Export(QByteArray &out)
         out.append(QString::number(c.placeW).toUtf8()).append(' ');
         out.append(QString::number(c.placeH).toUtf8()).append(' ');
         out.append(QString::number(c.offsetX).toUtf8()).append(' ');
-        out.append(QString::number(height - c.offsetY).toUtf8()).append(' ');
+        out.append(QString::number(metrics().ascender - c.offsetY).toUtf8()).append(' ');
         out.append(QString::number(c.advance).toUtf8()).append(' ');
         out.append('\n');
     }
