@@ -33,6 +33,16 @@ Features:
 * kerning support
 * selection of characters set from the char map
 
+how to compile on Mac?:
+
+* `brew update && brew upgrade`
+* `brew install qt freetype` install dependencies
+* `brew install git` *optionally* install git (if it was not installed)
+* `git clone git@github.com:yura415/fontbuilder.git`
+* `cd fontbuilder`
+* `qmake && make`
+* it will create new .app file in bin/ folder
+
 what next?:
 
 * export of font description into the formats of popular game frameworks (CEGUI,HGE,PopCapFramework)
