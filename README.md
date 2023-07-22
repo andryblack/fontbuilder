@@ -45,6 +45,12 @@ why here?:
 ![screen1](http://www.gamedev.ru/files/images/54213_1274102379_screen.jpg)
 ![screen2](http://www.gamedev.ru/files/images/screen1.jpeg)
 
+Installing dependencies:
+
+```bash
+apt-get install qt5-default g++ cmake libfreetype6-dev libfontconfig1-dev xclip
+```
+
 Building:
 
 ```bash
